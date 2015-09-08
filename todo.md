@@ -1,0 +1,67 @@
+list of method to add in order to manage network
+
+* rigidbody.movePast(x)
+* rigidbody.movePresent()
+
+* physicworld.movePast(x,indexarray)
+* physicworld.movePresent()
+* physicworld.collidewith(shape)
+
+when the server get an instant action : 
+physicworld.movePast(x,authorOf Action)
+physicworld.collidewith(damageShape)
+for each : get userData apply thing end
+physicworld.movePresent()
+
+structure of entities in the world
+
+method to use :
+world.createHoverfly(...)
+world.createGrenade(...)
+
+where is it store ?
+world.grenade
+world.hoverfly
+world.character
+
+world.createSnapshot
+
+structure draw 
+background, world, forground, debug
+
+#plan to develop the game
+
+0.1 : offline game 
+	mapping with svg
+	action manager with network in mind
+	3 weapon
+	basic monster
+
+0.2 : network game
+	interpolation of entities
+	instant action -> send entities touched
+
+further improve :
+	deploy to app for desktop and mobile
+	improve graphism
+		
+#gloal object
+
+world :
+	method :
+	init : instance arrays
+	createGrenade
+	createHoverfly
+	destroyGrenade
+	destroyHoverfly
+	update
+	draw (no z order yet)
+
+	attribute :
+	grenade : array of all the grenade
+	hoverfly : ""
+	toUpdate : array of attribut that are array and must 
+		be updated by iterating on them
+	toDraw : same for draw
+
+
