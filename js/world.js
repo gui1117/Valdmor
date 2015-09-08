@@ -2,7 +2,9 @@ var world = {};
 
 var phys2D = Physics2DDevice.create({});
 
-world.wall = {
+world.passive = {};
+
+world.passive.wall = {
 	material : phys2D.createMaterial({}),
 	shapes : [],
 	addShape : function(type,obj) {
@@ -65,44 +67,91 @@ world.wall = {
 		this.shapes = [];
 	}
 }
+//
+//world.monster = {
+//	material : phys2D.createMaterial({}),
+//	width : 30,
+//	height : 30,
+//	monsters : [],
+//	addMonster : function(type,obj) {
+//		var monster = {};
+//		var w2 = this.width;
+//		var h2 = this.height;
+//		var vertices = phys2D.createRectangleVertices(
+//				-w2,-h2,w2,h2);
+//		monster.shape = phys2D.createPolygonShape({
+//			vertices : vertices,
+//			material : world.monster.material
+//		});
+//		monster.body = phys2D.createRigidBody({
+//			type : 'dynamic',
+//			shapes : [monster.shape],
+//			sleeping : false,
+//			bullet : false,
+//			position : [obj.x, obj.y],
+//			rotation : 0,
+//		});
+//		world.monster.monsters.push(monster);
+//		world.physicWorld.addRigidBody(monster.body);
+//	},
+//	clear : function() {
+//		for (var i = 0; i < this.monsters.length; i++) {
+//			var monster = this.monsters[i];
+//			monster.body.world.removeRigidBody(monster.body);
+//		}
+//		this.monsters = [];
+//	}
+//}
 
-world.monster = {
-	width : 30,
-	height : 30,
-	monsters : [],
-	addMonster : function(type,obj) {
-		var monster = {};
-		var w2 = this.width;
-		var h2 = this.height;
-		var vertices = phys2D.createRectangleVertices(
-				-w2,-h2,w2,h2);
-		monster.shape = phys2D.createPolygonShape({
-			vertices : vertices,
-			material : world.monster.material
-		});
-		monster.body = phys2D.createRigidBody({
-			type : 'dynamic',
-			shapes : [monster.shape],
-			sleeping : false,
-			bullet : false,
-			position : [obj.x, obj.y],
-			rotation : 0,
-		});
-		world.monster.monsters.push(monster);
-		world.physicWorld.addRigidBody(monster.body);
-	},
-	clear : function() {
-		for (var i = 0; i < this.monsters.length; i++) {
-			var monster = this.monsters[i];
-			monster.body.world.removeRigidBody(monster.body);
+world.active = {};
+
+world.newActive = function(obj) {
+	var name = obj.name;
+	if (!name) {
+		console.log("newEntity no name");
+		return 
+	} else if (world.active.name) {
+		console.log("newEntity name already used");
+		return
+	}
+
+	world.active[name] = {
+		svgTags : obj.svgTags || [],
+		material : obj.material || phys2D.createMaterial({}),
+		shapes : obj.shapes || [obj.shape],
+		array : [],
+		add : function(type,xmlObj) {
+			var ent = {};
+			ent.body = phys2D.createRigidBody({
+				type : 'dynamic',
+				shapes : new this.shapes,
+				sleeping : false,
+				bullet : false,
+				position : [obj.x, obj.y],
+				rotation : obj.rotation || 0,
+			});
+			world[name].array.push(ent);
+			world.physicWorld.addRigidBody(ent.body);
+		},
+		clear : function() {
+			for (var i = 0; i < this.array.length; i++) {
+				var ent = this.array[i];
+				ent.body.world.removeRigidBody(ent.body);
+			}
+			this.array = [];
+		},
+		update : function() {
 		}
-		this.monsters = [];
 	}
 }
 
 world.clear = function() {
-	this.monster.clear();
-	this.wall.clear();
+	for (var i in world.passive) {
+		world.passive[i].clear();
+	}
+	for (var i in world.active) {
+		world.passive[i].clear();
+	}
 	world.physicWorld = phys2D.createWorld({
 		gravity : [0, 0],
 		velocityIterations : 8,
@@ -114,9 +163,16 @@ world.loadmap = function(map_svg) {
 
 	world.clear();
 
+	var arrayTags = [];
+	for (var i in world.passive) {
+		arrayTags = arrayTags.concat(world.passive[i].svgTags);
+	}
+	for (var i in world.active) {
+		arrayTags = arrayTags.concat(world.passive[i].svgTags);
+	}
+
 	var wallTags = ["rect","path"];
 	var monsterTags = ["rect"];
-	var arrayTags = ["rect","path"];
 	var mapObject = parseXml(map_svg,arrayTags);
 	var g = mapObject.svg.g;
 
