@@ -5,11 +5,11 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   version="1.1"
-   id="svg2"
-   viewBox="0 0 744.09448819 1052.3622047"
+   width="210mm"
    height="297mm"
-   width="210mm">
+   viewBox="0 0 744.09448819 1052.3622047"
+   id="svg2"
+   version="1.1">
   <defs
      id="defs4" />
   <metadata
@@ -27,32 +27,42 @@
   <g
      id="wall">
     <path
-       id="path3362"
+       style="fill:#ff8080;fill-rule:evenodd;stroke:#ff8080;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1"
        d="M 257.14285,335.21935 438.57142,498.07649 327.14285,660.93363 170,468.07649 257.14285,335.21935 Z"
-       style="fill:#ff8080;fill-rule:evenodd;stroke:#ff8080;stroke-width:1px;stroke-linecap:butt;stroke-linejoin:miter;stroke-opacity:1" />
+       id="path3362" />
   </g>
   <g
      id="monster">
     <rect
-       y="14.3622"
-       x="57.14288"
-       height="50"
-       width="50"
+       style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844"
        id="rect3388"
-       style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844" />
-    <rect
-       y="67.07648"
-       x="63.85712"
-       height="50"
        width="50"
+       height="50"
+       x="57.14288"
+       y="14.3622" />
+    <rect
+       style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844"
        id="rect3388-3"
-       style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844" />
-    <rect
-       y="89.36218"
-       x="37"
-       height="50"
        width="50"
+       height="50"
+       x="63.85712"
+       y="67.07648" />
+    <rect
+       style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844"
        id="rect3388-0"
-       style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844" />
+       width="50"
+       height="50"
+       x="37"
+       y="89.36218" />
+  </g>
+  <g
+     id="character">
+    <rect
+       y="116.66187"
+       x="315.1073"
+       height="48.107986"
+       width="75.770081"
+       id="rect3348"
+       style="fill:#00ff00;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844" />
   </g>
 </svg>

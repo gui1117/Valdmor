@@ -64,4 +64,26 @@ world :
 		be updated by iterating on them
 	toDraw : same for draw
 
+#IA how to give a grid of the world
+
+world.grid :
+	set the scale (width and height of square)
+	array of array
+	each square is an object with elements : 
+		wall : 0 no 1 yes
+		monster : number (number of monster in the square
+	when active entities update, they update the last square
+		and the new square
+	
+	for an IA, just get the square visible and code it 
+
+
+
+
+
+
+
+
+
+
 
