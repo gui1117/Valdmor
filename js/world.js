@@ -4,14 +4,15 @@ var phys2D = Physics2DDevice.create({});
 
 world.passive = {};
 world.active = {};
+world.hyperactive = {};
 
 world.newActive = function(obj) {
 	var name = obj.name;
 	if (!name) {
-		console.log("newEntity no name");
+		console.log("error : newActive without name");
 		return 
 	} else if (world.active.name) {
-		console.log("newEntity name already used");
+		console.log("error : newActive name already used");
 		return
 	}
 
@@ -19,35 +20,50 @@ world.newActive = function(obj) {
 		svgTags : obj.svgTags || [],
 		shapes : obj.shapes || [obj.shape],
 		array : [],
-		add : function(type,xmlObj) {
-			var ent = {
-				update : obj.updateEntity || function(dt){}
+		add : function(obj_add) {
+			var act = {
+				type : "active",
+				init : obj.init,
+				update : obj.update,
+				remove : function() {
+					world.physicWorld.removeRigidBody(this.body);
+					var index = world.active[name].array.indexOf(this);
+					world.active[name].array.slice(index,index);
+				},
+				life : obj.life,
+				damage : obj.damage,
 			};
 			var shapes = [];
 			for (var i = 0; i < this.shapes.length; i++) {
 				shapes.push(this.shapes[i].clone());
 			}
-			ent.body = phys2D.createRigidBody({
+			act.body = phys2D.createRigidBody({
 				type : 'dynamic',
 				shapes : shapes,
 				sleeping : false,
 				bullet : false,
-				position : [xmlObj.x, xmlObj.y],
-				rotation : xmlObj.rotation || 0,
+				position : obj_add.position || [obj_add.x, obj_add.y],
+				rotation : obj_add.rotation || 0,
+				userData : act
 			});
-			world.active[name].array.push(ent);
-			world.physicWorld.addRigidBody(ent.body);
+			world.active[name].array.push(act);
+			world.physicWorld.addRigidBody(act.body);
+			if (obj.init) {
+				act.init(obj_add);
+			}
 		},
 		clear : function() {
 			for (var i = 0; i < this.array.length; i++) {
-				var ent = this.array[i];
-				ent.body.world.removeRigidBody(ent.body);
+				var act = this.array[i];
+				act.body.world.removeRigidBody(act.body);
 			}
 			this.array = [];
 		},
 		update : function(dt) {
 			for (var i = 0; i < this.array.length; i++) {
-				this.array[i].update(dt);
+				if (this.array[i].update) {
+					this.array[i].update();
+				};
 			}
 		}
 	}
@@ -56,69 +72,79 @@ world.newActive = function(obj) {
 world.newHyperactive = function(obj) {
 	var name = obj.name;
 	if (!name) {
-		console.log("newbullet no name");
+		console.log("error : newhyperactive without name");
 		return 
 	} else if (world.hyperactive.name) {
-		console.log("newbullet name already used");
+		console.log("error : newhyperactive with name already used");
 		return
 	}
 
-	var array = [];
-	array.length = obj.length || 255;
 	world.hyperactive[name] = {
 		shapes : obj.shapes || [obj.shape],
-		array : array,
+		array : [],
 		cursor : 0,
 		add : function(obj_add) {
-			var bullet = {
-				update : obj.updateBullet || function(dt){}
+			var hyp = {
+				update : obj.update, 
+				init : obj.init,
+				remove : function() {
+					world.physicWorld.removeRigidBody(this.body);
+					var index = world.hyperactive[name].array.indexOf(this);
+					world.hyperactive[name].array[index] = null;
+				},
 			};
 			var shapes = [];
 			for (var i = 0; i < this.shapes.length; i++) {
 				shapes.push(this.shapes[i].clone());
 			}
-			bullet.body = phys2D.createRigidBody({
+			var v = obj_add.velocity || obj.velocity || 0;
+			var r = obj_add.rotation || obj.rotation || 0;
+			hyp.body = phys2D.createRigidBody({
 				type : 'dynamic',
 				shapes : shapes,
 				sleeping : false,
 				bullet : true,
-				position : [obj_add.x, obj_add.y],
-				rotation : obj_add.rotation || 0,
-				velocity : obj_add.velocity || obj.velocity || [0,0],
-				angularVelocity : obj_add.angularVelocity || obj.angularVelocity || 0,
-				force : obj_add.force || obj.force || [0,0],
-				torque : obj_add.torque || obj.torque || 0,
-				linearDrag : obj_add.linearDrag || obj.linearDrag || 0.05,
-				angularDrag : obj_add.angularDrag || obj.angularDrag || 0.05,
-				surfaceVelocity : obj_add.surfaceVelocity || obj.surfaceVelocity || [0,0],
-				userData : null
+				position : obj_add.position || [0,0],
+				rotation : r,
+				velocity : [v*Math.cos(r),v*Math.sin(r)],
+				linearDrag : obj_add.linearDrag || obj.linearDrag || 0,
+				angularDrag : obj_add.angularDrag || obj.angularDrag || 0,
+				userData : hyp 
 			});
 			if (this.array[this.cursor]) {
 				world.physicWorld.removeRigidBody(this.array[this.cursor]);
 			}
-			this.array[this.cursor] = bullet;
-			this.cursor = (this.cursor + 1) % this.array.length;
-			world.physicWorld.addRigidBody(bullet.body);
+			this.array[this.cursor] = hyp;
+			this.cursor = (this.cursor + 1) % (obj.length || 255);
+			world.physicWorld.addRigidBody(hyp.body);
+			if (obj.init) {
+				hyp.init(obj_add);
+			}
 		},
 		clear : function() {
 			for (var i = 0; i < this.array.length; i++) {
 				var bullet = this.array[i];
-				bullet.body.world.removeRigidBody(bullet.body);
+				if (bullet && bullet.body) {
+					bullet.body.world.removeRigidBody(bullet.body);
+				}
 			}
 			this.array = [];
 		},
 		update : function(dt) {
 			for (var i = 0; i < this.array.length; i++) {
-				this.array[i].update(dt);
+				if (this.array[i] && this.array[i].update) {
+					this.array[i].update(dt);
+				}
 			}
 		}
 	}
 };
 
 world.init = function() {
-	monster.init();
-	wall.init();
-	character.init();
+	initMonster();
+	initWall();
+	initCharacter();
+	initBullet();
 }
 
 world.clear = function() {
@@ -127,6 +153,9 @@ world.clear = function() {
 	}
 	for (var i in world.active) {
 		world.active[i].clear();
+	}
+	for (var i in world.hyperactive) {
+		world.hyperactive[i].clear();
 	}
 	world.physicWorld = phys2D.createWorld({
 		gravity : [0, 0],
@@ -159,7 +188,8 @@ world.loadmap = function(map_svg) {
 				var tag = world.passive[layer.id].svgTags[t];
 				if (layer[tag]) {
 					for (var obj = 0; obj < layer[tag].length; obj++) {
-						world.passive[layer.id].add(tag,layer[tag][obj]);
+						layer[tag][obj].tag = tag;
+						world.passive[layer.id].add(layer[tag][obj]);
 					}
 				}
 			}
@@ -170,7 +200,8 @@ world.loadmap = function(map_svg) {
 				var tag = world.active[layer.id].svgTags[t];
 				if (layer[tag]) {
 					for (var obj = 0; obj < layer[tag].length; obj++) {
-						world.active[layer.id].add(tag,layer[tag][obj]);
+						layer[tag][obj].tag = tag;
+						world.active[layer.id].add(layer[tag][obj]);
 					}
 				}
 			}
@@ -184,6 +215,9 @@ world.loadmap = function(map_svg) {
 };
 
 world.update = function(dt) {
+	for (var i in world.hyperactive) {
+		world.hyperactive[i].update(dt);
+	}
 	for (var i in world.active) {
 		world.active[i].update(dt);
 	}

@@ -1,13 +1,11 @@
-wall = {};
-
-wall.init = function() {
+initWall = function() {
 	world.passive.wall = {
 		svgTags : ["rect","path"],
 		material : phys2D.createMaterial({}),
 		shapes : [],
-		add : function(type,obj) {
+		add : function(obj) {
 			var shape;
-			if (type === "rect") 
+			if (obj.tag === "rect") 
 			{
 				var vertices = phys2D.createRectangleVertices(
 						obj.x,obj.y,obj.x+obj.width,obj.y+obj.height);
@@ -16,7 +14,7 @@ wall.init = function() {
 					material : this.material
 				});
 			} 
-			else if (type === "path") 
+			else if (obj.tag === "path") 
 			{
 				var vertices = [];
 				var data = obj.d;
@@ -36,7 +34,7 @@ wall.init = function() {
 			} 
 			else 
 			{
-				console.info("add wall but false type : "+type.toString());
+				console.info("add wall but false tag : "+obj.tag.toString());
 				return
 			}
 			world.passive.wall.shapes.push(shape);
@@ -54,6 +52,7 @@ wall.init = function() {
 				bullet : false,
 				position : [0, 0],
 				rotation : 0,
+				userData : this
 			});
 			world.physicWorld.addRigidBody(world.passive.wall.body);
 		},

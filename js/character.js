@@ -1,18 +1,16 @@
-var character = {
-	velocity : 1
-};
-
-character.init = function(){
+initCharacter = function(){
+	var rad = 15;
+	var velocity = 1;
 	world.newActive({
 		name : "character",
 		svgTags : ["rect"],
 		shapes : [phys2D.createPolygonShape({
-			vertices : phys2D.createRectangleVertices(-15,-15,15,15)
+			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
 		})],
-		updateEntity : function(dt) {
-			var v = character.velocity;
+		update : function(dt) {
+			var v = velocity;
 			if (isDown.W) {
-				if (isDown .A) {
+				if (isDown.A) {
 					this.body.setRotation(-3*Math.PI/4);
 				} else if (isDown.D) {
 					this.body.setRotation(-Math.PI/4);
@@ -20,7 +18,7 @@ character.init = function(){
 					this.body.setRotation(-Math.PI/2);
 				}
 			} else if (isDown.S) {
-				if (isDown .A) {
+				if (isDown.A) {
 					this.body.setRotation(3*Math.PI/4);
 				} else if (isDown.D) {
 					this.body.setRotation(Math.PI/4);
@@ -36,7 +34,18 @@ character.init = function(){
 			}
 			var r = this.body.getRotation();
 			this.body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
-//			this.body.integrate(dt);
-		}
+			if (isDown.SPACE) {
+				var r = this.body.getRotation();
+				var p = this.body.getPosition();
+				var d = rad + 5;
+				d *= 1.1;
+				p = [p[0]+d*Math.cos(r),p[1]+d*Math.sin(r)];
+				world.hyperactive.bullet.add({
+					rotation : this.body.getRotation(),
+					position : p,
+					life : 100
+				});
+			}
+		},
 	});
 };
