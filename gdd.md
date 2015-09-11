@@ -103,3 +103,9 @@ automaticRifle : instant shoot raycast
 #map desgin
 
 printed circuit board
+(fr)
+conception des niveaux prévu pour groupe de différente taille :
+plusieur chemin possible plus ou moins dangereux le groupe choisit 
+ou il va. et aussi des map plus ou moins difficile dont certaine sont
+clairement impossible seule
+ou alors un map global avec 

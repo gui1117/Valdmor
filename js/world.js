@@ -38,7 +38,7 @@ world.newActive = function(obj) {
 				shapes.push(this.shapes[i].clone());
 			}
 			act.body = phys2D.createRigidBody({
-				type : 'dynamic',
+				type : 'kinetic',
 				shapes : shapes,
 				sleeping : false,
 				bullet : false,
@@ -108,7 +108,7 @@ world.newHyperactive = function(obj) {
 			var v = obj_add.velocity || obj.velocity || 0;
 			var r = obj_add.rotation || obj.rotation || 0;
 			hyp.body = phys2D.createRigidBody({
-				type : 'dynamic',
+				type : 'kinetic',
 				shapes : shapes,
 				sleeping : false,
 				bullet : true,
