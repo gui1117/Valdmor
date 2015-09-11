@@ -97,6 +97,14 @@ world.newHyperactive = function(obj) {
 			for (var i = 0; i < this.shapes.length; i++) {
 				shapes.push(this.shapes[i].clone());
 			}
+			if (obj.eventListener) {
+				for (var eventType in obj.eventListener) {
+					var handler = obj.eventListener[eventType];
+					for (var i = 0; i < shapes.length; i++) {
+						shapes[i].addEventListener(eventType,handler);
+					}
+				}
+			}
 			var v = obj_add.velocity || obj.velocity || 0;
 			var r = obj_add.rotation || obj.rotation || 0;
 			hyp.body = phys2D.createRigidBody({
@@ -144,7 +152,8 @@ world.init = function() {
 	initMonster();
 	initWall();
 	initCharacter();
-	initBullet();
+	initGrenade();
+	initShotgun();
 }
 
 world.clear = function() {

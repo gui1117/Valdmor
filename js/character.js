@@ -7,6 +7,9 @@ initCharacter = function(){
 		shapes : [phys2D.createPolygonShape({
 			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
 		})],
+		init: function(obj_add) {
+			this.waitTime = 0;
+		},
 		update : function(dt) {
 			var v = velocity;
 			if (isDown.W) {
@@ -34,17 +37,21 @@ initCharacter = function(){
 			}
 			var r = this.body.getRotation();
 			this.body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
-			if (isDown.SPACE) {
+			if (isDown.SPACE && this.waitTime <= 0) {
+				this.waitTime = 10;
 				var r = this.body.getRotation();
 				var p = this.body.getPosition();
-				var d = rad + 5;
+				//var d = rad + 5;
+				var d = rad + 15;
 				d *= 1.1;
 				p = [p[0]+d*Math.cos(r),p[1]+d*Math.sin(r)];
-				world.hyperactive.bullet.add({
+				world.hyperactive.shotgun.add({
 					rotation : this.body.getRotation(),
 					position : p,
-					life : 100
+					//life : 100
 				});
+			} else if (this.waitTime > 0) {
+				this.waitTime -= 1;
 			}
 		},
 	});
