@@ -12,8 +12,8 @@ initCharacter = function(){
 		},
 		update : function(dt) {
 			var v = velocity;
-			if (isDown.W) {
-				if (isDown.A) {
+			if (isDown.Z) {
+				if (isDown.Q) {
 					this.body.setRotation(-3*Math.PI/4);
 				} else if (isDown.D) {
 					this.body.setRotation(-Math.PI/4);
@@ -21,7 +21,7 @@ initCharacter = function(){
 					this.body.setRotation(-Math.PI/2);
 				}
 			} else if (isDown.S) {
-				if (isDown.A) {
+				if (isDown.Q) {
 					this.body.setRotation(3*Math.PI/4);
 				} else if (isDown.D) {
 					this.body.setRotation(Math.PI/4);
@@ -30,28 +30,63 @@ initCharacter = function(){
 				}
 			} else if (isDown.D) {
 					this.body.setRotation(0);
-			} else if (isDown.A) {
+			} else if (isDown.Q) {
 					this.body.setRotation(Math.PI);
 			} else {
 				v = 0;
 			}
 			var r = this.body.getRotation();
 			this.body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
-			if (isDown.SPACE && this.waitTime <= 0) {
-				this.waitTime = 10;
-				var r = this.body.getRotation();
-				var p = this.body.getPosition();
-				//var d = rad + 5;
-				var d = rad + 15;
-				d *= 1.1;
-				p = [p[0]+d*Math.cos(r),p[1]+d*Math.sin(r)];
-				world.hyperactive.shotgun.add({
-					rotation : this.body.getRotation(),
-					position : p,
-					//life : 100
-				});
-			} else if (this.waitTime > 0) {
+			if (this.waitTime > 0){
 				this.waitTime -= 1;
+			} else {
+				if (isDown.SPACE) {
+					this.waitTime = 10;
+					var r = this.body.getRotation();
+					var p = this.body.getPosition();
+					var d = rad;
+					d *= 1.1;
+					world.action.shootShotgun({
+						rotation : this.body.getRotation(),
+						position : p,
+						distance : d,
+					});
+				} else if (isDown.B) {
+					this.waitTime = 10;
+					var r = this.body.getRotation();
+					var p = this.body.getPosition();
+					var d = rad;
+					d *= 1.1;
+					world.action.launchGrenade({
+						rotation : this.body.getRotation(),
+						position : p,
+						velocity : 1,
+						distance : d
+					});
+				} else if (isDown.N) {
+					this.waitTime = 10;
+					var r = this.body.getRotation();
+					var p = this.body.getPosition();
+					var d = rad;
+					d *= 1.1;
+					world.action.shootSubmachine({
+						rotation : this.body.getRotation(),
+						position : p,
+						distance : d
+					});
+				} else if (isDown.V) {
+					this.waitTime = 10;
+					var r = this.body.getRotation();
+					var p = this.body.getPosition();
+					var d = rad;
+					d *= 1.1;
+					world.action.hitSword({
+						rotation : this.body.getRotation(),
+						position : p,
+						distance : d
+					});
+				}
+
 			}
 		},
 	});

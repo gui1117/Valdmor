@@ -1,10 +1,70 @@
 var world = {};
 
-var phys2D = Physics2DDevice.create({});
-
 world.passive = {};
 world.active = {};
 world.hyperactive = {};
+world.debugDraw = [];
+world.action = {};
+
+world.grid = {
+	scale : 10,
+	array : [],
+	code : {
+		empty : 0,
+		neutral : 1,
+		bullet : 2,
+		enemy : 3,
+	},
+	add : function(obj) {
+		var p = obj.gridLastPosition = obj.body.getPosition();
+		var x = Math.floor(p[0]/this.scale);
+		var y = Math.floor(p[1]/this.scale);
+		this.array[x][y][this.code[obj.gridType]] += 1;
+	},
+	update : function(obj) {
+		var p = obj.gridLastPosition;
+		var x = Math.floor(p[0]/this.scale);
+		var y = Math.floor(p[1]/this.scale);
+		this.array[x][y][this.code[obj.gridType]] -= 1;
+
+		var p = obj.gridLastPosition = obj.body.getPosition();
+		var x = Math.floor(p[0]/this.scale);
+		var y = Math.floor(p[1]/this.scale);
+		this.array[x][y][this.code[obj.gridType]] += 1;
+	},
+	remove : function(obj) {
+		var p = obj.gridLastPosition;
+		var x = Math.floor(p[0]/this.scale);
+		var y = Math.floor(p[1]/this.scale);
+		this.array[x][y][this.code[obj.gridType]] -= 1;
+	},
+	draw : function() {
+		var s2 = this.scale/2
+		for (var x=0; x<this.array.length; x++) {
+			for (var y=0; y<this.array[x].length; y++) {
+				var square = this.array[x][y];
+				var color = [0,0,0,0];
+//					square[1] || 0,
+//					square[2] || 0,
+//					square[3] || 0,
+//					0.1
+//				];
+				phys2DDebug.drawCircle(x*this.scale+s2,y*this.scale+s2,s2,color);
+			}
+		}
+	},
+};
+
+world.newDebugDraw = function(func) {
+	world.debugDraw.push(func);
+};
+
+world.drawDebugDraw = function() {
+	for (var i=0; i<world.debugDraw.length; i++) {
+		world.debugDraw[i]();
+	}
+	world.debugDraw = [];
+};
 
 world.newActive = function(obj) {
 	var name = obj.name;
@@ -23,9 +83,11 @@ world.newActive = function(obj) {
 		add : function(obj_add) {
 			var act = {
 				type : "active",
+				gridType : obj.gridType,
 				init : obj.init,
 				update : obj.update,
 				remove : function() {
+					world.grid.remove(this);
 					world.physicWorld.removeRigidBody(this.body);
 					var index = world.active[name].array.indexOf(this);
 					world.active[name].array.slice(index,index);
@@ -48,6 +110,8 @@ world.newActive = function(obj) {
 			});
 			world.active[name].array.push(act);
 			world.physicWorld.addRigidBody(act.body);
+			world.grid.add(act);
+
 			if (obj.init) {
 				act.init(obj_add);
 			}
@@ -62,7 +126,8 @@ world.newActive = function(obj) {
 		update : function(dt) {
 			for (var i = 0; i < this.array.length; i++) {
 				if (this.array[i].update) {
-					this.array[i].update();
+					world.grid.update(this.array[i]);
+					this.array[i].update(dt);
 				};
 			}
 		}
@@ -88,6 +153,7 @@ world.newHyperactive = function(obj) {
 				update : obj.update, 
 				init : obj.init,
 				remove : function() {
+					world.grid.remove(this);
 					world.physicWorld.removeRigidBody(this.body);
 					var index = world.hyperactive[name].array.indexOf(this);
 					world.hyperactive[name].array[index] = null;
@@ -125,6 +191,7 @@ world.newHyperactive = function(obj) {
 			this.array[this.cursor] = hyp;
 			this.cursor = (this.cursor + 1) % (obj.length || 255);
 			world.physicWorld.addRigidBody(hyp.body);
+			world.grid.add(hyp);
 			if (obj.init) {
 				hyp.init(obj_add);
 			}
@@ -141,6 +208,7 @@ world.newHyperactive = function(obj) {
 		update : function(dt) {
 			for (var i = 0; i < this.array.length; i++) {
 				if (this.array[i] && this.array[i].update) {
+					world.grid.update(this.array[i]);
 					this.array[i].update(dt);
 				}
 			}
@@ -152,8 +220,11 @@ world.init = function() {
 	initMonster();
 	initWall();
 	initCharacter();
+
 	initGrenade();
 	initShotgun();
+	initSubmachine();
+	initSword();
 }
 
 world.clear = function() {
@@ -171,6 +242,7 @@ world.clear = function() {
 		velocityIterations : 8,
 		positionIterations : 8,
 	});
+	world.grid.array = [];
 }
 
 world.loadmap = function(map_svg) {
@@ -187,6 +259,15 @@ world.loadmap = function(map_svg) {
 
 	var mapObject = parseXml(map_svg,arrayTags);
 	var g = mapObject.svg.g;
+
+	world.grid.array.length = 100;
+	for (var i=0; i<world.grid.array.length; i++) {
+		world.grid.array[i] = [];
+		world.grid.array[i].length = 100;
+		for (var j=0; j<world.grid.array.length; j++) {
+			world.grid.array[i][j] = [0,0,0,0];
+		}
+	}
 
 	for (var i = 0; i < g.length; i++) {
 
