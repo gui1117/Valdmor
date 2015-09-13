@@ -1,7 +1,7 @@
 initGrenade = function() {
 	var rad = 5;
 	var damage = 1;
-	var damageRadius = 10;
+	var damageRadius = 30;
 	var life = 100;
 
 	world.action.launchGrenade = function(obj) {
@@ -19,7 +19,9 @@ initGrenade = function() {
 
 	world.newHyperactive({
 		name : "grenade",
+		gridType : "bullet",
 		shapes : [phys2D.createPolygonShape({
+			sensor : true,
 			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
 		})],
 		init : function(obj_add){
@@ -47,11 +49,10 @@ initGrenade = function() {
 };
 
 initShotgun = function() {
-	var h = 30;
-	var bw = 5;
-	var fw = 10;
+	var h = 100;
+	var bw = 10;
+	var fw = 40;
 	var damage = 1;
-	var rad = 5;
 
 	world.action.shootShotgun = function(obj) {
 		var p = obj.position;
@@ -118,7 +119,6 @@ initShotgun = function() {
 initSubmachine = function() {
 	var rad = 5;
 	var damage = 1;
-	var damageRadius = 10;
 	var life = 100;
 	var velocity = 1
 
@@ -135,7 +135,9 @@ initSubmachine = function() {
 
 	world.newHyperactive({
 		name : "submachine",
+		gridType : "bullet",
 		shapes : [phys2D.createPolygonShape({
+			sensor : true,
 			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
 		})],
 		velocity : velocity,
@@ -152,8 +154,8 @@ initSubmachine = function() {
 };
 
 initSword = function() {
-	var h = 20;
-	var w = 20;
+	var h = 15;
+	var w = 22;
 	var damage = 1;
 
 	world.action.hitSword = function(obj) {

@@ -1,6 +1,8 @@
 initWall = function() {
 	world.passive.wall = {
 		svgTags : ["rect","path"],
+		gridType : "neutral",
+		type : "passive",
 		material : phys2D.createMaterial({}),
 		shapes : [],
 		add : function(obj) {

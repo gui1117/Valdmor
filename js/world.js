@@ -7,7 +7,7 @@ world.debugDraw = [];
 world.action = {};
 
 world.grid = {
-	scale : 10,
+	scale : 20,
 	array : [],
 	code : {
 		empty : 0,
@@ -19,38 +19,72 @@ world.grid = {
 		var p = obj.gridLastPosition = obj.body.getPosition();
 		var x = Math.floor(p[0]/this.scale);
 		var y = Math.floor(p[1]/this.scale);
-		this.array[x][y][this.code[obj.gridType]] += 1;
+		this.array[x][y][this.code[obj.gridType]]++;
 	},
 	update : function(obj) {
 		var p = obj.gridLastPosition;
 		var x = Math.floor(p[0]/this.scale);
 		var y = Math.floor(p[1]/this.scale);
-		this.array[x][y][this.code[obj.gridType]] -= 1;
+		this.array[x][y][this.code[obj.gridType]]--;
 
 		var p = obj.gridLastPosition = obj.body.getPosition();
 		var x = Math.floor(p[0]/this.scale);
 		var y = Math.floor(p[1]/this.scale);
-		this.array[x][y][this.code[obj.gridType]] += 1;
+		this.array[x][y][this.code[obj.gridType]]++;
 	},
 	remove : function(obj) {
 		var p = obj.gridLastPosition;
 		var x = Math.floor(p[0]/this.scale);
 		var y = Math.floor(p[1]/this.scale);
-		this.array[x][y][this.code[obj.gridType]] -= 1;
+		this.array[x][y][this.code[obj.gridType]]--;
 	},
 	draw : function() {
 		var s2 = this.scale/2
 		for (var x=0; x<this.array.length; x++) {
 			for (var y=0; y<this.array[x].length; y++) {
 				var square = this.array[x][y];
-				var color = [0,0,0,0];
-//					square[1] || 0,
-//					square[2] || 0,
-//					square[3] || 0,
-//					0.1
-//				];
-				phys2DDebug.drawCircle(x*this.scale+s2,y*this.scale+s2,s2,color);
+				if (square[1] || square[2] || square[3]) {
+					var color = [
+						square[1] || 0,
+						square[2] || 0,
+						square[3] || 0,
+						1
+					];
+					phys2DDebug.drawCircle(x*this.scale+s2,y*this.scale+s2,s2/2,color);
+				}
 			}
+		}
+	},
+	addPassives : function() {
+		for (var x=0; x<this.array.length; x++) {
+			for (var y=0; y<this.array[x].length; y++) {
+				var point = [x*this.scale+this.scale/2, y*this.scale+this.scale/2];
+				var store = [];
+				var count = world.physicWorld.bodyPointQuery(point, store);
+				for (var i=0; i<count; i++) {
+					var obj = store[i].userData;
+					if (obj && obj.type === "passive") {
+						this.array[x][y][this.code[obj.gridType]]++;
+					}
+				}
+			}
+		}
+	},
+	getView : function(position,width,height,array) {
+		var p = position;
+		var w2 = Math.floor(width/2);
+		var h2 = Math.floor(height/2);
+		p = [Math.floor(p[0]/this.scale),Math.floor(p[1]/this.scale)];
+
+		var xp = 0;
+		var yp = 0;
+		for (var x=p[0]-w2; x<=p[0]+w2; x++) {
+			for (var y=p[1]-h2; y<=p[1]+h2; y++) {
+				array[xp][yp] = world.grid.array[x][y];
+				yp++;
+			}
+			yp = 0;
+			xp++;
 		}
 	},
 };
@@ -302,6 +336,7 @@ world.loadmap = function(map_svg) {
 	for (var i in world.passive) {
 		world.passive[i].create();
 	}
+	world.grid.addPassives();
 };
 
 world.update = function(dt) {

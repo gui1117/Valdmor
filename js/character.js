@@ -1,9 +1,10 @@
 initCharacter = function(){
-	var rad = 15;
+	var rad = 12;
 	var velocity = 1;
 	world.newActive({
 		name : "character",
 		svgTags : ["rect"],
+		gridType : "enemy",
 		shapes : [phys2D.createPolygonShape({
 			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
 		})],
