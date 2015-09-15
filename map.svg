@@ -5,8 +5,8 @@
    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
    xmlns:svg="http://www.w3.org/2000/svg"
    xmlns="http://www.w3.org/2000/svg"
-   width="210mm"
-   height="297mm"
+   width="1210mm"
+   height="1297mm"
    viewBox="0 0 744.09448819 1052.3622047"
    id="svg2"
    version="1.1">
@@ -36,9 +36,9 @@
     <rect
        style="fill:#0000ff;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844"
        id="rect3388"
-       width="50"
-       height="50"
-       x="187.14288"
+       width="150"
+       height="150"
+       x="387.14288"
        y="184.3622" />
   </g>
   <g
@@ -46,8 +46,8 @@
     <rect
        y="116.66187"
        x="315.1073"
-       height="48.107986"
-       width="75.770081"
+       height="148.107986"
+       width="175.770081"
        id="rect3348"
        style="fill:#00ff00;fill-opacity:0.5;stroke:#ff8080;stroke-width:0.34299999;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:0.58415844" />
   </g>

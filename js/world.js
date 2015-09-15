@@ -294,10 +294,10 @@ world.loadmap = function(map_svg) {
 	var mapObject = parseXml(map_svg,arrayTags);
 	var g = mapObject.svg.g;
 
-	world.grid.array.length = 100;
+	world.grid.array.length = 1000;
 	for (var i=0; i<world.grid.array.length; i++) {
 		world.grid.array[i] = [];
-		world.grid.array[i].length = 100;
+		world.grid.array[i].length = 1000;
 		for (var j=0; j<world.grid.array.length; j++) {
 			world.grid.array[i][j] = [0,0,0,0];
 		}

@@ -109,3 +109,7 @@ plusieur chemin possible plus ou moins dangereux le groupe choisit
 ou il va. et aussi des map plus ou moins difficile dont certaine sont
 clairement impossible seule
 ou alors un map global avec 
+
+#flock bird
+
+des oiseaux assez petit comparé au joueur qui se déplace dans le environnement assez ouvert. faible dégat lorsque superpose au hero (ou alors de suicide sur le hero) 
