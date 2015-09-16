@@ -44,7 +44,7 @@ function newPool() {
 		generation : 0,
 		innovation : outputsCard,
 		currentSpecies : 0,
-		currentGenome : 0,
+		currentGenome : 1,
 		currentFrame : 0,
 		maxFitness : 0
 	};
@@ -312,7 +312,7 @@ function containsLink(genes, link) {
 	}
 }
 
-function pointMutate(genom) {
+function pointMutate(genome) {
 	var step = genome.mutationRates["step"];
 
 	for (var i=0; i<genome.genes.length; i++) {
@@ -458,7 +458,7 @@ function mutate(genome) {
 			enableDisableMutate(genome, false);
 		}
 		p--;
-	}
+	,
 }
 
 function disjoint(genes1, genes2) {
