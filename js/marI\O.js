@@ -1,37 +1,34 @@
-neat = {
-	population : 300,
-	deltaDisjoint : 2.0,
-	deltaWeights : 0.4,
-	deltaThreshold : 1.0,
+var population = 300;
+var deltaDisjoint = 2.0;
+var deltaWeights = 0.4;
+var deltaThreshold = 1.0;
 
-	staleSpecies : 15,
+var staleSpecies = 15;
 
-	mutateConnectionsChance : 0.25,
-	perturbChance : 0.90,
-	crossoverChance : 0.75,
-	linkMutationChance : 2.0,
-	nodeMutationChance : 0.50,
-	biasMutationChance : 0.40,
-	stepSize : 0.1,
-	disableMutationChance : 0.4,
-	enableMutationChance : 0.2,
+var mutateConnectionsChance = 0.25;
+var perturbChance = 0.90;
+var crossoverChance = 0.75;
+var linkMutationChance = 2.0;
+var nodeMutationChance = 0.50;
+var biasMutationChance = 0.40;
+var stepSize = 0.1;
+var disableMutationChance = 0.4;
+var enableMutationChance = 0.2;
 
-	timeoutConstant : 20,
+var timeoutConstant = 20;
 
-	maxNodes : 1000000,
+var maxNodes = 1000000;
 
-	numberOfOupts = 4;
-	numberOfInputs = 100;
-};
+/* number of buttons */
+var outputsCard = 4;
 
-neat.setInputs = function(inputs) {
-	this.inputs = inputs;
-}
-neat.getInputs = function() {
-	return this.inputs;
+/* number of inputsCard */
+var inputsCard = 100;
+
+function getInputs() {
 }
 
-neat.sigmoid = function(x) {
+function sigmoid(x) {
 	return 1/(1+Math.exp(-x));
 	//return 2/(1+math.exp(-4.9*x))-1
 }
@@ -209,16 +206,16 @@ function evaluateNetwork(network, inputs) {
 	}
 }
 
-var outputs = [];
-for (i=0; i<outputsCard; i++) {
-	if (network.neurons[maxNodes+i].value > 0) {
-		outputs[i] = true;
-	} else {
-		outputs[i] = false;
+	var outputs = [];
+	for (i=0; i<outputsCard; i++) {
+		if (network.neurons[maxNodes+i].value > 0) {
+			outputs[i] = true;
+		} else {
+			outputs[i] = false;
+		}
 	}
-}
-
-return outputs;
+	
+	return outputs;
 }
 
 function crossover(g1, g2) {
@@ -330,7 +327,7 @@ function pointMutate(genom) {
 
 function linkMutate(genome, forceBias) {
 	var tmp 
-		var neuron1 = randomNeuron(genome.genes, false);
+	var neuron1 = randomNeuron(genome.genes, false);
 	var neuron2 = randomNeuron(genome.genes, true);
 
 	var newLink = newGene();
@@ -478,7 +475,7 @@ function disjoint(genes1, genes2) {
 		gene = genes2[i];
 		i2[gene.innovation] = true;
 	}
-
+	
 	var disjointGenes = 0;
 	for (i=0; i<gene1.length; i++) {
 		gene = genes1[i];
@@ -597,18 +594,18 @@ function cullSpecies(cutToZero) {
 function breedChild(species) {
 	var child = {};
 	if (Math.random() < crossoverChance) {
-		g1 = species.genomes[math.random(0, species.genomes.length-1)];
-		g2 = species.genomes[math.random(0, species.genomes.length-1)];
-		child = crossover(g1, g2);
+                g1 = species.genomes[math.random(0, species.genomes.length-1)];
+                g2 = species.genomes[math.random(0, species.genomes.length-1)];
+                child = crossover(g1, g2);
 	} else {
-		g = species.genomes[math.random(0, species.genomes.length-1)];
-		child = copyGenome(g);
+                g = species.genomes[math.random(0, species.genomes.length-1)];
+                child = copyGenome(g);
 	} 
 	mutate(child);
 
 	return child;
 }
-
+ 
 function removeStaleSpecies() {
 	var survived = [];
 	var s,species;
@@ -686,7 +683,7 @@ function newGeneration() {
 		calculateAverageFitness(species);
 	}
 	removeWeakSpecies();
-
+	
 	var sum = totalAverageFitness();
 	var children = [];
 
@@ -748,16 +745,16 @@ function evaluateCurrent() {
 	inputs = getInputs();
 	controller = evaluateNetwork(genome.network, inputs);
 
-	//        if controller["P1 Left"] and controller["P1 Right"] then
-	//                controller["P1 Left"] = false
-	//                controller["P1 Right"] = false
-	//        end
-	//        if controller["P1 Up"] and controller["P1 Down"] then
-	//                controller["P1 Up"] = false
-	//                controller["P1 Down"] = false
-	//        end
-	// 
-	//        joypad.set(controller)
+//        if controller["P1 Left"] and controller["P1 Right"] then
+//                controller["P1 Left"] = false
+//                controller["P1 Right"] = false
+//        end
+//        if controller["P1 Up"] and controller["P1 Down"] then
+//                controller["P1 Up"] = false
+//                controller["P1 Down"] = false
+//        end
+// 
+//        joypad.set(controller)
 }
 
 if (!pool) {
