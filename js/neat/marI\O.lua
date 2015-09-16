@@ -704,11 +704,11 @@ end
 function breedChild(species)
         local child = {}
         if math.random() < CrossoverChance then
-                g1 = species.genomes[math.random(1, #species.genomes)]
-                g2 = species.genomes[math.random(1, #species.genomes)]
+                local g1 = species.genomes[math.random(1, #species.genomes)]
+                local g2 = species.genomes[math.random(1, #species.genomes)]
                 child = crossover(g1, g2)
         else
-                g = species.genomes[math.random(1, #species.genomes)]
+                local g = species.genomes[math.random(1, #species.genomes)]
                 child = copyGenome(g)
         end
        
@@ -812,7 +812,7 @@ function initializePool()
         pool = newPool()
  
         for i=1,Population do
-                basic = basicGenome()
+                local basic = basicGenome() 
                 addToSpecies(basic)
         end
  

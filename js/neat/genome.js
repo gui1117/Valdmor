@@ -21,6 +21,9 @@ function createGenome(spec) {
 	setGlobalRank = function(rank) {
 		globalRank = rank;
 	},
+	getGlobalRank = function() {
+		return globalRank;
+	},
 	getFitness = function() {
 		return fitness;
 	},
@@ -89,6 +92,8 @@ function createGenome(spec) {
 	return Object.freeze({
 		copy,
 		mutate,
-		getFitness
+		getFitness,
+		getGlobalRank,
+		setGlobalRank
 	});
 }
