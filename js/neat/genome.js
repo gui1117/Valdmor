@@ -1,4 +1,42 @@
-/* require gene */
+function initConstructorGenome(spec) {
+	let	{
+		perturbChance,
+		mutateConnectionsChances,
+		linkMutationChance,
+		nodeMutationChance,
+		enableMutationChance,
+		disableMutationChance,
+		biasMutationChance,
+		stepSize,
+		maxneuron
+	} = spec,
+
+	function create(spec) {
+		let genes,
+		fitness,
+		calculateAverageFitness,
+		setFitness,
+		getFitness,
+		adjustedFitness,
+		network,
+		evaluateNetwork,
+		globalRank,
+		getGlobalRank,
+		setGlobalRank,
+		copy,
+		mutate,
+
+		return Object.freeze({
+			setFitness,
+			getFitness,
+			getGlobalRank,
+			setGlobalRank,
+			evaluateNetwork,
+	};
+	function crossover(genome1,genome2) {
+	};
+	return contructorGenome;
+}
 
 function createGenome(spec) {
 	let mutationRates = {},
@@ -41,6 +79,22 @@ function createGenome(spec) {
 		genome2.genes = genes.copy();
 
 		return genome2;
+	},
+//	getInnovationArray = function() {
+//		/* be careful */
+//		let innovation = [];
+//		genes.forEach(function (gene) {
+//			innovation[gene.
+	crossover = function(genome) {
+		if (genome.getFitness > fitness) {
+			console.error("crossover with higher fitness genome");
+		}
+		let child = copy();
+		child.genes.forEach(function(gene) {
+			if (Math.random(0,1)===1 && genome.innovationPresentAndEnabled(gene.innovation)) {
+				child.genes[genes.indexOf(gene)]genome.copyInnovation(gene.innovation);
+			}
+		});
 	},
 	mutate = function() {
 		mutateConnectionsChances *= (Math.random(0,1)*0.10263+0.95);

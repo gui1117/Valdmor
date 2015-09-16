@@ -94,14 +94,16 @@ function createPool(spec) {
 				});
 				averageFitness = total / genomes.length;
 			},
-			crossover = function() {
-			},
 			breedChild = function() {
 				let child;
 				if (Math.random() < crossoverChance) {
 					let g1 = genomes[Math.random(0,genomes.length-1)];
 					let g2 = genomes[Math.random(0,genomes.length-1)];
-					child = crossover(g1,g2);
+					if (g1.getFitness > g2.getFitness) {
+						g1.crossover(g2);
+					} else {
+						g2.crossover(g1);
+					}
 					//------------------------
 
 				} 
