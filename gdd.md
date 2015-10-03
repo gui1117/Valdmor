@@ -113,3 +113,13 @@ ou alors un map global avec
 #flock bird
 
 des oiseaux assez petit comparé au joueur qui se déplace dans le environnement assez ouvert. faible dégat lorsque superpose au hero (ou alors de suicide sur le hero) 
+
+#son
+
+on peut calculer le son par case :
+	les arme a feu font du son 
+	le son des case voisine font du son
+	les monstres réveillé font du son
+	et les joueur en font un peu aussi
+
+enfin l'etat des monstres sera fonction du son. (bien qu'un monstre puisse etre reveillé sans son)

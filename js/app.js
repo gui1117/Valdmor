@@ -1,60 +1,82 @@
-// run the game
+debugBool = true;
 
-var debugBool=true;
-if (debugBool){
-	console.log("hello world log");
-	console.debug("hello world debug");
-	console.info("hello world info");
-	console.warn("hello world warn");
-}
-
-var TurbulenzEngine = WebGLTurbulenzEngine.create({
+/* load Turbulenz device */
+TurbulenzEngine = WebGLTurbulenzEngine.create({
 	canvas: document.getElementById("canvas")
 });
+canvas = document.getElementById("canvas");
+canvas.height=window.innerHeight;
 canvas.width=window.innerWidth;
-canvas.height=window.innerWidth;
 
+graphicsDevice = TurbulenzEngine.createGraphicsDevice({});
 
-var graphicsDevice = TurbulenzEngine.createGraphicsDevice({});
-
-
-var phys2DDebug = Physics2DDebugDraw.create({
+phys2DDebug = Physics2DDebugDraw.create({
 	graphicsDevice : graphicsDevice
 });
-phys2DDebug.setPhysics2DViewport([0,0,window.innerWidth,window.innerHeight]);
-phys2DDebug.setScreenViewport([0,0,window.innerWidth,window.innerHeight]);
+phys2DDebug.setPhysics2DViewport([
+		0,0,window.innerWidth,window.innerHeight
+]);
+phys2DDebug.setScreenViewport([
+		0,0,window.innerWidth,window.innerHeight
+]);
 
-
-var inputDevice = TurbulenzEngine.createInputDevice();
-// isDown is an array where down keys are true and up keys false or undefined
-var isDown = {};
-inputDevice.keyCodesArray = [];
-for (var i in inputDevice.keyCodes) {
-	inputDevice.keyCodesArray[inputDevice.keyCodes[i]] = i;
-}
-inputDevice.addEventListener('keydown', function(keyCode){isDown[inputDevice.keyCodesArray[keyCode]] = true;});
-inputDevice.addEventListener('keyup', function(keyCode){isDown[inputDevice.keyCodesArray[keyCode]] = false;});
-
-
-var phys2D = Physics2DDevice.create({});
-var phys2DCollision = phys2D.createCollisionUtils();
-
-
-world.init();
-world.loadmap("map.svg");
-
-function update() {
-	inputDevice.update();
-	world.update(1000/60);
-	if (graphicsDevice.beginFrame()){
-		graphicsDevice.clear([0,0,0,0], 1.0);
-		phys2DDebug.begin();
-		world.grid.draw();
-		phys2DDebug.drawWorld(world.physicWorld);
-		world.drawDebugDraw();
-		phys2DDebug.end();
-		graphicsDevice.endFrame();
+inputDevice = TurbulenzEngine.createInputDevice();
+{
+	// isDown is an array where down keys are true and up keys false or undefined
+	isDown = {};
+	inputDevice.ReverseKeyCodes = [];
+	for (var i in inputDevice.keyCodes) {
+		inputDevice.ReverseKeyCodes[inputDevice.keyCodes[i]] = i;
 	}
-};
+	inputDevice.addEventListener(
+			'keydown', 
+			function(keyCode) {
+				isDown[inputDevice.ReverseKeyCodes[keyCode]] = true;
+			});
+	inputDevice.addEventListener(
+			'keyup', 
+			function(keyCode) { 
+				isDown[inputDevice.ReverseKeyCodes[keyCode]] = false;
+			});
+}
 
-TurbulenzEngine.setInterval(update, 1000/60);
+phys2D = Physics2DDevice.create({});
+phys2DCollision = phys2D.createCollisionUtils();
+/* end load Turbulenz device */
+
+newIdentifier = createIncrement(-1);
+soundGrid = createSoundGrid({
+	scale : 20,
+	width : 1000,
+	height : 1000,
+});
+loop = createLoop(1000/60);
+world = phys2D.createWorld({
+	gravity : [0, 0],
+	velocityIterations : 8,
+	positionIterations : 8,
+});
+
+maze = createMaze();
+
+soundGrid.addSound({
+	position : [200,400],
+	intensity : 40,
+});
+
+
+TurbulenzEngine.setInterval(loop.loop,1000/60);
+
+createCharacter({});
+
+gl = createGrenadeLauncher({});
+function shoot() {
+	gl.shoot({
+		position : [100,100],
+		distance : 1,
+		velocity : 5,
+		rotation : 5
+	});
+	window.setTimeout(shoot,1000);
+}
+shoot();
