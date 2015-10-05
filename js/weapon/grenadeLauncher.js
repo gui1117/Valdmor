@@ -1,14 +1,19 @@
+/* TODO
+ * vitesse remise a jour dans l'update pendant x seconde
+ * puis stop et ensuite explose
+ */
 function createGrenadeLauncher(spec) {
 	var id = newIdentifier(),
 	grenadeLauncher = {},
 	rad = spec ? spec.radius : 5,
 	damage = spec ? spec.damage : 1,
 	damageRadius = spec ? spec.damageRadius : 30,
-	lifeTime = spec ? spec.lifeTime : 100,
-	reloadTime = spec ? spec.reloadTime : 30,
-	velocity = spec ? spec.velocty : 10,
+	lifeTime = spec ? spec.lifeTime : 300,
+	velocity = spec ? spec.velocty : 3,
 	sound = spec ? spec.sound : 1,
+	reloadTime = spec ? spec.reloadTime : 800,
 
+	reload = 0,
 	createGrenade = function(spec) {
 		var id = newIdentifier(),
 		grenade = {},
@@ -31,17 +36,17 @@ function createGrenadeLauncher(spec) {
 			rotation : r,
 			userData : grenade,
 		}),
-		life = 1,
-		time = 0,
+		life = lifeTime,
 		remove = function() {
 			loop.removeOfUpdate(id);
 			world.removeRigidBody(body);
 		},
 		update = function(dt) {
 			var store;
-			time += dt;
+			life -= dt;
+			body.setVelocity(v);
 
-			if (life <= 0 || time >= lifeTime) {
+			if (life <= 0) {
 				store = [];
 				world.bodyCircleQuery(body.getPosition(), damageRadius, store);
 				if (debugBool) {
@@ -60,7 +65,7 @@ function createGrenadeLauncher(spec) {
 			}
 		},
 		damage = function(d) {
-			life -= d;
+			life = 0;
 		};
 
 		world.addRigidBody(body);
@@ -73,21 +78,22 @@ function createGrenadeLauncher(spec) {
 	},
 	shoot = function(spec) {
 		var p = spec.position;
-		var d = spec.distance;
-		var v = spec.velocity || velocity;
-		var r = spec.rotation;
+		d = spec.distance,
+		v = spec.velocity || velocity,
+		r = spec.rotation;
 
-		createGrenade({
-			rotation : r,
-			position : [p[0]+(d+rad)*Math.cos(r),p[1]+(d+rad)*Math.sin(r)],
-			velocity : [v*Math.cos(r),v*Math.sin(r)],
+		if (!reload) {
+			createGrenade({
+				rotation : r,
+				position : [p[0]+(d+rad)*Math.cos(r),p[1]+(d+rad)*Math.sin(r)],
+				velocity : [v*Math.cos(r),v*Math.sin(r)],
 
-		});
-
+			});
+			reload = reloadTime;
+		}
 	},
-	update = function() {
-	},
-	reload = function() {
+	update = function(dt) {
+		reload = Math.max(reload - dt, 0);
 	};
 
 	loop.addToUpdate(id,grenadeLauncher);

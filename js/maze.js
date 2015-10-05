@@ -8,7 +8,7 @@ function createMaze(spec) {
 	updateSoundDelta = 1,
 	time = 0,
 	mazeGrid = generateMaze().grid,
-	coldCoef = 0.85,
+	coldCoef = 0.97,
 
 	WALL = 0,
 	SOUND = 1,
