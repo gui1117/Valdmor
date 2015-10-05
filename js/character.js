@@ -24,12 +24,14 @@ function createCharacter(spec) {
 		rotation : rotation,
 		userData : character,
 	}),
-	grenadeLauncher = createGrenadeLauncher({}),
+	grenadeLauncher = createGrenadeLauncher(),
 	update = function(dt) {
 		var r = body.getRotation(),
-		v = velocity;
+		v = velocity,
+		mid = newIdentifier(),
+		mp = mouse.getWorldPosition();
 
-		aim = angle(body.getPosition(),mousePosition);
+		aim = angle(body.getPosition(),mp);
 		if (isDown.Z) {
 			if (isDown.Q) {
 				body.setRotation(-3*Math.PI/4);
@@ -54,7 +56,7 @@ function createCharacter(spec) {
 			v = 0;
 		}
 		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
-		if (isDown.G) {
+		if (isDown.BUTTON_0) {
 			grenadeLauncher.shoot({
 				position : body.getPosition(),
 				rotation : aim,
@@ -73,10 +75,24 @@ function createCharacter(spec) {
 	world.addRigidBody(body);
 	loop.addToUpdate(id,character);
 
-	inputDevice.addEventListener('mousemove', function(dx,dy) {
-		mousePosition[0] += dx;
-		mousePosition[1] += dy;
-	});
+	inputDevice.addEventListener(
+			'keydown', 
+			function(keyCode) { 
+				if (inputDevice.ReverseKeyCodes[keyCode] === 'M') {
+					camera.multZoom(0.1);
+				}
+			});
+
+	inputDevice.addEventListener(
+			'keyup', 
+			function(keyCode) { 
+				if (inputDevice.ReverseKeyCodes[keyCode] === 'M') {
+					camera.multZoom(10);
+				}
+			});
+
+
+
 
 	character.update = update;
 	character.damage = damage;

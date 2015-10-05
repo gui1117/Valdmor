@@ -1,12 +1,13 @@
 function createGrenadeLauncher(spec) {
 	var id = newIdentifier(),
 	grenadeLauncher = {},
-	rad = spec.radius || 5,
-	damage = spec.damage || 1,
-	damageRadius = spec.damageRadius || 30,
-	lifeTime = spec.lifeTime || 100,
-	reloadTime = spec.reloadTime || 30,
-	velocity = spec.velocty || 10,
+	rad = spec ? spec.radius : 5,
+	damage = spec ? spec.damage : 1,
+	damageRadius = spec ? spec.damageRadius : 30,
+	lifeTime = spec ? spec.lifeTime : 100,
+	reloadTime = spec ? spec.reloadTime : 30,
+	velocity = spec ? spec.velocty : 10,
+	sound = spec ? spec.sound : 1,
 
 	createGrenade = function(spec) {
 		var id = newIdentifier(),
@@ -46,6 +47,7 @@ function createGrenadeLauncher(spec) {
 				if (debugBool) {
 					var p = body.getPosition(),
 						id = newIdentifier();
+					maze.addSound(p,sound);
 					loop.addToDraw(id, { draw : function(){ phys2DDebug.drawCircle(p[0],p[1],damageRadius,[1,1,0,1])}});
 					loop.removeOfDraw(id);
 				}

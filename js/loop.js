@@ -20,6 +20,7 @@ function createLoop(delay) {
 		/* MAIN LOOP */
 
 	loop = function() {
+		var mp;
 		/* UPDATE  */
 		world.step(dt);
 
@@ -43,10 +44,15 @@ function createLoop(delay) {
 			graphicsDevice.clear([0,0,0,0], 1.0);
 			phys2DDebug.begin();
 
+			maze.draw();
+
 			Object.keys(toDraw).forEach(function(key) {
 				toDraw[key].draw();
 			});
 			phys2DDebug.drawWorld(world);
+
+			mp = mouse.getWorldPosition();
+			phys2DDebug.drawCircle(mp[0],mp[1],1,[1,1,0,1])
 
 			phys2DDebug.end();
 			graphicsDevice.endFrame();

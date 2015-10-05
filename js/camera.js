@@ -1,9 +1,12 @@
 function createCamera() {
 	var position = [0,0],
-	zoom = 1.3,
+	zoom = 1.5,
 	setPosition = function(p) {
 		position[0] = p[0];
 		position[1] = p[1];
+	},
+	getPosition = function() {
+		return [position[0],position[1]];
 	},
 	setZoom = function(n) {
 		zoom = n
@@ -31,6 +34,7 @@ function createCamera() {
 		getZoom : getZoom,
 		multZoom : multZoom,
 		setPosition : setPosition,
+		getPosition : getPosition,
 		setViewport : setViewport,
 	});
 }

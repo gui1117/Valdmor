@@ -4,11 +4,11 @@ function createMaze(spec) {
 
 	id = newIdentifier(),
 	maze = {},
-	scalar = 10, // for sound
 	updateSoundTime = 1,
 	updateSoundDelta = 1,
 	time = 0,
 	mazeGrid = generateMaze().grid,
+	coldCoef = 0.85,
 
 	WALL = 0,
 	SOUND = 1,
@@ -16,8 +16,8 @@ function createMaze(spec) {
 	grid = [],
 
 	toGrid = function(pos) {
-		var p0 = Math.floor(pos[0]/(smallSquare+bigSquare)),
-		p1 = Math.floor(pos[1]/(smallSquare+bigSquare));
+		var p0 = Math.floor(pos[0]/(smallSquare+bigSquare))*2,
+		p1 = Math.floor(pos[1]/(smallSquare+bigSquare))*2;
 		if (pos[0]-p0 >= smallSquare) {
 			p0++;
 		} 
@@ -48,17 +48,17 @@ function createMaze(spec) {
 	},
 	addSound = function(position, intensity) {
 		var p = toGrid(position);
-		grid[p[0]][p[1]][SOUND] += Math.pow(scalar,intensity);
+		grid[p[0]][p[1]][SOUND] += Math.pow(10,intensity);
 	},
 	getSound = function(pos) {
 		var p = toGrid(pos);
-		return grid[p[0]][p[1]][SOUND];
+		return Math.log(grid[p[0]][p[1]][SOUND]);
 	},
 	updateSound = function() {
 		var i,j;
 		for (i=1; i<grid.length-1; i++) {
 			for (j=1; j<grid[i].length-1; j++) {
-				tmpGrid[i][j] = 1/6/5*(
+				tmpGrid[i][j] = coldCoef*1/6*(
 						2*grid[i][j][SOUND]
 						+ grid[i+1][j][SOUND]
 						+ grid[i-1][j][SOUND]
@@ -107,7 +107,7 @@ function createMaze(spec) {
 						break;
 
 					case 2:
-						createCharacter({
+						character = createCharacter({
 							position : p
 						});
 						break;
@@ -117,6 +117,18 @@ function createMaze(spec) {
 
 					case 4:
 						break;
+				}
+			}
+		}
+	},
+	draw = function() {
+		var p,alpha;
+		for (i=0; i<mazeGrid.length; i++) {
+			for (j=0; j<mazeGrid[0].length; j++) {
+				p = toWorld([i,j],true);
+				alpha = Math.max(0,Math.min(Math.log(grid[i][j][SOUND]),1));
+				if (alpha > 0) {
+					phys2DDebug.drawCircle(p[0],p[1],5.9,[1,1,0,alpha]);
 				}
 			}
 		}
@@ -141,10 +153,9 @@ function createMaze(spec) {
 	loop.addToUpdate(id,maze);
 
 
-
-
 	maze.update = update;
 	maze.getSound = getSound;
 	maze.addSound = addSound;
+	maze.draw = draw;
 	return Object.freeze(maze);
 }
