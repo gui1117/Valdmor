@@ -1,13 +1,16 @@
 function createCharacter(spec) {
 	var id = newIdentifier(),
 	character = {},
-	position = spec.position || [10,10],
+
+	position = spec ? spec.position : [100,100],
 
 	rad = 12,
 	life = 0,
-	velocity = 1,
+	velocity = 1.5,
 	rotation = 0,
 	distance = rad*1.1,
+	aim = 0,
+	mousePosition = position,
 
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
@@ -25,6 +28,8 @@ function createCharacter(spec) {
 	update = function(dt) {
 		var r = body.getRotation(),
 		v = velocity;
+
+		aim = angle(body.getPosition(),mousePosition);
 		if (isDown.Z) {
 			if (isDown.Q) {
 				body.setRotation(-3*Math.PI/4);
@@ -52,18 +57,29 @@ function createCharacter(spec) {
 		if (isDown.G) {
 			grenadeLauncher.shoot({
 				position : body.getPosition(),
-				rotation : body.getRotation(),
+				rotation : aim,
 				distance : distance,
 			});
 		}
+		camera.setPosition(body.getPosition());
 	},
 	damage = function(d) {
 		life -= d;
-	}
+	},
+	getPosition = function() {
+		var p = body.getPosition();
+		return [p[0],p[1]];
+	};
 	world.addRigidBody(body);
 	loop.addToUpdate(id,character);
 
+	inputDevice.addEventListener('mousemove', function(dx,dy) {
+		mousePosition[0] += dx;
+		mousePosition[1] += dy;
+	});
+
 	character.update = update;
 	character.damage = damage;
+	character.getPosition = getPosition; 
 	return Object.freeze(character);
 }

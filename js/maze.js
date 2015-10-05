@@ -1,204 +1,150 @@
-/* possibilité pour améliorer :
- * 		pour une certaine proba on prend dans a salle
- * 		une salle plus petite qui relie a la meme sortie et entre
- * 		avec un couloir si il faut
- */
+function createMaze(spec) {
+	var smallSquare = spec ? spec.smallSquare : 20,
+	bigSquare = spec ? spec.bigSquare : 200,
 
-function createMaze() {
-	var maxRoom = 5,
-	roomSize = 6,
-	generateRoomGrid = function() {
-		/* 0: void
-		 * 1: first room
-		 * 2: second
-		 * 3: third 
-		 * ....
-		 */
-		var grid = [],
-		n = 0,
-		i,j,k,forbidden;
-		grid.length = maxRoom*2-1;
-		for (i=0; i<grid.length; i++) {
-			grid[i] = [];
-			grid[i].length = maxRoom*2+1;
-			for (j=0; j<grid[i].length; j++) {
-				grid[i][j] = 0;
-			}
+	id = newIdentifier(),
+	maze = {},
+	scalar = 10, // for sound
+	updateSoundTime = 1,
+	updateSoundDelta = 1,
+	time = 0,
+	mazeGrid = generateMaze().grid,
+
+	WALL = 0,
+	SOUND = 1,
+	tmpGrid = [],
+	grid = [],
+
+	toGrid = function(pos) {
+		var p0 = Math.floor(pos[0]/(smallSquare+bigSquare)),
+		p1 = Math.floor(pos[1]/(smallSquare+bigSquare));
+		if (pos[0]-p0 >= smallSquare) {
+			p0++;
+		} 
+		if (pos[1]-p1 >= smallSquare) {
+			p1++;
 		}
-
-		i = maxRoom-1;
-		j = maxRoom-1;
-		while (!grid[i][j] && n<maxRoom) {
-			n++;
-			grid[i][j] = n;
-
-			do {
-				k = Math.floor(Math.random()*4);
-			} while (k === forbidden)
-			switch (k) { 
-				case 0:
-					i++;
-					forbidden = 1;
-					break;
-				case 1:
-					i--;
-					forbidden = 0;
-					break;
-				case 2:
-					j++;
-					forbidden = 3;
-					break;
-				case 3:
-					j--;
-					forbidden = 2;
-					break;
-			}
-		}
-
-		return {grid : grid, numberOfRoom : n};
+		return [p0,p1];
 	},
-	generateGrid = function(roomObj) {
-		/* 0 : empty
-		 * 1 : wall
-		 */
-		var grid = [],
-		i,j,k,l,x,y,
-		rg,room,
-		entrance,exit;
-
-		/* init empty grid */
-		grid.length = (maxRoom*2-1)*(roomSize+1)*2+1
-			for (i=0; i<grid.length; i++) {
-				grid[i] = []
-				grid[i].length = grid.length;
-				for (j=0; j<grid.length; j++) {
-					if (i%2 === 0 && j%2 === 0) {
-						grid[i][j] = 1;
-					} else {
-						grid[i][j] = 0;
-					}
-				}
+	toWorld = function(pos,center) {
+		var x = Math.floor(pos[0]/2)*(smallSquare+bigSquare),
+		y = Math.floor(pos[1]/2)*(smallSquare+bigSquare);
+		if (center) {
+			if (pos[0]%2 == 0) {
+				x += smallSquare/2;
+			} else {
+				x += smallSquare + bigSquare/2;
 			}
-		/* end init empty grid */
-
-		/* set rooms */
-		rg = roomObj.grid;
-		room = [];
-		room.length = roomObj.numberOfRoom;
-		for (i=0; i<rg.length; i++) {
-			for (j=0; j<rg[i].length; j++) {
-				if (rg[i][j]) {
-					room[rg[i][j]] = [i,j];
-				}
+			if (pos[1]%2 == 0) {
+				y += smallSquare/2;
+			} else {
+				y += smallSquare + bigSquare/2;
 			}
+		} else {
+			x += (pos[0]%2)*smallSquare;
+			y += (pos[1]%2)*smallSquare;
 		}
-		for (i=1; i<room.length; i++) {
-			entrance = Math.floor(Math.random()*roomSize);
-			exit = entrance;
-			room[i].exit = exit;
-			x = 2*room[i][0]*(roomSize +1);
-			y = 2*room[i][1]*(roomSize +1);
-
-			for (k=0; k<roomSize; k++) {
-				grid[x][y+2*k+1] = 1;
-				grid[x+2*k+1][y] = 1;
-				grid[x+2*roomSize][y+2*k+1] = 1;
-				grid[x+2*k+1][y+2*roomSize] = 1;
-			}
-
-			/* SORRY this code is ugly as hell */
-			if (i !== 1) {
-				if (entrance > room[i-1].exit) {
-					l = true;
-				} else {
-					l = false;
-				}
-
-				if        (room[i-1][0] === room[i][0] && room[i-1][1] <= room[i][1]) {
-					grid[x+1+entrance*2][y] = 0;
-					if (l) {
-						grid[x+2+entrance*2][y-1] = 1;
-						grid[x+0+room[i-1].exit*2][y-1] = 1;
-					} else {
-						grid[x+0+entrance*2][y-1] = 1;
-						grid[x+2+room[i-1].exit*2][y-1] = 1;
-					}
-
-				} else if (room[i-1][0] === room[i][0] && room[i-1][1] >= room[i][1]) {
-					grid[x+1+entrance*2][y+roomSize*2] = 0;
-					if (l) {
-						grid[x+2+entrance*2][y+roomSize*2+1] = 1;
-						grid[x+0+room[i-1].exit*2][y+roomSize*2+1] = 1;
-					} else {
-						grid[x+0+entrance*2][y+roomSize*2+1] = 1;
-						grid[x+2+room[i-1].exit*2][y+roomSize*2+1] = 1;
-					}
-
-
-				} else if (room[i-1][0] <= room[i][0] && room[i-1][1] === room[i][1]) {
-					grid[x][y+1+entrance*2] = 0;
-					if (l) {
-						grid[x-1][y+2+entrance*2] = 1;
-						grid[x-1][y+0+room[i-1].exit*2] = 1;
-					} else {
-						grid[x-1][y+0+entrance*2] = 1;
-						grid[x-1][y+2+room[i-1].exit*2] = 1;
-					}
-
-
-				} else if (room[i-1][0] >= room[i][0] && room[i-1][1] === room[i][1]) {
-					grid[x+roomSize*2][y+1+entrance*2] = 0;
-					if (l) {
-						grid[x+roomSize*2+1][y+2+entrance*2] = 1;
-						grid[x+roomSize*2+1][y+0+room[i-1].exit*2] = 1;
-					} else {
-						grid[x+roomSize*2+1][y+0+entrance*2] = 1;
-						grid[x+roomSize*2+1][y+2+room[i-1].exit*2] = 1;
-					}
-				}
-			}
-			if (i !== room.length-1) {
-				if 		  (room[i+1][0] === room[i][0] && room[i+1][1] <= room[i][1]) {
-					grid[x+1+entrance*2][y] = 0;
-
-				} else if (room[i+1][0] === room[i][0] && room[i+1][1] >= room[i][1]) {
-					grid[x+1+entrance*2][y+roomSize*2] = 0;
-
-				} else if (room[i+1][0] <= room[i][0] && room[i+1][1] === room[i][1]) {
-					grid[x][y+1+entrance*2] = 0;
-
-				} else if (room[i+1][0] >= room[i][0] && room[i+1][1] === room[i][1]) {
-					grid[x+roomSize*2][y+1+entrance*2] = 0;
-
-				}
-			}
-			/* end SORRY */
-		}
-		/* end set rooms */
-
-		return grid;
+		return [x,y];
 	},
-	grid,
-	draw = function() {
-		var x,y,square,color,
-		s2,scale = 6;
-		s2=scale/2;
-		for (x=0; x<grid.length; x++) {
-			for (y=0; y<grid[x].length; y++) {
-				square = grid[x][y];
-				if (square > 0) {
-					color = [0,1,1,1];
-					phys2DDebug.drawCircle(x*scale+s2,y*scale+s2,s2/2,color);
+	addSound = function(position, intensity) {
+		var p = toGrid(position);
+		grid[p[0]][p[1]][SOUND] += Math.pow(scalar,intensity);
+	},
+	getSound = function(pos) {
+		var p = toGrid(pos);
+		return grid[p[0]][p[1]][SOUND];
+	},
+	updateSound = function() {
+		var i,j;
+		for (i=1; i<grid.length-1; i++) {
+			for (j=1; j<grid[i].length-1; j++) {
+				tmpGrid[i][j] = 1/6/5*(
+						2*grid[i][j][SOUND]
+						+ grid[i+1][j][SOUND]
+						+ grid[i-1][j][SOUND]
+						+ grid[i][j+1][SOUND]
+						+ grid[i][j-1][SOUND]
+						)
+			}
+		}
+		for (i=1; i<grid.length-1; i++) {
+			for (j=1; j<grid[i].length-1; j++) {
+				grid[i][j][SOUND] = tmpGrid[i][j];
+			}
+		}
+	},
+	update = function(dt) {
+		time += dt;
+		while (time > updateSoundTime) {
+			updateSoundTime = time + updateSoundDelta;
+			updateSound();
+		}
+	},
+	instantiateMaze = function() {
+		var i,j,p,h2,w2;
+		for (i=1; i<grid.length-1; i++) {
+			for (j=1; j<grid[i].length-1; j++) {
+				p = toWorld([i,j],true);
+
+				switch (mazeGrid[i][j]) {
+					case 1:
+						if (i%2 == 0) {
+							w2 = smallSquare/2;
+						} else {
+							w2 = bigSquare/2;
+						}
+						if (j%2 == 0) {
+							h2 = smallSquare/2;
+						} else {
+							h2 = bigSquare/2;
+						}
+
+						createWall({
+							position : p,
+							topleft : [-w2,-h2],
+							downright : [w2,h2],
+						});
+						break;
+
+					case 2:
+						createCharacter({
+							position : p
+						});
+						break;
+
+					case 3:
+						break;
+
+					case 4:
+						break;
 				}
 			}
 		}
+	},
+	i,j;
 
-	};
+	grid.length = mazeGrid.length;
+	tmpGrid.length = mazeGrid.length;
+	for (i=0; i<mazeGrid[0].length; i++) {
+		grid[i] = [];
+		grid[i].length = mazeGrid[0].length;
+		tmpGrid[i] = [];
+		tmpGrid[i].length = mazeGrid[0].length;
+
+		for (j=0; j<mazeGrid[0].length; j++) {
+			grid[i][j] = [0,1];
+			tmpGrid[i][j] = 0;
+		}
+	}
+
+	instantiateMaze();
+	loop.addToUpdate(id,maze);
 
 
-	grid = generateGrid(generateRoomGrid());;
 
-	return Object.freeze({
-		draw : draw
-	});
+
+	maze.update = update;
+	maze.getSound = getSound;
+	maze.addSound = addSound;
+	return Object.freeze(maze);
 }

@@ -40,16 +40,20 @@ inputDevice = TurbulenzEngine.createInputDevice();
 			});
 }
 
+inputDevice.addEventListener('mousemove', function(dx,dy) {
+	console.log(dx,dy);
+});
+
+
+
+
 phys2D = Physics2DDevice.create({});
 phys2DCollision = phys2D.createCollisionUtils();
 /* end load Turbulenz device */
 
 newIdentifier = createIncrement(-1);
-soundGrid = createSoundGrid({
-	scale : 20,
-	width : 1000,
-	height : 1000,
-});
+
+camera = createCamera();
 loop = createLoop(1000/60);
 world = phys2D.createWorld({
 	gravity : [0, 0],
@@ -59,15 +63,7 @@ world = phys2D.createWorld({
 
 maze = createMaze();
 
-soundGrid.addSound({
-	position : [200,400],
-	intensity : 40,
-});
-
-
 TurbulenzEngine.setInterval(loop.loop,1000/60);
-
-createCharacter({});
 
 gl = createGrenadeLauncher({});
 function shoot() {

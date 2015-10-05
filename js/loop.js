@@ -20,9 +20,9 @@ function createLoop(delay) {
 		/* MAIN LOOP */
 
 	loop = function() {
+		/* UPDATE  */
 		world.step(dt);
 
-		soundGrid.update(dt);
 		Object.keys(toUpdate).forEach(function(key) {
 			toUpdate[key].update(dt);
 		});
@@ -31,24 +31,22 @@ function createLoop(delay) {
 		});
 		toRemoveOfUpdate = [];
 
+		/* DRAW */
 		if (window.innerWidth !== canvas.width
 				|| window.innerHeigth !== canvas.height) {
 			canvas.width = window.innerWidth;
 			canvas.heigth = window.innerHeight;
 		}
+		camera.setViewport();
 
 		if (graphicsDevice.beginFrame()){
 			graphicsDevice.clear([0,0,0,0], 1.0);
 			phys2DDebug.begin();
 
-			soundGrid.draw();
 			Object.keys(toDraw).forEach(function(key) {
 				toDraw[key].draw();
 			});
-			world.rigidBodies.forEach(function(body) {
-				phys2DDebug.drawRigidBody(body);
-			});
-			maze.draw();
+			phys2DDebug.drawWorld(world);
 
 			phys2DDebug.end();
 			graphicsDevice.endFrame();
