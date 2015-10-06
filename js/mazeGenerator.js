@@ -1,22 +1,4 @@
 function generateMaze() {
-/* possibilité pour améliorer :
- * 		pour une certaine proba on prend dans a salle
- * 		une salle plus petite qui relie a la meme sortie et entre
- * 		avec un couloir si il faut
- *
- * 		bof ou sinon salles préfaites :
- *
- * 		model : 
- * 		 _ _ _ _ _ _
- * 		|_|_|_|_|_|_|
- * 		|_|_|_|_|_|_|
- * 		|_|_|_|_|_|_|
- * 		|_|_|_|_|_|_|
- * 		|_|_|_|_|_|_|
- * 		|_|_|_|_|_|_|
- *
- */
-
 	var radius = 5, //the radius in room of the global square
 	roomNbr = 8,
 	roomSize = 6,
@@ -120,20 +102,8 @@ function generateMaze() {
 			x = 2*room[i][0]*(roomSize +1);
 			y = 2*room[i][1]*(roomSize +1);
 
-			grid[x][y] = 1;
-			for (k=0; k<roomSize; k++) {
-				grid[x][y+2*k+1] = 1;
-				grid[x][y+2*k+2] = 1;
-				grid[x+2*k+1][y] = 1;
-				grid[x+2*k+2][y] = 1;
-				grid[x+2*roomSize][y+2*k+1] = 1;
-				grid[x+2*roomSize][y+2*k+2] = 1;
-				grid[x+2*k+1][y+2*roomSize] = 1;
-				grid[x+2*k+2][y+2*roomSize] = 1;
-				for (l=0; l<roomSize; l++) {
-					grid[x+2*k+1][y+2*l+1] = 4;
-				}
-			}
+			//initRoom.js
+			initRoom(x,y,grid,roomSize);
 
 			/* SORRY this code is ugly as hell */
 			if (i !== 1) {

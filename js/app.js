@@ -64,7 +64,8 @@ phys2DCollision = phys2D.createCollisionUtils();
 newIdentifier = createIncrement(-1);
 
 camera = createCamera();
-loop = createLoop(1000/60);
+dt = 1000/50;
+loop = createLoop(dt);
 world = phys2D.createWorld({
 	gravity : [0, 0],
 	velocityIterations : 8,
@@ -73,4 +74,4 @@ world = phys2D.createWorld({
 
 maze = createMaze();
 
-TurbulenzEngine.setInterval(loop.loop,1000/60);
+TurbulenzEngine.setInterval(loop.loop,dt);
