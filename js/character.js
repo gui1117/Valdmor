@@ -25,6 +25,9 @@ function createCharacter(spec) {
 		userData : character,
 	}),
 	grenadeLauncher = createGrenadeLauncher(),
+	shotgun = createShotgun({
+		immune : character,
+	}),
 	update = function(dt) {
 		var r = body.getRotation(),
 		v = velocity,
@@ -62,11 +65,18 @@ function createCharacter(spec) {
 				rotation : aim,
 				distance : distance,
 			});
+		} 
+		if (isDown.BUTTON_1) {
+			shotgun.shoot({
+				position : body.getPosition(),
+				rotation : aim,
+			});
 		}
 		camera.setPosition(body.getPosition());
 	},
 	damage = function(d) {
 		life -= d;
+		console.log('character damaged');
 	},
 	getPosition = function() {
 		var p = body.getPosition();

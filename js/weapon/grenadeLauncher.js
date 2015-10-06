@@ -1,16 +1,13 @@
-/* TODO
- * vitesse remise a jour dans l'update pendant x seconde
- * puis stop et ensuite explose
- */
 function createGrenadeLauncher(spec) {
 	var id = newIdentifier(),
 	grenadeLauncher = {},
 	rad = spec ? spec.radius : 5,
 	damage = spec ? spec.damage : 1,
 	damageRadius = spec ? spec.damageRadius : 30,
-	lifeTime = spec ? spec.lifeTime : 300,
 	velocity = spec ? spec.velocty : 3,
-	sound = spec ? spec.sound : 1,
+	velocityTime = spec ? spec.velocityTime : 200,
+	lifeTime = spec ? spec.lifeTime : 400,
+	soundIntensity = spec ? spec.soundIntensity : 1,
 	reloadTime = spec ? spec.reloadTime : 800,
 
 	reload = 0,
@@ -36,23 +33,26 @@ function createGrenadeLauncher(spec) {
 			rotation : r,
 			userData : grenade,
 		}),
-		life = lifeTime,
+		life = 1,
+		time = 0,
 		remove = function() {
 			loop.removeOfUpdate(id);
 			world.removeRigidBody(body);
 		},
 		update = function(dt) {
 			var store;
-			life -= dt;
-			body.setVelocity(v);
+			time += dt;
+			if (time < velocityTime) {
+				body.setVelocity(v);
+			}
 
-			if (life <= 0) {
+			if (life === 0 || time > lifeTime) {
 				store = [];
 				world.bodyCircleQuery(body.getPosition(), damageRadius, store);
 				if (debugBool) {
 					var p = body.getPosition(),
 						id = newIdentifier();
-					maze.addSound(p,sound);
+					maze.addSound(p,soundIntensity);
 					loop.addToDraw(id, { draw : function(){ phys2DDebug.drawCircle(p[0],p[1],damageRadius,[1,1,0,1])}});
 					loop.removeOfDraw(id);
 				}
