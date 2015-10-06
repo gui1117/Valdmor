@@ -3,9 +3,22 @@ function generateMaze() {
  * 		pour une certaine proba on prend dans a salle
  * 		une salle plus petite qui relie a la meme sortie et entre
  * 		avec un couloir si il faut
+ *
+ * 		bof ou sinon salles préfaites :
+ *
+ * 		model : 
+ * 		 _ _ _ _ _ _
+ * 		|_|_|_|_|_|_|
+ * 		|_|_|_|_|_|_|
+ * 		|_|_|_|_|_|_|
+ * 		|_|_|_|_|_|_|
+ * 		|_|_|_|_|_|_|
+ * 		|_|_|_|_|_|_|
+ *
  */
 
-	var maxRoom = 5,
+	var radius = 5, //the radius in room of the global square
+	roomNbr = 8,
 	roomSize = 6,
 	generateRoomGrid = function() {
 		/* 0: void
@@ -14,44 +27,53 @@ function generateMaze() {
 		 * 3: third 
 		 * ....
 		 */
-		var grid = [],
+		var grid,
 		n = 0,
 		i,j,k,forbidden;
-		grid.length = maxRoom*2-1;
-		for (i=0; i<grid.length; i++) {
-			grid[i] = [];
-			grid[i].length = maxRoom*2+1;
-			for (j=0; j<grid[i].length; j++) {
-				grid[i][j] = 0;
+
+		while (n < roomNbr) {
+			n = 0;
+			grid = [];
+			grid.length = radius*2-1;
+			for (i=0; i<grid.length; i++) {
+				grid[i] = [];
+				grid[i].length = radius*2+1;
+				for (j=0; j<grid[i].length; j++) {
+					grid[i][j] = 0;
+				}
 			}
-		}
 
-		i = maxRoom-1;
-		j = maxRoom-1;
-		while (!grid[i][j] && n<maxRoom) {
-			n++;
-			grid[i][j] = n;
+			i = radius-1;
+			j = radius-1;
+			while (i>0 && i<grid.length
+					&& j>0 && j<grid.length
+					&& n<roomNbr
+					&& !grid[i][j]) {
 
-			do {
-				k = Math.floor(Math.random()*4);
-			} while (k === forbidden)
-			switch (k) { 
-				case 0:
-					i++;
-					forbidden = 1;
-					break;
-				case 1:
-					i--;
-					forbidden = 0;
-					break;
-				case 2:
-					j++;
-					forbidden = 3;
-					break;
-				case 3:
-					j--;
-					forbidden = 2;
-					break;
+				n++;
+				grid[i][j] = n;
+
+				do {
+					k = Math.floor(Math.random()*4);
+				} while (k === forbidden)
+				switch (k) { 
+					case 0:
+						i++;
+						forbidden = 1;
+						break;
+					case 1:
+						i--;
+						forbidden = 0;
+						break;
+					case 2:
+						j++;
+						forbidden = 3;
+						break;
+					case 3:
+						j--;
+						forbidden = 2;
+						break;
+				}
 			}
 		}
 
@@ -70,14 +92,14 @@ function generateMaze() {
 		entrance,exit;
 
 		/* init empty grid */
-		grid.length = (maxRoom*2-1)*(roomSize+1)*2+1
-			for (i=0; i<grid.length; i++) {
-				grid[i] = []
-				grid[i].length = grid.length;
-				for (j=0; j<grid.length; j++) {
-					grid[i][j] = 0;
-				}
+		grid.length = (radius*2-1)*(roomSize+1)*2+1;
+		for (i=0; i<grid.length; i++) {
+			grid[i] = []
+			grid[i].length = grid.length;
+			for (j=0; j<grid.length; j++) {
+				grid[i][j] = 0;
 			}
+		}
 		/* end init empty grid */
 
 		/* set rooms */

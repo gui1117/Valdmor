@@ -53,6 +53,7 @@ inputDevice = TurbulenzEngine.createInputDevice();
 				isDown[inputDevice.ReverseMouseCodes[mouseCode]] = false;
 			});
 }
+mouseCodes = inputDevice.mouseCodes;
 
 mouse = createMouse();
 

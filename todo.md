@@ -77,9 +77,17 @@ world.grid :
 	
 	for an IA, just get the square visible and code it 
 
+#interface 
 
+black screen on left and right to make an almost square screen
+like teleglitch
 
-
+#monsters : 
+- basic : wake up when sound, go toward the hero if no wall between
+- second : some guards that go from begin to end and end to begin,
+	(with findpath) if see character go kill them, (can only see in front
+	of them so you can follow ? maybe not )
+- third : when alarm pathfind to the character (like second almost ?)
 
 
 

@@ -7,8 +7,9 @@ function createGrenadeLauncher(spec) {
 	velocity = spec ? spec.velocty : 3,
 	velocityTime = spec ? spec.velocityTime : 200,
 	lifeTime = spec ? spec.lifeTime : 400,
-	soundIntensity = spec ? spec.soundIntensity : 1,
+	soundIntensity = spec ? spec.soundIntensity : 3,
 	reloadTime = spec ? spec.reloadTime : 800,
+	bullet = spec ? spec.bullet : 0,
 
 	reload = 0,
 	createGrenade = function(spec) {
@@ -92,6 +93,15 @@ function createGrenadeLauncher(spec) {
 			reload = reloadTime;
 		}
 	},
+	setBullet = function(n) {
+		bullet = n;
+	},
+	addBullet = function(n) {
+		bullet += n;
+	},
+	getBullet = function() {
+		return bullet;
+	},
 	update = function(dt) {
 		reload = Math.max(reload - dt, 0);
 	};
@@ -100,5 +110,8 @@ function createGrenadeLauncher(spec) {
 
 	grenadeLauncher.shoot = shoot;
 	grenadeLauncher.update = update;
+	grenadeLauncher.setBullet = setBullet;
+	grenadeLauncher.addBullet = addBullet;
+	grenadeLauncher.getBullet = getBullet;
 	return Object.freeze(grenadeLauncher);
 }

@@ -4,6 +4,7 @@ function createCharacter(spec) {
 
 	position = spec ? spec.position : [100,100],
 
+	soundIntensity = 0.5,
 	rad = 12,
 	life = 0,
 	velocity = 1.5,
@@ -59,19 +60,11 @@ function createCharacter(spec) {
 			v = 0;
 		}
 		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
-		if (isDown.BUTTON_0) {
-			grenadeLauncher.shoot({
-				position : body.getPosition(),
-				rotation : aim,
-				distance : distance,
-			});
-		} 
-		if (isDown.BUTTON_1) {
-			shotgun.shoot({
-				position : body.getPosition(),
-				rotation : aim,
-			});
+
+		if (v) {
+			maze.addSound(body.getPosition(),soundIntensity);
 		}
+
 		camera.setPosition(body.getPosition());
 	},
 	damage = function(d) {
@@ -98,6 +91,22 @@ function createCharacter(spec) {
 			function(keyCode) { 
 				if (inputDevice.ReverseKeyCodes[keyCode] === 'M') {
 					camera.multZoom(10);
+				}
+			});
+	inputDevice.addEventListener(
+			'mousedown',
+			function(keycode,x,y) {
+				if (keycode === mouseCodes.BUTTON_1) {
+					grenadeLauncher.shoot({
+						position : body.getPosition(),
+						rotation : aim,
+						distance : distance,
+					});
+				} else if (keycode === mouseCodes.BUTTON_0) {
+					shotgun.shoot({
+						position : body.getPosition(),
+						rotation : aim,
+					});
 				}
 			});
 
