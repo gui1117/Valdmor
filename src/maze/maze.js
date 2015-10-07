@@ -22,7 +22,7 @@ function createMaze(spec) {
 	grid = [],
 
 	pathgrid = [],
-	pathfinder = new PF.AStarFinder({,
+	pathfinder = new PF.AStarFinder({
 		allowDiagonal : true,
 		dontCrossCorners : true,
 	}),
@@ -104,7 +104,7 @@ function createMaze(spec) {
 		}
 	},
 	instantiateMaze = function() {
-		var i,j,k,h2,w2,p
+		var i,j,k,h2,w2,p,
 		nbrOfMonster;
 		for (i=1; i<grid.length-1; i++) {
 			for (j=1; j<grid[i].length-1; j++) {
@@ -133,7 +133,7 @@ function createMaze(spec) {
 						entryPos = toWorld([i,j],"center");
 
 						character = createCharacter({
-							position : toWorld([i,j],"random");
+							position : toWorld([i,j],"random"),
 						});
 						break;
 
@@ -165,7 +165,7 @@ function createMaze(spec) {
 	instantiatePathgrid = function() {
 		var i,j;
 
-		pathgrid = new PF.grid(grid.length,grid[0].length);
+		pathgrid = new PF.Grid(grid.length,grid[0].length);
 
 		for (i=0; i<grid.length; i++) {
 			for (j=0; j<grid[i].length; j++) {
