@@ -73,5 +73,6 @@ world = phys2D.createWorld({
 });
 
 maze = createMaze();
+maze.createEntities();
 
 TurbulenzEngine.setInterval(loop.loop,dt);

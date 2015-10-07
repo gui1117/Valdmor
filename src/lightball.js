@@ -7,7 +7,7 @@ function createLightball(spec) {
 	var id = newIdentifier(),
 	lightball = {},
 
-	position = spec.position || [10,10],
+//	position = 0,  // must be the fraction of the distance in node
 
 	rad = 10,
 	life = 1,
@@ -25,7 +25,7 @@ function createLightball(spec) {
 		shapes : [shape],
 		sleeping : false,
 		bullet : false,
-		position : position,
+		position : [0,0],
 		rotation : rotation,
 		userData : lightball,
 	}),
@@ -36,6 +36,13 @@ function createLightball(spec) {
 	update = function(dt) {
 		if (life <= 0) {
 			remove();
+		}
+	},
+	draw = function() {
+		if (debugBool) {
+			nodes.forEach(function(node) {
+				phys2DDebug.drawCircle(node[0],node[1],20,[0,1,1,1]);
+			});
 		}
 	},
 	damage = function(d) {
@@ -50,11 +57,15 @@ function createLightball(spec) {
 	});
 	current = Math.floor(Math.random()*nodes.length);
 
+	body.setPosition(nodes[current][0],nodes[current][1]);
+
 
 	world.addRigidBody(body);
 	loop.addToUpdate(id,lightball);
+	loop.addToDraw(id,lightball);
 
 	lightball.update = update;
 	lightball.damage = damage;
+	lightball.draw = draw;
 	return Object.freeze(lightball);
 }

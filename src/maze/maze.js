@@ -13,6 +13,8 @@ function createMaze(spec) {
 	chanceOfMonster = 0.3,
 	maxMonster = 5,
 
+	nbrOfLighball = 1,
+
 	entryPos = [],
 	exitPos = [],
 
@@ -103,7 +105,7 @@ function createMaze(spec) {
 			updateSound();
 		}
 	},
-	instantiateMaze = function() {
+	createEntities = function() {
 		var i,j,k,h2,w2,p,
 		nbrOfMonster;
 		for (i=1; i<grid.length-1; i++) {
@@ -155,6 +157,10 @@ function createMaze(spec) {
 				}
 			}
 		}
+
+		for (i=0; i<nbrOfLighball; i++) {
+			createLightball();
+		}
 	},
 	getEntry = function() {
 		return [entryPos[0],entryPos[1]]
@@ -169,7 +175,7 @@ function createMaze(spec) {
 
 		for (i=0; i<grid.length; i++) {
 			for (j=0; j<grid[i].length; j++) {
-				if (grid[i][j] === 1) {
+				if (mazeGrid[i][j] === 1) {
 					pathgrid.setWalkableAt(i, j, false);
 				}
 			}
@@ -191,9 +197,9 @@ function createMaze(spec) {
 			gb = b;
 		}
 
-		nodes = pathfinder(ga[0],ga[1],gb[0],gb[1],pathgrid);
+		nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathgrid);
 
-		if (coordinate === "grid") {
+		if (coordinate === "world") {
 			for (i=0; i<nodes.length; i++) {
 				nodes[i] = toWorld(nodes[i],nodeType);
 			}
@@ -229,7 +235,6 @@ function createMaze(spec) {
 		}
 	}
 
-	instantiateMaze();
 	instantiatePathgrid();
 	loop.addToUpdate(id,maze);
 
@@ -240,6 +245,7 @@ function createMaze(spec) {
 	maze.getEntry = getEntry;
 	maze.getExit = getExit;
 	maze.getPath = getPath;
+	maze.createEntities = createEntities;
 	maze.draw = draw;
 	return Object.freeze(maze);
 }
