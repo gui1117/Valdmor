@@ -100,6 +100,10 @@ function createMaze(spec) {
 						character = createCharacter({
 							position : toWorld([i,j],"random"),
 						});
+
+//						createFlooder({
+//							position : toWorld([i,j],"random"),
+//						});
 						break;
 
 					case 3:
@@ -160,6 +164,25 @@ function createMaze(spec) {
 	addSound = function(pos,intensity) {
 		soundGrid.add(toGrid(pos),intensity);
 	},
+	getFreeDirection = function(pos) {
+		var p = toGrid(pos),
+		freeDir = [];
+
+		if (mazeGrid[p[0]][p[1]-1] !== 1) {
+			freeDir.push("up");
+		}
+		if (mazeGrid[p[0]][p[1]+1] !== 1) {
+			freeDir.push("down");
+		}
+		if (mazeGrid[p[0]-1][p[1]] !== 1) {
+			freeDir.push("left");
+		}
+		if (mazeGrid[p[0]+1][p[1]] !== 1) {
+			freeDir.push("right");
+		}
+
+		return freeDir;
+	},
 	draw = function() {
 		var p,alpha;
 		for (i=0; i<mazeGrid.length; i++) {
@@ -189,7 +212,10 @@ function createMaze(spec) {
 	maze.getSound = getSound;
 	maze.addSound = addSound;
 	maze.getPath = getPath;
+	maze.getFreeDirection = getFreeDirection;
 	maze.createEntities = createEntities;
+	maze.toGrid = toGrid;
+	maze.toWorld = toWorld;
 	maze.draw = draw;
 	return Object.freeze(maze);
 }
