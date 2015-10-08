@@ -35,7 +35,7 @@ function createCharacter(spec) {
 		mid = newIdentifier(),
 		mp = mouse.getWorldPosition();
 
-		aim = angle(body.getPosition(),mp);
+		aim = getAngle(body.getPosition(),mp);
 		if (isDown.Z) {
 			if (isDown.Q) {
 				body.setRotation(-3*Math.PI/4);

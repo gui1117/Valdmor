@@ -133,36 +133,15 @@ function generateRoom(x,y,grid,roomSize) {
  * 		|       |   |
  * 		|_ _|_ _|_ _|
  */
-		var k;
-		for (k=1; k<roomSize*2; k++) {
-			grid[x+4][y+k] = 1;
+		[1,2,8,9,10,11].forEach(function(k) {
 			grid[x+8][y+k] = 1;
 			grid[x+k][y+4] = 1;
+		});
+
+		[1,2,3,4,10,11].forEach(function(k) {
+			grid[x+4][y+k] = 1;
 			grid[x+k][y+8] = 1;
-		}
-		grid[x+4][y+5] = 0;
-		grid[x+4][y+6] = 0;
-		grid[x+4][y+7] = 0;
-		grid[x+4][y+8] = 0;
-		grid[x+4][y+9] = 0;
-
-		grid[x+8][y+3] = 0;
-		grid[x+8][y+4] = 0;
-		grid[x+8][y+5] = 0;
-		grid[x+8][y+6] = 0;
-		grid[x+8][y+7] = 0;
-
-		grid[x+3][y+4] = 0;
-		grid[x+4][y+4] = 0;
-		grid[x+5][y+4] = 0;
-		grid[x+6][y+4] = 0;
-		grid[x+7][y+4] = 0;
-
-		grid[x+5][y+8] = 0;
-		grid[x+6][y+8] = 0;
-		grid[x+7][y+8] = 0;
-		grid[x+8][y+8] = 0;
-		grid[x+9][y+8] = 0;
+		});
 	});
 
 
@@ -250,15 +229,12 @@ function generateRoom(x,y,grid,roomSize) {
 				grid[x+k][y+l] = 1;
 			}
 		}
-		grid[x+4][y+1] = 1;
-		grid[x+8][y+1] = 1;
-		grid[x+4][y+11] = 1;
-		grid[x+8][y+11] = 1;
-
-		grid[x+1][y+4] = 1;
-		grid[x+1][y+8] = 1;
-		grid[x+11][y+4] = 1;
-		grid[x+11][y+8] = 1;
+		[1,2,10,11].forEach(function(k) {
+			grid[x+4][y+k] = 1;
+			grid[x+8][y+k] = 1;
+			grid[x+k][y+4] = 1;
+			grid[x+k][y+8] = 1;
+		});
 	});
 
 	type.push(function() {
@@ -290,6 +266,7 @@ function generateRoom(x,y,grid,roomSize) {
 		grid[x+4][y+2] = 1;
 		grid[x+4][y+3] = 1;
 		grid[x+4][y+4] = 1;
+		grid[x+4][y+6] = 1;
 		grid[x+4][y+8] = 1;
 		grid[x+4][y+9] = 1;
 		grid[x+4][y+10] = 1;

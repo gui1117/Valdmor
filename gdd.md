@@ -112,7 +112,8 @@ ou alors un map global avec
 
 #flock bird
 
-des oiseaux assez petit comparé au joueur qui se déplace dans le environnement assez ouvert. faible dégat lorsque superpose au hero (ou alors de suicide sur le hero) 
+des oiseaux assez petit comparé au joueur qui se déplace dans le 
+environnement assez ouvert. faible dégat lorsque superpose au hero (ou alors de suicide sur le hero) 
 
 #son
 
@@ -123,3 +124,18 @@ on peut calculer le son par case :
 	et les joueur en font un peu aussi
 
 enfin l'etat des monstres sera fonction du son. (bien qu'un monstre puisse etre reveillé sans son)
+
+#image
+
+très inspiré de pianitza dans une ambiance plutot pas gore, juste
+un peu stressante et bizarre,
+
+ecran qui louche avec superposition des deux image qui devie un peu l'une de l'autre parfois
+
+grain (style film pellicule) très fort
+
+ton de couleur a la pianitza
+
+saturation de la lumiere basé sur le son
+
+

@@ -12,8 +12,8 @@ function createLightball(spec) {
 
 	rad = 10,
 	life = 1,
-	velocity = 1,
-	rotation = 0,
+	velocity = 1.5,
+	distance = 5,
 
 	nodes = [],
 	current,
@@ -27,7 +27,7 @@ function createLightball(spec) {
 		sleeping : false,
 		bullet : false,
 		position : [0,0],
-		rotation : rotation,
+		rotation : 0,
 		userData : lightball,
 	}),
 	remove = function() {
@@ -35,6 +35,22 @@ function createLightball(spec) {
 		world.removeRigidBody(body);
 	},
 	update = function(dt) {
+		var r,
+		v = velocity;
+
+		if (getDistance(body.getPosition(),nodes[current]) < distance) {
+			if (current === nodes.length-1) {
+				body.setPosition(nodes[0]);
+				current = 1;
+			} else {
+				current++;
+			}
+		}
+
+		r = getAngle(body.getPosition(),nodes[current]);
+		body.setRotation(r);
+		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
+
 		if (life <= 0) {
 			remove();
 		}
@@ -58,7 +74,7 @@ function createLightball(spec) {
 	});
 	current = Math.floor(Math.random()*nodes.length);
 
-	body.setPosition(nodes[current][0],nodes[current][1]);
+	body.setPosition([nodes[current][0],nodes[current][1]]);
 
 	world.addRigidBody(body);
 	loop.addToUpdate(id,lightball);

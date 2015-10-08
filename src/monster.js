@@ -38,7 +38,7 @@ function createMonster(spec) {
 		}
 	},
 	update = function(dt) {
-		var dis = distance(character.getPosition(),body.getPosition()),
+		var dis = getDistance(character.getPosition(),body.getPosition()),
 		chance,v,r;
 		time += dt;
 		
@@ -47,9 +47,9 @@ function createMonster(spec) {
 			time = 0;
 
 			if (awake) {
-				if (distance(body.getPosition(),character.getPosition()) 
+				if (getDistance(body.getPosition(),character.getPosition()) 
 						< sleepingDistance) {
-					body.setRotation(angle(body.getPosition(),character.getPosition()));
+					body.setRotation(getAngle(body.getPosition(),character.getPosition()));
 				} else {
 					setAwake(false);
 				}

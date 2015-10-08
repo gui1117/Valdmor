@@ -74,7 +74,7 @@ function generateMaze() {
 		entrance,exit;
 
 		/* init empty grid */
-		grid.length = (radius*2-1)*(roomSize+1)*2+1;
+		grid.length = (radius*2)*(roomSize+1)*2+1;
 		for (i=0; i<grid.length; i++) {
 			grid[i] = []
 			grid[i].length = grid.length;
@@ -197,7 +197,7 @@ function generateMaze() {
 	};
 
 
-	grid = generateGrid(generateRoomGrid());;
+	grid = generateGrid(generateRoomGrid());
 
 
 	return {grid : grid, draw : draw};
