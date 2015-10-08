@@ -4,26 +4,17 @@ function createMaze(spec) {
 
 	id = newIdentifier(),
 	maze = {},
-	updateSoundTime = 1,
-	updateSoundDelta = 1,
-	time = 0,
-	mazeGrid = generateMaze().grid,
-	coldCoef = 0.97,
 
 	chanceOfMonster = 0.3,
 	maxMonster = 5,
-
 	nbrOfLighball = 1,
 
-	entryPos = [],
-	exitPos = [],
-
-	WALL = 0,
-	SOUND = 1,
-	tmpGrid = [],
-	grid = [],
-
-	pathgrid = [],
+	mazeGrid = generateMaze().grid,
+	soundGrid = createSoundGrid({
+		width : mazeGrid.length,
+		height : mazeGrid[0].length,
+	}),
+	pathGrid = new PF.Grid(mazeGrid.length,mazeGrid[0].length),
 	pathfinder = new PF.AStarFinder({
 		allowDiagonal : true,
 		dontCrossCorners : true,
@@ -71,45 +62,17 @@ function createMaze(spec) {
 		}
 		return [x,y];
 	},
-	addSound = function(position, intensity) {
-		var p = toGrid(position);
-		grid[p[0]][p[1]][SOUND] += Math.pow(10,intensity);
-	},
-	getSound = function(pos) {
-		var p = toGrid(pos);
-		return Math.log(grid[p[0]][p[1]][SOUND]);
-	},
-	updateSound = function() {
-		var i,j;
-		for (i=1; i<grid.length-1; i++) {
-			for (j=1; j<grid[i].length-1; j++) {
-				tmpGrid[i][j] = coldCoef*1/6*(
-						2*grid[i][j][SOUND]
-						+ grid[i+1][j][SOUND]
-						+ grid[i-1][j][SOUND]
-						+ grid[i][j+1][SOUND]
-						+ grid[i][j-1][SOUND]
-						)
-			}
-		}
-		for (i=1; i<grid.length-1; i++) {
-			for (j=1; j<grid[i].length-1; j++) {
-				grid[i][j][SOUND] = tmpGrid[i][j];
-			}
-		}
-	},
 	update = function(dt) {
-		time += dt;
-		while (time > updateSoundTime) {
-			updateSoundTime = time + updateSoundDelta;
-			updateSound();
-		}
+		soundGrid.update(dt);
 	},
 	createEntities = function() {
-		var i,j,k,h2,w2,p,
-		nbrOfMonster;
-		for (i=1; i<grid.length-1; i++) {
-			for (j=1; j<grid[i].length-1; j++) {
+		var i,j,k,h2,w2,
+		nbrOfMonster,
+		entryPos,
+		exitPos;
+
+		for (i=1; i<mazeGrid.length-1; i++) {
+			for (j=1; j<mazeGrid[i].length-1; j++) {
 
 				switch (mazeGrid[i][j]) {
 					case 1:
@@ -148,7 +111,7 @@ function createMaze(spec) {
 							nbrOfMonster = Math.floor(Math.random()*(maxMonster+1));
 							for (k=0; k<nbrOfMonster; k++) {
 								createMonster({
-										position :toWorld([i,j],"random")
+										position : toWorld([i,j],"random")
 								});
 							}
 						}
@@ -159,26 +122,10 @@ function createMaze(spec) {
 		}
 
 		for (i=0; i<nbrOfLighball; i++) {
-			createLightball();
-		}
-	},
-	getEntry = function() {
-		return [entryPos[0],entryPos[1]]
-	},
-	getExit = function() {
-		return [exitPos[0],exitPos[1]]
-	},
-	instantiatePathgrid = function() {
-		var i,j;
-
-		pathgrid = new PF.Grid(grid.length,grid[0].length);
-
-		for (i=0; i<grid.length; i++) {
-			for (j=0; j<grid[i].length; j++) {
-				if (mazeGrid[i][j] === 1) {
-					pathgrid.setWalkableAt(i, j, false);
-				}
-			}
+			createLightball({
+				entry : entryPos,
+				exit : exitPos,
+			});
 		}
 	},
 	getPath = function(spec) {
@@ -197,7 +144,7 @@ function createMaze(spec) {
 			gb = b;
 		}
 
-		nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathgrid);
+		nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathGrid);
 
 		if (coordinate === "world") {
 			for (i=0; i<nodes.length; i++) {
@@ -207,12 +154,18 @@ function createMaze(spec) {
 
 		return nodes;
 	},
+	getSound = function(pos) {
+		return soundGrid.get(toGrid(pos));
+	},
+	addSound = function(pos,intensity) {
+		soundGrid.add(toGrid(pos),intensity);
+	},
 	draw = function() {
 		var p,alpha;
 		for (i=0; i<mazeGrid.length; i++) {
 			for (j=0; j<mazeGrid[0].length; j++) {
 				p = toWorld([i,j],"center");
-				alpha = Math.max(0,Math.min(Math.log(grid[i][j][SOUND]),1));
+				alpha = Math.max(0,Math.min(soundGrid.get([i,j]),1));
 				if (alpha > 0) {
 					phys2DDebug.drawCircle(p[0],p[1],5.9,[1,1,0,alpha]);
 				}
@@ -221,29 +174,20 @@ function createMaze(spec) {
 	},
 	i,j;
 
-	grid.length = mazeGrid.length;
-	tmpGrid.length = mazeGrid.length;
-	for (i=0; i<mazeGrid[0].length; i++) {
-		grid[i] = [];
-		grid[i].length = mazeGrid[0].length;
-		tmpGrid[i] = [];
-		tmpGrid[i].length = mazeGrid[0].length;
-
-		for (j=0; j<mazeGrid[0].length; j++) {
-			grid[i][j] = [0,1];
-			tmpGrid[i][j] = 0;
+	for (i=0; i<mazeGrid.length; i++) {
+		for (j=0; j<mazeGrid[i].length; j++) {
+			if (mazeGrid[i][j] === 1) {
+				pathGrid.setWalkableAt(i, j, false);
+			}
 		}
 	}
 
-	instantiatePathgrid();
 	loop.addToUpdate(id,maze);
 
 
 	maze.update = update;
 	maze.getSound = getSound;
 	maze.addSound = addSound;
-	maze.getEntry = getEntry;
-	maze.getExit = getExit;
 	maze.getPath = getPath;
 	maze.createEntities = createEntities;
 	maze.draw = draw;

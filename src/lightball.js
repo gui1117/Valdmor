@@ -7,7 +7,8 @@ function createLightball(spec) {
 	var id = newIdentifier(),
 	lightball = {},
 
-//	position = 0,  // must be the fraction of the distance in node
+	entry = spec.entry,
+	exit = spec.exit,
 
 	rad = 10,
 	life = 1,
@@ -50,15 +51,14 @@ function createLightball(spec) {
 	};
 
 	nodes = maze.getPath({
-		a : maze.getEntry(),
-		b : maze.getExit(),
+		a : entry,
+		b : exit,
 		coordinate : "world",
 		nodeType : "center",
 	});
 	current = Math.floor(Math.random()*nodes.length);
 
 	body.setPosition(nodes[current][0],nodes[current][1]);
-
 
 	world.addRigidBody(body);
 	loop.addToUpdate(id,lightball);
