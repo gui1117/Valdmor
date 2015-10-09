@@ -1,15 +1,16 @@
 function createGrenadeLauncher(spec) {
 	var id = newIdentifier(),
 	grenadeLauncher = {},
-	rad = spec ? spec.radius : 5,
-	damage = spec ? spec.damage : 1,
-	damageRadius = spec ? spec.damageRadius : 30,
-	velocity = spec ? spec.velocty : 3,
-	velocityTime = spec ? spec.velocityTime : 200,
-	lifeTime = spec ? spec.lifeTime : 400,
-	soundIntensity = spec ? spec.soundIntensity : 3,
-	reloadTime = spec ? spec.reloadTime : 800,
-	bullet = spec ? spec.bullet : 0,
+
+	rad = spec ? spec.radius : GL_RADIUS,
+	damage = spec ? spec.damage : GL_DAMAGE,
+	damageRadius = spec ? spec.damageRadius : GL_DAMAGE_RADIUS,
+	velocity = spec ? spec.velocty : GL_VELOCITY,
+	velocityTime = spec ? spec.velocityTime : GL_VELOCITY_TIME,
+	lifeTime = spec ? spec.lifeTime : GL_LIFE_TIME,
+	soundIntensity = spec ? spec.soundIntensity : GL_SOUND_INTENSITY,
+	reloadTime = spec ? spec.reloadTime : GL_RELOAD_TIME,
+//	bullet = spec ? spec.bullet : 0,
 
 	reload = 0,
 	createGrenade = function(spec) {
@@ -22,6 +23,7 @@ function createGrenadeLauncher(spec) {
 		shape = phys2D.createPolygonShape({
 			sensor : true,
 			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
+			group : BULLET_GROUP,
 			userData : grenade,
 		}),
 		body = phys2D.createRigidBody({

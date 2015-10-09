@@ -20,20 +20,18 @@ function createFlooder(spec) {
 
 	position = spec.position,
 
-	rad = 10,
-	life = 1,
-	velocity = 1,
-	distance = 5,
-	deathDistance = 800,
+	rad = FL_RADIUS,
+	life = FL_LIFE,
+	velocity = FL_VELOCITY,
+	distance = FL_DISTANCE,
+	deathDistance = FL_DEATH_DISTANCE,
+
 	aim = position,
 	lastDir = "",
-	//timeBetweenDecision = 1,
-//	time = 0,
-//	sleepingDistance = 800,
-//	soundRatio = 0.1,
 
 	shape = phys2D.createPolygonShape({
-		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
+		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
+		group : FLOODER_GROUP,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',

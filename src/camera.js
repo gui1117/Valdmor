@@ -1,6 +1,6 @@
 function createCamera() {
 	var position = [0,0],
-	zoom = 1.5,
+	zoom = ZOOM,
 	setPosition = function(p) {
 		position[0] = p[0];
 		position[1] = p[1];

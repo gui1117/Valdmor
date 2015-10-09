@@ -10,16 +10,17 @@ function createLightball(spec) {
 	entry = spec.entry,
 	exit = spec.exit,
 
-	rad = 10,
-	life = 1,
-	velocity = 1.5,
-	distance = 5,
+	rad = LI_RADIUS,
+	life = LI_LIFE,
+	velocity = LI_VELOCITY,
+	distance = LI_DISTANCE,
 
 	nodes = [],
 	current,
 
 	shape = phys2D.createPolygonShape({
-		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
+		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
+		group : LIGHTBALL_GROUP,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',

@@ -2,17 +2,18 @@ function createShotgun(spec) {
 	var id = newIdentifier(),
 	shotgun = {},
 
-	height = spec.height || 320,
-	smallWidth = spec.smallWidth || 15,
-	bigWidth = spec.bigWidth || 100,
 	immune = spec.immune,
-	damage = spec.damage || 1,
-	reloadTime = spec.reloadTime || 800,
-	magazin = spec.magazin || 8,
-	soundIntensity = spec.soundIntensity || 2,
+	height = spec.height || SH_HEIGHT,
+	smallWidth = spec.smallWidth || SH_SMALL_WIDTH,
+	bigWidth = spec.bigWidth || SH_BIG_WIDTH,
+	damage = spec.damage || SH_DAMAGE,
+	reloadTime = spec.reloadTime || SH_RELOAD_TIME,
+	magazin = spec.magazin || SH_MAGAZIN,
+	soundIntensity = spec.soundIntensity || SH_SOUND_INTENSITY,
 
 	shape =  phys2D.createPolygonShape({
 		vertices : [[0,-smallWidth/2],[height,-bigWidth/2],[height,bigWidth/2],[0,smallWidth/2]],
+		group : DAMAGE_GROUP,
 	}),
 
 	bullet = 0,

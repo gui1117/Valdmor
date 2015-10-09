@@ -7,8 +7,9 @@ function createManhole(spec) {
 	manhole = {},
 
 	position = spec.position,	
-	distance = spec.distance || 2000,
-	deltaTime = spec.deltaTime || 200,
+
+	distance = MH_DISTANCE,
+	deltaTime = MH_DELTA_TIME,
 
 	nextTime = 0;
 	time = 0;

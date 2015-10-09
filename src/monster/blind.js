@@ -4,18 +4,20 @@ function createBlind(spec) {
 
 	position = spec.position || [10,10],
 
-	rad = 10,
-	life = 1,
-	velocity = 1,
-	rotation = 0,
+	rad = BL_RADIUS,
+	life = BL_LIFE,
+	velocity = BL_VELOCITY,
+	timeBetweenDecision = BL_TIME_BETWEEN_DECISION,
+	sleepingDistance = BL_SLEEPING_DISTANCE,
+	soundRatio = BL_SOUND_RATIO,
+
 	awake = false,
-	timeBetweenDecision = 1,
 	time = 0,
-	sleepingDistance = 800,
-	soundRatio = 0.1,
+	rotation = 0,
 
 	shape = phys2D.createPolygonShape({
-		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
+		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
+		group : BLIND_GROUP,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',

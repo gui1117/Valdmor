@@ -4,18 +4,18 @@ function createCharacter(spec) {
 
 	position = spec ? spec.position : [100,100],
 
-	soundIntensity = 0.5,
-	rad = 12,
-	life = 0,
-	velocity = 1.5,
+	soundIntensity = CHAR_SOUND_INT,
+	rad = CHAR_RAD,
+	life = CHAR_LIFE,
+	velocity = CHAR_VELOCITY,
+	distance = CHAR_DISTANCE
+
 	rotation = 0,
-	distance = rad*1.1,
 	aim = 0,
-	mousePosition = position,
 
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
-		group : 2,
+		group : CHARACTER_GROUP,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',
