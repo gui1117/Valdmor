@@ -14,7 +14,8 @@ function createCharacter(spec) {
 	mousePosition = position,
 
 	shape = phys2D.createPolygonShape({
-		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad)
+		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
+		group : 2,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',

@@ -1,6 +1,6 @@
-function createMonster(spec) {
+function createBlind(spec) {
 	var id = newIdentifier(),
-	monster = {},
+	blind = {},
 
 	position = spec.position || [10,10],
 
@@ -24,7 +24,7 @@ function createMonster(spec) {
 		bullet : false,
 		position : position,
 		rotation : rotation,
-		userData : monster,
+		userData : blind,
 	}),
 	remove = function() {
 		loop.removeOfUpdate(id);
@@ -73,9 +73,9 @@ function createMonster(spec) {
 		life -= d;
 	};
 	world.addRigidBody(body);
-	loop.addToUpdate(id,monster);
+	loop.addToUpdate(id,blind);
 
-	monster.update = update;
-	monster.damage = damage;
-	return Object.freeze(monster);
+	blind.update = update;
+	blind.damage = damage;
+	return Object.freeze(blind);
 }

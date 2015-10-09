@@ -2,8 +2,8 @@ function createSoundGrid(spec) {
 	var width = spec.width,
 	height = spec.height,
 
-	timeDelta = 1,
-	coldCoef = 0.97,
+	timeDelta = 100,
+	coldCoef = 0.60,
 
 	nextUpdate = timeDelta,
 	time = 0,

@@ -5,8 +5,8 @@ function createMaze(spec) {
 	id = newIdentifier(),
 	maze = {},
 
-	chanceOfMonster = 0.3,
-	maxMonster = 5,
+	chanceOfBlind = 0.3,
+	maxBlind = 5,
 	nbrOfLighball = 1,
 
 	mazeGrid = generateMaze().grid,
@@ -67,7 +67,7 @@ function createMaze(spec) {
 	},
 	createEntities = function() {
 		var i,j,k,h2,w2,
-		nbrOfMonster,
+		nbrOfBlind,
 		entryPos,
 		exitPos;
 
@@ -101,9 +101,9 @@ function createMaze(spec) {
 							position : toWorld([i,j],"random"),
 						});
 
-//						createFlooder({
-//							position : toWorld([i,j],"random"),
-//						});
+						createManhole({
+							position : toWorld([i,j],"random"),
+						});
 						break;
 
 					case 3:
@@ -111,10 +111,10 @@ function createMaze(spec) {
 						break;
 
 					case 4:
-						if (Math.random() < chanceOfMonster) {
-							nbrOfMonster = Math.floor(Math.random()*(maxMonster+1));
-							for (k=0; k<nbrOfMonster; k++) {
-								createMonster({
+						if (Math.random() < chanceOfBlind) {
+							nbrOfBlind = Math.floor(Math.random()*(maxBlind+1));
+							for (k=0; k<nbrOfBlind; k++) {
+								createBlind({
 										position : toWorld([i,j],"random")
 								});
 							}
