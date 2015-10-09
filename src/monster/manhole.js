@@ -8,7 +8,8 @@ function createManhole(spec) {
 
 	position = spec.position,	
 
-	distance = MH_DISTANCE,
+	min_distance = MH_MIN_DISTANCE,
+	max_distance = MH_MAX_DISTANCE,
 	deltaTime = MH_DELTA_TIME,
 
 	nextTime = 0;
@@ -22,7 +23,7 @@ function createManhole(spec) {
 			nextTime += deltaTime;
 
 			d = getDistance(position,character.getPosition());
-			if (alarm.isOn() && d < distance) {
+			if (alarm.isOn() && d < max_distance && d > min_distance) {
 				createFlooder({
 					position : position
 				});

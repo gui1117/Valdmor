@@ -207,7 +207,6 @@ function createMaze(spec) {
 
 	loop.addToUpdate(id,maze);
 
-
 	maze.update = update;
 	maze.getSound = getSound;
 	maze.addSound = addSound;

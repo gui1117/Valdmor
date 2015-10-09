@@ -52,7 +52,8 @@ LI_VELOCITY = 1.5;
 LI_DISTANCE = 5;
 
 /* manhole */
-MH_DISTANCE = 2000;
+MH_MIN_DISTANCE = 200;
+MH_MAX_DISTANCE = 2000;
 MH_DELTA_TIME = 200;
 
 /* grenade launcher */

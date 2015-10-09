@@ -138,4 +138,4 @@ ton de couleur a la pianitza
 
 saturation de la lumiere basé sur le son
 
-
++ aberation géométrique des lentilles : distorsion, courbure de champ, astigmatisme

@@ -32,6 +32,7 @@ function createFlooder(spec) {
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
 		group : FLOODER_GROUP,
+		mask : 0xffffffff^FLOODER_GROUP,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',
