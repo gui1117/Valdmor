@@ -46,10 +46,6 @@ function createLoop(deltaTime) {
 					avg += t;
 				});
 				avg /= debugDT.length;
-				min = Math.round(min);
-				min = Math.round(max);
-				min = Math.round(avg);
-				console.info("last 100 dt : min",min,"max",max,"avg",avg);
 				min = Math.round(1000/min);
 				max = Math.round(1000/max);
 				avg = Math.round(1000/avg);

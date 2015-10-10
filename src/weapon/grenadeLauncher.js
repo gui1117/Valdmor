@@ -37,19 +37,21 @@ function createGrenadeLauncher(spec) {
 			userData : grenade,
 		}),
 		life = 1,
-		time = 0,
+		timeToStop = TurbulenzEngine.getTime() + velocityTime,
+		timeToDie = TurbulenzEngine.getTime() + lifeTime,
 		remove = function() {
 			loop.removeOfUpdate(id);
 			world.removeRigidBody(body);
 		},
 		update = function(dt) {
-			var store;
-			time += dt;
-			if (time < velocityTime) {
+			var store,
+			time = TurbulenzEngine.getTime();
+
+			if (time < timeToStop) {
 				body.setVelocity(v);
 			}
 
-			if (life === 0 || time > lifeTime) {
+			if (life === 0 || time > timeToDie) {
 				store = [];
 				world.bodyCircleQuery(body.getPosition(), damageRadius, store);
 				if (debugBool) {

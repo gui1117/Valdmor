@@ -12,7 +12,9 @@ function createBlind(spec) {
 	soundRatio = BL_SOUND_RATIO,
 	attackDelay = BL_ATTACK_DELAY,
 
-	punch = createPunch(),
+	punch = createPunch({
+		immune : blind,
+	}),
 	awake = false,
 	rotation = 0,
 	timeToDecide = TurbulenzEngine.getTime(),

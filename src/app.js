@@ -71,7 +71,6 @@ world = phys2D.createWorld({
 	positionIterations : 8,
 });
 
-alarm = createAlarm();
 maze = createMaze();
 maze.createEntities();
 
