@@ -1,6 +1,7 @@
 function createShotgun(spec) {
 	var id = newIdentifier(),
 	shotgun = {},
+	spec = spec || {},
 
 	immune = spec.immune,
 	height = spec.height || SH_HEIGHT,

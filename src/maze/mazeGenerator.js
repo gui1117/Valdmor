@@ -66,7 +66,7 @@ function generateMaze() {
 		 * 1 : wall
 		 * 2 : entrance
 		 * 3 : exit
-		 * 4 : blindable
+		 * 4 : monsterable
 		 */
 		var grid = [],
 		i,j,k,l,x,y,

@@ -8,9 +8,9 @@ function createCharacter(spec) {
 	rad = CHAR_RAD,
 	life = CHAR_LIFE,
 	velocity = CHAR_VELOCITY,
+	rotation = 0,
 	distance = CHAR_DISTANCE
 
-	rotation = 0,
 	aim = 0,
 
 	shape = phys2D.createPolygonShape({

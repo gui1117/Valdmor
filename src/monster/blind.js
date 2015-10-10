@@ -10,10 +10,13 @@ function createBlind(spec) {
 	timeBetweenDecision = BL_TIME_BETWEEN_DECISION,
 	sleepingDistance = BL_SLEEPING_DISTANCE,
 	soundRatio = BL_SOUND_RATIO,
+	attackDelay = BL_ATTACK_DELAY,
 
+	punch = createPunch(),
 	awake = false,
-	time = 0,
 	rotation = 0,
+	timeToDecide = TurbulenzEngine.getTime(),
+	timeToAttack = undefined,
 
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
@@ -41,12 +44,14 @@ function createBlind(spec) {
 	},
 	update = function(dt) {
 		var dis = getDistance(character.getPosition(),body.getPosition()),
-		chance,v,r;
-		time += dt;
+		chance,v,r,
+		time = TurbulenzEngine.getTime();
 		
 
-		if (time >= timeBetweenDecision) {
-			time = 0;
+		if (time >= timeToDecide) {
+			while (timeToDecide <= time) {
+				timeToDecide += timeBetweenDecision;
+			}
 
 			if (awake) {
 				if (getDistance(body.getPosition(),character.getPosition()) 
@@ -66,14 +71,27 @@ function createBlind(spec) {
 			r = body.getRotation();
 			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 		}
+		if (timeToAttack && time > timeToAttack) {
+			punch.shoot({
+				position : body.getPosition(),
+				rotation : body.getRotation(),
+			});
+			timeToAttack = undefined;
+		}
 
 		if (life <= 0) {
 			remove();
 		}
 	},
+	attack = function() {
+		if (! timeToAttack) {
+			timeToAttack = TurbulenzEngine.getTime()+attackDelay;
+		}
+	},
 	damage = function(d) {
 		life -= d;
 	};
+	shape.addEventListener('begin',attack,CHARACTER_GROUP);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,blind);
 

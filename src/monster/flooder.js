@@ -15,6 +15,7 @@
  */
 
 function createFlooder(spec) {
+	/* condition : position is on a big square */
 	var id = newIdentifier(),
 	flooder = {},
 
@@ -25,10 +26,12 @@ function createFlooder(spec) {
 	velocity = FL_VELOCITY,
 	distance = FL_DISTANCE,
 	deathDistance = FL_DEATH_DISTANCE,
+	attackDelay = FL_ATTACK_DELAY,
 
 	aim = position,
-	lastDir = "",
-
+	previous = "",
+	timeToAttack = undefined,
+	
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
 		group : FLOODER_GROUP,
@@ -56,24 +59,24 @@ function createFlooder(spec) {
 			fd = maze.getFreeDirection(p);
 			do {
 				i = Math.floor(Math.random()*fd.length);
-			} while (fd.length > 1 && fd[i]  === lastDir)
+			} while (fd.length > 1 && fd[i]  === previous)
 
 			switch (fd[i]) {
 				case "up" :
-					lastDir = "up";
-					gp = [gp[0],gp[1]-1];
+					previous = "down";
+					gp = [gp[0],gp[1]-2];
 					break;
 				case "down" :
-					lastDir = "down";
-					gp = [gp[0],gp[1]+1];
+					previous = "up";
+					gp = [gp[0],gp[1]+2];
 					break;
 				case "left" :
-					lastDir = "left";
-					gp = [gp[0]-1,gp[1]];
+					previous = "right";
+					gp = [gp[0]-2,gp[1]];
 					break;
 				case "right" :
-					lastDir = "right";
-					gp = [gp[0]+1,gp[1]];
+					previous = "left";
+					gp = [gp[0]+2,gp[1]];
 					break;
 			}
 
@@ -88,9 +91,13 @@ function createFlooder(spec) {
 			remove();
 		}
 	},
+	attack = function(arbitrer) {
+		remove();
+	},
 	damage = function(d) {
 		life -= d;
 	};
+	shape.addEventListener('begin',attack,CHARACTER_GROUP);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,flooder);
 

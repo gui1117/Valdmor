@@ -46,6 +46,22 @@ use of predefine sentences like "together ! wave in
 comming" if the information isn't globally known (like if
 a player declench a trap) or "please come I'm stuck !"
 
+#plan to develop the game
+
+0.1 : offline game 
+	mapping with svg
+	action manager with network in mind
+	3 weapon
+	basic monster
+
+0.2 : network game
+	interpolation of entities
+	instant action -> send entities touched
+
+further improve :
+	deploy to app for desktop and mobile
+	improve graphism
+	
 #monster
 
 basic : 
@@ -139,3 +155,8 @@ ton de couleur a la pianitza
 saturation de la lumiere basé sur le son
 
 + aberation géométrique des lentilles : distorsion, courbure de champ, astigmatisme
+
+#interface 
+
+black screen on left and right to make an almost square screen
+like teleglitch

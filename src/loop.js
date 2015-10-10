@@ -1,4 +1,4 @@
-function createLoop(delay) {
+function createLoop(deltaTime) {
 	var	toUpdate = {},
 	toDraw = {},
 	toRemoveOfUpdate = [],
@@ -15,12 +15,50 @@ function createLoop(delay) {
 	removeOfDraw = function(id) {
 		toRemoveOfDraw.push(id);
 	},
-	dt = delay,
+	lastTime = undefined,
+	debugDT = [],
 
-		/* MAIN LOOP */
+	/* MAIN LOOP */
 
 	loop = function() {
-		var mp;
+		var mp,dt,
+		avg = 0,
+		min = Infinity,
+		max = -Infinity;
+		
+		if (!lastTime) {
+			lastTime = TurbulenzEngine.getTime();
+			dt = deltaTime;
+		} else {
+			dt = TurbulenzEngine.getTime()- lastTime;
+			lastTime = TurbulenzEngine.getTime();
+		}
+		if (debugBool) {
+			debugDT.push(dt);
+			if (debugDT.length >= 100) {
+				debugDT.forEach(function(t) {
+					if (min > t) {
+						min = t;
+					} 
+					if (max < t) {
+						max = t;
+					}
+					avg += t;
+				});
+				avg /= debugDT.length;
+				min = Math.round(min);
+				min = Math.round(max);
+				min = Math.round(avg);
+				console.info("last 100 dt : min",min,"max",max,"avg",avg);
+				min = Math.round(1000/min);
+				max = Math.round(1000/max);
+				avg = Math.round(1000/avg);
+				console.info("last 100 fps : min",max,"max",min,"avg",avg);
+				debugDT = [];
+			}
+		}
+
+
 		/* UPDATE  */
 		world.step(dt);
 
@@ -52,7 +90,7 @@ function createLoop(delay) {
 			phys2DDebug.drawWorld(world);
 
 			mp = mouse.getWorldPosition();
-			phys2DDebug.drawCircle(mp[0],mp[1],1,[1,1,0,1])
+			phys2DDebug.drawCircle(mp[0],mp[1],1,[1,1,0,1]);
 
 			phys2DDebug.end();
 			graphicsDevice.endFrame();
@@ -63,7 +101,7 @@ function createLoop(delay) {
 		toRemoveOfDraw = [];
 	};
 
-		/* END MAIN LOOP */
+	/* END MAIN LOOP */
 
 	return Object.freeze({
 		addToUpdate : addToUpdate,

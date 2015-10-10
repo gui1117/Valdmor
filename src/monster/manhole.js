@@ -12,8 +12,8 @@ function createManhole(spec) {
 	max_distance = MH_MAX_DISTANCE,
 	deltaTime = MH_DELTA_TIME,
 
-	nextTime = 0;
-	time = 0;
+	nextTime = 0,
+	time = 0,
 
 	update = function(dt) {
 		var d;
@@ -29,10 +29,15 @@ function createManhole(spec) {
 				});
 			}
 		}
-	}
+	},
+	draw = function() {
+		phys2DDebug.drawCircle(position[0],position[1],20,[0.5,1,0.5,1]);
+	};
 
 	loop.addToUpdate(id,manhole);
+	loop.addToDraw(id,manhole);
 
 	manhole.update = update;
+	manhole.draw = draw;
 	return Object.freeze(manhole);
 }

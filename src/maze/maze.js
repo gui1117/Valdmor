@@ -8,6 +8,7 @@ function createMaze(spec) {
 	chanceOfBlind = MAZE_CHANCE_OF_BLIND,
 	maxBlind = MAZE_MAX_BLIND,
 	nbrOfLighball = MAZE_NBR_OF_LIGHTBALL,
+	chanceOfManhole = MAZE_CHANCE_OF_MANHOLE,
 
 	mazeGrid = generateMaze().grid,
 	soundGrid = createSoundGrid({
@@ -100,11 +101,8 @@ function createMaze(spec) {
 						character = createCharacter({
 							position : toWorld([i,j],"random"),
 						});
-
-						createManhole({
-							position : toWorld([i,j],"random"),
-						});
 						break;
+
 
 					case 3:
 						exitPos = toWorld([i,j],"center");
@@ -119,6 +117,13 @@ function createMaze(spec) {
 								});
 							}
 						}
+						if (Math.random() < chanceOfManhole) {
+							createManhole({
+								position : toWorld([i,j],"random"),
+							});
+						}
+						break;
+
 
 						break;
 				}

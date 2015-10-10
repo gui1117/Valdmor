@@ -10,7 +10,7 @@ function createGrenadeLauncher(spec) {
 	lifeTime = spec ? spec.lifeTime : GL_LIFE_TIME,
 	soundIntensity = spec ? spec.soundIntensity : GL_SOUND_INTENSITY,
 	reloadTime = spec ? spec.reloadTime : GL_RELOAD_TIME,
-//	bullet = spec ? spec.bullet : 0,
+	bullet = spec ? spec.bullet : 0,
 
 	reload = 0,
 	createGrenade = function(spec) {
@@ -71,6 +71,7 @@ function createGrenadeLauncher(spec) {
 			life = 0;
 		};
 
+		shape.addEventListener('begin',damage);
 		world.addRigidBody(body);
 		loop.addToUpdate(id,grenade);
 
@@ -81,14 +82,14 @@ function createGrenadeLauncher(spec) {
 	},
 	shoot = function(spec) {
 		var p = spec.position;
-		d = spec.distance,
+		d = spec.distance+rad*1.45,
 		v = spec.velocity || velocity,
 		r = spec.rotation;
 
 		if (!reload) {
 			createGrenade({
 				rotation : r,
-				position : [p[0]+(d+rad)*Math.cos(r),p[1]+(d+rad)*Math.sin(r)],
+				position : [p[0]+d*Math.cos(r),p[1]+d*Math.sin(r)],
 				velocity : [v*Math.cos(r),v*Math.sin(r)],
 
 			});
