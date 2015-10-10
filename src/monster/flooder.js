@@ -25,12 +25,13 @@ function createFlooder(spec) {
 	life = FL_LIFE,
 	velocity = FL_VELOCITY,
 	distance = FL_DISTANCE,
-	deathDistance = FL_DEATH_DISTANCE,
+	lifeTime = FL_LIFE_TIME,
 	attackDelay = FL_ATTACK_DELAY,
 
 	aim = position,
 	previous = "",
 	timeToAttack = undefined,
+	timeToDie = TurbulenzEngine.getTime() + lifeTime,
 	
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
@@ -87,7 +88,7 @@ function createFlooder(spec) {
 		r = getAngle(p,aim);
 		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 
-		if (life <= 0 || getDistance(p,character.getPosition()) > deathDistance) {
+		if (life <= 0 || TurbulenzEngine.getTime() > timeToDie) {
 			remove();
 		}
 	},

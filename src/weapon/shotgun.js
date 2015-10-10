@@ -29,6 +29,7 @@ function createShotgun(spec) {
 			reload = reloadTime;
 			shapeAttack({
 				position : position,
+				damage : damage,
 				distance : 0,
 				rotation : rotation,
 				shape : shape,

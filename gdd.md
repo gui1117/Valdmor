@@ -160,3 +160,8 @@ saturation de la lumiere basé sur le son
 
 black screen on left and right to make an almost square screen
 like teleglitch
+
+#alarm
+each monster have a different behavior when alarm :
+manhole : more frequence
+blind : no sound just distance to the heros
