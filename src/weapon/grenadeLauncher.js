@@ -1,16 +1,34 @@
 function createGrenadeLauncher(spec) {
 	var id = newIdentifier(),
 	grenadeLauncher = {},
+	spec = spec || {},
 
-	rad = spec ? spec.radius : GL_RADIUS,
-	damage = spec ? spec.damage : GL_DAMAGE,
-	damageRadius = spec ? spec.damageRadius : GL_DAMAGE_RADIUS,
-	velocity = spec ? spec.velocty : GL_VELOCITY,
-	velocityTime = spec ? spec.velocityTime : GL_VELOCITY_TIME,
-	lifeTime = spec ? spec.lifeTime : GL_LIFE_TIME,
-	soundIntensity = spec ? spec.soundIntensity : GL_SOUND_INTENSITY,
-	reloadTime = spec ? spec.reloadTime : GL_RELOAD_TIME,
-	bullet = spec ? spec.bullet : 0,
+	rad = spec.radius || GL_RADIUS,
+	damageAmount = spec.damage || GL_DAMAGE,
+	damageRadius = spec.damageRadius || GL_DAMAGE_RADIUS,
+	velocity = spec.velocty || GL_VELOCITY,
+	velocityTime = spec.velocityTime || GL_VELOCITY_TIME,
+	lifeTime = spec.lifeTime || GL_LIFE_TIME,
+	soundIntensity = spec.soundIntensity || GL_SOUND_INTENSITY,
+	reloadTime = spec.reloadTime || GL_RELOAD_TIME,
+	bullet = spec.bullet || 0,
+
+	shootSoundName = spec.shootSoundName || GL_SHOOT_SOUND,
+	shootSoundVolume = spec.shootSoundVolume || GL_SHOOT_SOUND_VOLUME,
+
+	shootSound  = soundDevice.createSound({
+		src : 'assets/sounds/'+shootSoundName,
+		uncompress: false,
+	}),
+
+	explosionSoundName = spec.explosionSoundName || GL_EXPLOSION_SOUND,
+	explosionSoundVolume = spec.explosionSoundVolume || GL_EXPLOSION_SOUND_VOLUME,
+
+	explosionSound  = soundDevice.createSound({
+		src : 'assets/sounds/'+explosionSoundName,
+		uncompress: false,
+	}),
+
 
 	reload = 0,
 	createGrenade = function(spec) {
@@ -44,7 +62,7 @@ function createGrenadeLauncher(spec) {
 			world.removeRigidBody(body);
 		},
 		update = function(dt) {
-			var store,
+			var store,damageShape,
 			time = TurbulenzEngine.getTime();
 
 			if (time < timeToStop) {
@@ -52,19 +70,17 @@ function createGrenadeLauncher(spec) {
 			}
 
 			if (life === 0 || time > timeToDie) {
-				store = [];
-				world.bodyCircleQuery(body.getPosition(), damageRadius, store);
-				if (debugBool) {
-					var p = body.getPosition(),
-						id = newIdentifier();
-					maze.addSound(p,soundIntensity);
-					loop.addToDraw(id, { draw : function(){ phys2DDebug.drawCircle(p[0],p[1],damageRadius,[1,1,0,1])}});
-					loop.removeOfDraw(id);
-				}
-				store.forEach(function(ent) {
-					if (ent.damage) {
-						ent.damage(damage);
-					}
+				soundSource.play(explosionSound);
+				damageShape = phys2D.createCircleShape({
+					sensor : true,
+					radius : damageRadius,
+					group : DAMAGE_GROUP,
+				}),
+
+				shapeAttack({
+					shape : damageShape,
+					position : body.getPosition(),
+					damage : damageAmount,
 				});
 				remove();
 			}
@@ -89,6 +105,7 @@ function createGrenadeLauncher(spec) {
 		r = spec.rotation;
 
 		if (!reload) {
+			soundSource.play(shootSound);
 			createGrenade({
 				rotation : r,
 				position : [p[0]+d*Math.cos(r),p[1]+d*Math.sin(r)],

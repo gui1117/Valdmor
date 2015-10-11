@@ -1,32 +1,26 @@
-function createFlooder(spec) {
+function createTank(spec) {
 	/* condition : position is on a big square */
 	var id = newIdentifier(),
-	flooder = {},
+	tank = {},
 
 	position = spec.position,
 
-	rad = FL_RADIUS,
-	life = FL_LIFE,
-	velocity = FL_VELOCITY,
-	distance = FL_DISTANCE,
-	lifeTime = FL_LIFE_TIME,
-	damageRadius = FL_DAMAGE_RADIUS,
-	damage = FL_DAMAGE,
+	rad = TA_RADIUS,
+	life = TA_LIFE,
+	velocity = TA_VELOCITY,
+	distance = TA_DISTANCE,
+	attackDelay = TA_ATTACK_DELAY,
+	activationDistance = TA_ACTIVATION_DISTANCE,
 
 	aim = position,
 	previous = "",
 	timeToAttack = undefined,
 	timeToDie = TurbulenzEngine.getTime() + lifeTime,
 	
-	damageShape = phys2D.createPolygonShape({
-		vertices : phys2D.createRectangleVertices(-damageRadius,-damageRadius,damageRadius,damageRadius),
-		group : DAMAGE_GROUP,
-	}),
-
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
-		group : FLOODER_GROUP,
-		mask : 0xffffffff^FLOODER_GROUP,
+		group : TANK_GROUP,
+		mask : 0xffffffff^TANK_GROUP,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',
@@ -35,7 +29,7 @@ function createFlooder(spec) {
 		bullet : false,
 		position : position,
 		rotation : 0,
-		userData : flooder,
+		userData : tank,
 	}),
 	remove = function() {
 		loop.removeOfUpdate(id);
@@ -83,22 +77,16 @@ function createFlooder(spec) {
 		}
 	},
 	attack = function(arbitrer) {
-		shapeAttack({
-			shape : damageShape,
-			position : body.getPosition(),
-			damage : damage,
-		});
-		remove();
+		//TODO
 	},
 	damage = function(d) {
 		life -= d;
 	};
-
-	shape.addEventListener('begin',attack,CHARACTER_GROUP);
+	shape.addEventListener('begin',attack,CHARACTER_GROUP | MONSTER_GROUP);
 	world.addRigidBody(body);
-	loop.addToUpdate(id,flooder);
+	loop.addToUpdate(id,tank);
 
-	flooder.update = update;
-	flooder.damage = damage;
-	return Object.freeze(flooder);
+	tank.update = update;
+	tank.damage = damage;
+	return Object.freeze(tank);
 }

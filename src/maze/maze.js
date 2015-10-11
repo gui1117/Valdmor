@@ -189,16 +189,16 @@ function createMaze(spec) {
 		return freeDir;
 	},
 	draw = function() {
-		var p,alpha;
-		for (i=0; i<mazeGrid.length; i++) {
-			for (j=0; j<mazeGrid[0].length; j++) {
-				p = toWorld([i,j],"center");
-				alpha = Math.max(0,Math.min(soundGrid.get([i,j]),1));
-				if (alpha > 0) {
-					phys2DDebug.drawCircle(p[0],p[1],5.9,[1,1,0,alpha]);
-				}
-			}
-		}
+//		var p,alpha;
+//		for (i=0; i<mazeGrid.length; i++) {
+//			for (j=0; j<mazeGrid[0].length; j++) {
+//				p = toWorld([i,j],"center");
+//				alpha = Math.max(0,Math.min(soundGrid.get([i,j]),1));
+//				if (alpha > 0) {
+//					phys2DDebug.drawCircle(p[0],p[1],5.9,[1,1,0,alpha]);
+//				}
+//			}
+//		}
 	},
 	i,j;
 

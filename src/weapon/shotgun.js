@@ -11,6 +11,13 @@ function createShotgun(spec) {
 	reloadTime = spec.reloadTime || SH_RELOAD_TIME,
 	magazin = spec.magazin || SH_MAGAZIN,
 	soundIntensity = spec.soundIntensity || SH_SOUND_INTENSITY,
+	shootSoundName = spec.shootSoundName || SH_SHOOT_SOUND,
+	soundVolume = spec.soundVolume || SH_SOUND_VOLUME,
+
+	shootSound  = soundDevice.createSound({
+		src : 'assets/sounds/'+shootSoundName,
+		uncompress: false,
+	}),
 
 	shape =  phys2D.createPolygonShape({
 		vertices : [[0,-smallWidth/2],[height,-bigWidth/2],[height,bigWidth/2],[0,smallWidth/2]],
@@ -25,6 +32,7 @@ function createShotgun(spec) {
 
 		if (bullet) {
 			bullet--;
+			soundSource.play(shootSound);
 			maze.addSound(position,soundIntensity);
 			reload = reloadTime;
 			shapeAttack({

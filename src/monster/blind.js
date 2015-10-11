@@ -85,7 +85,7 @@ function createBlind(spec) {
 			remove();
 		}
 	},
-	attack = function() {
+	attack = function(arbiter) {
 		if (! timeToAttack) {
 			timeToAttack = TurbulenzEngine.getTime()+attackDelay;
 		}
@@ -93,6 +93,7 @@ function createBlind(spec) {
 	damage = function(d) {
 		life -= d;
 	};
+	console.log('cg'+CHARACTER_GROUP)
 	shape.addEventListener('begin',attack,CHARACTER_GROUP);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,blind);

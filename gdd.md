@@ -165,3 +165,11 @@ like teleglitch
 each monster have a different behavior when alarm :
 manhole : more frequence
 blind : no sound just distance to the heros
+
+#weapon
+peut etre ? 
+	les armes se recharge toutes seul même quand on tire
+	pour le shotgun nombre de balle maxi : magazin
+		mais toujours temps de chargement mini
+		entre deux coups
+	pour le lance grenade : 1

@@ -1,6 +1,6 @@
 debugBool = true;
 
-/* load Turbulenz device */
+/* load Turbulenz devices */
 TurbulenzEngine = WebGLTurbulenzEngine.create({
 	canvas: document.getElementById("canvas")
 });
@@ -8,17 +8,16 @@ canvas = document.getElementById("canvas");
 canvas.height=window.innerHeight;
 canvas.width=window.innerWidth;
 
+mathDevice = TurbulenzEngine.createMathDevice();
 graphicsDevice = TurbulenzEngine.createGraphicsDevice({});
+soundDevice = TurbulenzEngine.createSoundDevice({
+	deviceSpecifier: "DirectSound Software",
+	linearDistance: true,
+});
 
 phys2DDebug = Physics2DDebugDraw.create({
 	graphicsDevice : graphicsDevice
 });
-phys2DDebug.setPhysics2DViewport([
-		0,0,window.innerWidth,window.innerHeight
-]);
-phys2DDebug.setScreenViewport([
-		0,0,window.innerWidth,window.innerHeight
-]);
 
 inputDevice = TurbulenzEngine.createInputDevice();
 {
@@ -54,8 +53,21 @@ inputDevice = TurbulenzEngine.createInputDevice();
 			});
 }
 mouseCodes = inputDevice.mouseCodes;
-
 mouse = createMouse();
+
+soundSource = soundDevice.createSource({
+	position : mathDevice.v3Build(0, 0, 0),
+	direction : mathDevice.v3Build(0, 0, -1),
+	velocity : mathDevice.v3Build(0, 0, 0),
+	gain: 1.0,
+	minDistance: 1.0,
+	maxDistance: 100.0,
+	rollOff: 1.0,
+	relative: false,
+	looping: false,
+	pitch: 1.0
+});
+
 
 phys2D = Physics2DDevice.create();
 phys2DCollision = phys2D.createCollisionUtils();
