@@ -3,14 +3,13 @@ function createPunch(spec) {
 
 	return createShotgun({
 		immune : spec.immune,
-		height : spec.height || PU_HEIGHT,
-		smallWidth : spec.width || PU_WIDTH,
-		bigWidth : spec.width || PU_WIDTH,
-		reloadTime : spec.reloadTime || PU_RELOAD_TIME,
+		height : spec.height || PARAM.PU_HEIGHT,
+		smallWidth : spec.width || PARAM.PU_WIDTH,
+		bigWidth : spec.width || PARAM.PU_WIDTH,
+		reloadTime : spec.reloadTime || PARAM.PU_RELOAD_TIME,
 		magazin : 1,
-		soundIntensity : spec.soundIntensity || PU_SOUND_INTENSITY,
-		damage : spec.damage || PU_DAMAGE,
-		shootSoundName : spec.shootSoundName || PU_SHOOT_SOUND,
-		soundVolume : spec.soundVolume || PU_SOUND_VOLUME,
+		soundIntensity : spec.soundIntensity || PARAM.PU_SOUND_INTENSITY,
+		damage : spec.damage || PARAM.PU_DAMAGE,
+		shootSound : spec.shootSound || SOUND.PUNCH_SHOOT[0],
 	});
 }

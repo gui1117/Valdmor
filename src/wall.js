@@ -8,7 +8,7 @@ function createWall(spec) {
 
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices( topleft[0], topleft[1], downright[0], downright[1]),
-		group : WALL_GROUP,
+		group : GROUP.WALL,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'static',

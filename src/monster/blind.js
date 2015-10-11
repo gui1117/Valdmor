@@ -4,13 +4,13 @@ function createBlind(spec) {
 
 	position = spec.position || [10,10],
 
-	rad = BL_RADIUS,
-	life = BL_LIFE,
-	velocity = BL_VELOCITY,
-	timeBetweenDecision = BL_TIME_BETWEEN_DECISION,
-	sleepingDistance = BL_SLEEPING_DISTANCE,
-	soundRatio = BL_SOUND_RATIO,
-	attackDelay = BL_ATTACK_DELAY,
+	rad = PARAM.BL_RADIUS,
+	life = PARAM.BL_LIFE,
+	velocity = PARAM.BL_VELOCITY,
+	timeBetweenDecision = PARAM.BL_TIME_BETWEEN_DECISION,
+	sleepingDistance = PARAM.BL_SLEEPING_DISTANCE,
+	soundRatio = PARAM.BL_SOUND_RATIO,
+	attackDelay = PARAM.BL_ATTACK_DELAY,
 
 	punch = createPunch({
 		immune : blind,
@@ -22,7 +22,7 @@ function createBlind(spec) {
 
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
-		group : BLIND_GROUP,
+		group : GROUP.BLIND,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',
@@ -93,8 +93,7 @@ function createBlind(spec) {
 	damage = function(d) {
 		life -= d;
 	};
-	console.log('cg'+CHARACTER_GROUP)
-	shape.addEventListener('begin',attack,CHARACTER_GROUP);
+	shape.addEventListener('begin',attack,GROUP.CHARACTER);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,blind);
 

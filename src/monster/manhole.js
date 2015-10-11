@@ -8,18 +8,18 @@ function createManhole(spec) {
 
 	position = spec.position,	
 
-	distance = MH_DISTANCE,
-	deltaTime = MH_DELTA_TIME,
-	rad = MH_RADIUS,
-	life = MH_LIFE,
+	distance = PARAM.MH_DISTANCE,
+	deltaTime = PARAM.MH_DELTA_TIME,
+	rad = PARAM.MH_RADIUS,
+	life = PARAM.MH_LIFE,
 
 	nextTime = 0,
 	time = 0,
 
 	shape = phys2D.createCircleShape({
 		radius : rad,
-		group : MANHOLE_GROUP,
-		mask : 0xffffffff^FLOODER_GROUP,
+		group : GROUP.MANHOLE,
+		mask : 0xffffffff^GROUP.FLOODER,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'static',

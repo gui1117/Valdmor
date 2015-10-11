@@ -1,6 +1,6 @@
 function createCamera() {
 	var position = [0,0],
-	zoom = ZOOM,
+	zoom = PARAM.ZOOM,
 	setPosition = function(p) {
 		position[0] = p[0];
 		position[1] = p[1];
@@ -9,7 +9,7 @@ function createCamera() {
 		return [position[0],position[1]];
 	},
 	setZoom = function(n) {
-		zoom = n
+		zoom = n;
 	},
 	getZoom = function() {
 		return zoom;

@@ -5,13 +5,13 @@ function createFlooder(spec) {
 
 	position = spec.position,
 
-	rad = FL_RADIUS,
-	life = FL_LIFE,
-	velocity = FL_VELOCITY,
-	distance = FL_DISTANCE,
-	lifeTime = FL_LIFE_TIME,
-	damageRadius = FL_DAMAGE_RADIUS,
-	damage = FL_DAMAGE,
+	rad = PARAM.FL_RADIUS,
+	life = PARAM.FL_LIFE,
+	velocity = PARAM.FL_VELOCITY,
+	distance = PARAM.FL_DISTANCE,
+	lifeTime = PARAM.FL_LIFE_TIME,
+	damageRadius = PARAM.FL_DAMAGE_RADIUS,
+	damage = PARAM.FL_DAMAGE,
 
 	aim = position,
 	previous = "",
@@ -20,13 +20,13 @@ function createFlooder(spec) {
 	
 	damageShape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-damageRadius,-damageRadius,damageRadius,damageRadius),
-		group : DAMAGE_GROUP,
+		group : GROUP.DAMAGE,
 	}),
 
 	shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
-		group : FLOODER_GROUP,
-		mask : 0xffffffff^FLOODER_GROUP,
+		group : GROUP.FLOODER,
+		mask : 0xffffffff^GROUP.FLOODER,
 	}),
 	body = phys2D.createRigidBody({
 		type : 'kinetic',
@@ -94,7 +94,7 @@ function createFlooder(spec) {
 		life -= d;
 	};
 
-	shape.addEventListener('begin',attack,CHARACTER_GROUP);
+	shape.addEventListener('begin',attack,GROUP.CHARACTER);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,flooder);
 

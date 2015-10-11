@@ -4,24 +4,23 @@ function createShotgun(spec) {
 	spec = spec || {},
 
 	immune = spec.immune,
-	height = spec.height || SH_HEIGHT,
-	smallWidth = spec.smallWidth || SH_SMALL_WIDTH,
-	bigWidth = spec.bigWidth || SH_BIG_WIDTH,
-	damage = spec.damage || SH_DAMAGE,
-	reloadTime = spec.reloadTime || SH_RELOAD_TIME,
-	magazin = spec.magazin || SH_MAGAZIN,
-	soundIntensity = spec.soundIntensity || SH_SOUND_INTENSITY,
-	shootSoundName = spec.shootSoundName || SH_SHOOT_SOUND,
-	soundVolume = spec.soundVolume || SH_SOUND_VOLUME,
-
-	shootSound  = soundDevice.createSound({
-		src : 'assets/sounds/'+shootSoundName,
-		uncompress: false,
-	}),
+	height = spec.height || PARAM.SH_HEIGHT,
+	smallWidth = spec.smallWidth || PARAM.SH_SMALL_WIDTH,
+	bigWidth = spec.bigWidth || PARAM.SH_BIG_WIDTH,
+	damage = spec.damage || PARAM.SH_DAMAGE,
+	reloadTime = spec.reloadTime || PARAM.SH_RELOAD_TIME,
+	magazin = spec.magazin || PARAM.SH_MAGAZIN,
+	soundIntensity = spec.soundIntensity || PARAM.SH_SOUND_INTENSITY,
+	shootSound = spec.shootSound || SOUND.SHOTGUN_SHOOT[0],
 
 	shape =  phys2D.createPolygonShape({
-		vertices : [[0,-smallWidth/2],[height,-bigWidth/2],[height,bigWidth/2],[0,smallWidth/2]],
-		group : DAMAGE_GROUP,
+		vertices : [
+			[0,-smallWidth/2],
+			[height,-bigWidth/2],
+			[height,bigWidth/2],
+			[0,smallWidth/2 ]
+		],
+		group : GROUP.DAMAGE,
 	}),
 
 	bullet = 0,
@@ -32,7 +31,7 @@ function createShotgun(spec) {
 
 		if (bullet) {
 			bullet--;
-			soundSource.play(shootSound);
+			sound.play(shootSound);
 			maze.addSound(position,soundIntensity);
 			reload = reloadTime;
 			shapeAttack({

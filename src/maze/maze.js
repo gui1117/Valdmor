@@ -3,12 +3,12 @@ function createMaze(spec) {
 	var id = newIdentifier(),
 	maze = {},
 
-	smallSquare = MAZE_SMALL_SQUARE,
-	bigSquare = MAZE_BIG_SQUARE,
-	chanceOfBlind = MAZE_CHANCE_OF_BLIND,
-	maxBlind = MAZE_MAX_BLIND,
-	nbrOfLighball = MAZE_NBR_OF_LIGHTBALL,
-	chanceOfManhole = MAZE_CHANCE_OF_MANHOLE,
+	smallSquare = PARAM.MAZE_SMALL_SQUARE,
+	bigSquare = PARAM.MAZE_BIG_SQUARE,
+	chanceOfBlind = PARAM.MAZE_CHANCE_OF_BLIND,
+	maxBlind = PARAM.MAZE_MAX_BLIND,
+	nbrOfLighball = PARAM.MAZE_NBR_OF_LIGHTBALL,
+	chanceOfManhole = PARAM.MAZE_CHANCE_OF_MANHOLE,
 
 	mazeGrid = generateMaze().grid,
 	soundGrid = createSoundGrid({

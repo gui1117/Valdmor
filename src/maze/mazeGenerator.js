@@ -1,7 +1,7 @@
 function generateMaze() {
-	var radius = MG_RADIUS, //the radius in room of the global square
-	roomNbr = MG_ROOM_NBR,
-	roomSize = MG_ROOM_SIZE,
+	var radius = PARAM.MG_RADIUS, //the radius in room of the global square
+	roomNbr = PARAM.MG_ROOM_NBR,
+	roomSize = PARAM.MG_ROOM_SIZE,
 	generateRoomGrid = function() {
 		/* 0: void
 		 * 1: first room
