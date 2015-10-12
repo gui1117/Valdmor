@@ -1,50 +1,51 @@
+"use strict";
+
 function shapeAttack(spec) {
-	var shape = spec.shape,
-	p = spec.position,
-	d = spec.distance || 0,
-	r = spec.rotation || 0,
-	damage = spec.damage,
-	immune = spec.immune || [],
+	/* specification */
+	var shapes = spec.shapes || [spec.shape];
+	var p = spec.position;
+	var d = spec.distance || 0;
+	var r = spec.rotation || 0;
+	var damage = spec.damage;
+	var transparantId = spec.transparentId || [];
+	var transparantMask = spec.transparantMask || 0;
+	//	var opaqueMask = spec.opaqueMask || GROUP.WALL; // not implemented
+	/* end specification */
 
-	bounds,store,i,
-
-	isImmuned = function(userData) {
-		var result = false;
-		immune.forEach(function(immune) {
-			if (immune === userData) {
-				result = true;
-			}
-		});
-		return result;
-	},
-
-	body = phys2D.createRigidBody({
+	var body = phys2D.createRigidBody({
 		type : 'static',
-		shapes : [shape],
+		shapes : shapes,
 		position : [p[0]+d*Math.cos(r),p[1]+d*Math.sin(r)],
 		rotation : r,
 	});
 
+	var intersect = function(otherShape) {
+		return body.shapes.some(function(shape) {
+			return phys2DCollision.intersects(shape,otherShape);
+		});
+	}
+
 	if (debugBool) {
-		i = newIdentifier();
-		loop.addToDraw(i,{
+		var debi = newIdentifier();
+		loop.addToDraw(debi,{
 			draw:function(){ phys2DDebug.drawRigidBody(body); }
 		});
-		loop.removeOfDraw(i);
+		loop.removeOfDraw(debi);
 	}
 
-	bounds = body.computeWorldBounds();
-
-	store = [];
+	var store = [];
+	var bounds = body.computeWorldBounds();
 	world.shapeRectangleQuery(bounds,store);
 
-	for (i=0; i<store.length; i++) {
-		if (phys2DCollision.intersects(shape,store[i])) {
-			if (store[i].body.userData 
-					&& store[i].body.userData.damage 
-					&& !isImmuned(store[i].body.userData)) {
-				store[i].body.userData.damage(damage);
-			}
+	store.forEach(function(otherShape) {
+		var userData = otherShape.body.userData;
+
+		if (userData && userData.damage
+				&& !(otherShape.mask & transparantMask)
+				&& (!userData.id || transparantId.indexOf(userData.id) === -1)
+				&& intersect(otherShape)) {
+
+			userData.damage(damage);
 		}
-	}
+	});
 }

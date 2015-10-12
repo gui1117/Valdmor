@@ -4,14 +4,14 @@ function particleAttack(spec) {
 	var damage = spec.damage;
 	var immune = spec.immune; // array of id
 
-	var destination = spec.destination; // this or the two below 
+	var destination = spec.destination; // this or the two below must be given
 	var rotation = spec.rotation;
 	var height = spec.height;
 
-	var direction,resultaFactor;
+	var direction;
 
 	if (spec.destination) {
-		direction = [origin[0]-destination[0],origin[1]-destination[1]]
+		direction = [origin[0]-destination[0],origin[1]-destination[1]];
 		height = getDistance(direction,origin);
 	} else {
 		direction = [height*Math.cos(rotation),height*Math.sin(rotation)];
@@ -27,7 +27,7 @@ function particleAttack(spec) {
 	var ignored = {};
 	immune.forEach(function(id) {
 		ignored[id] = true;
-	})
+	});
 
 	var filter = function(ray, tmpResult) {
 		var userData = tmpResult.shape.body.userData;

@@ -1,27 +1,27 @@
 function createMaze(spec) {
 
-	var id = newIdentifier(),
-	maze = {},
+	var id = newIdentifier();
+	var maze = {};
 
-	smallSquare = PARAM.MAZE_SMALL_SQUARE,
-	bigSquare = PARAM.MAZE_BIG_SQUARE,
-	chanceOfBlind = PARAM.MAZE_CHANCE_OF_BLIND,
-	maxBlind = PARAM.MAZE_MAX_BLIND,
-	nbrOfLighball = PARAM.MAZE_NBR_OF_LIGHTBALL,
-	chanceOfManhole = PARAM.MAZE_CHANCE_OF_MANHOLE,
+	var smallSquare = PARAM.MAZE_SMALL_SQUARE;
+	var bigSquare = PARAM.MAZE_BIG_SQUARE;
+	var chanceOfBlind = PARAM.MAZE_CHANCE_OF_BLIND;
+	var maxBlind = PARAM.MAZE_MAX_BLIND;
+	var nbrOfLighball = PARAM.MAZE_NBR_OF_LIGHTBALL;
+	var chanceOfManhole = PARAM.MAZE_CHANCE_OF_MANHOLE;
 
-	mazeGrid = generateMaze().grid,
-	soundGrid = createSoundGrid({
+	var mazeGrid = generateMaze().grid;
+	var soundGrid = createSoundGrid({
 		width : mazeGrid.length,
 		height : mazeGrid[0].length,
-	}),
-	pathGrid = new PF.Grid(mazeGrid.length,mazeGrid[0].length),
-	pathfinder = new PF.AStarFinder({
+	});
+	var pathGrid = new PF.Grid(mazeGrid.length,mazeGrid[0].length);
+	var pathfinder = new PF.AStarFinder({
 		allowDiagonal : true,
 		dontCrossCorners : true,
-	}),
+	});
 
-	toGrid = function(pos) {
+	var toGrid = function(pos) {
 		var p0 = Math.floor(pos[0]/(smallSquare+bigSquare))*2,
 		p1 = Math.floor(pos[1]/(smallSquare+bigSquare))*2;
 		if (pos[0]-p0 >= smallSquare) {
@@ -31,28 +31,28 @@ function createMaze(spec) {
 			p1++;
 		}
 		return [p0,p1];
-	},
-	toWorld = function(pos,type) {
+	};
+	var toWorld = function(pos,type) {
 		var x = Math.floor(pos[0]/2)*(smallSquare+bigSquare),
 		y = Math.floor(pos[1]/2)*(smallSquare+bigSquare);
 		if (type === "center") {
-			if (pos[0]%2 == 0) {
+			if (pos[0]%2 === 0) {
 				x += smallSquare/2;
 			} else {
 				x += smallSquare + bigSquare/2;
 			}
-			if (pos[1]%2 == 0) {
+			if (pos[1]%2 === 0) {
 				y += smallSquare/2;
 			} else {
 				y += smallSquare + bigSquare/2;
 			}
 		} else if (type === "random") {
-			if (pos[0]%2 == 0) {
+			if (pos[0]%2 === 0) {
 				x += Math.random()*smallSquare;
 			} else {
 				x += smallSquare + Math.random()*bigSquare;
 			}
-			if (pos[1]%2 == 0) {
+			if (pos[1]%2 === 0) {
 				y += Math.random()*smallSquare;
 			} else {
 				y += smallSquare + Math.random()*bigSquare;
@@ -62,11 +62,11 @@ function createMaze(spec) {
 			y += (pos[1]%2)*smallSquare;
 		}
 		return [x,y];
-	},
-	update = function(dt) {
+	};
+	var update = function(dt) {
 		soundGrid.update(dt);
-	},
-	createEntities = function() {
+	};
+	var createEntities = function() {
 		var i,j,k,h2,w2,
 		nbrOfBlind,
 		entryPos,
@@ -77,12 +77,12 @@ function createMaze(spec) {
 
 				switch (mazeGrid[i][j]) {
 					case 1:
-						if (i%2 == 0) {
+						if (i%2 === 0) {
 							w2 = smallSquare/2;
 						} else {
 							w2 = bigSquare/2;
 						}
-						if (j%2 == 0) {
+						if (j%2 === 0) {
 							h2 = smallSquare/2;
 						} else {
 							h2 = bigSquare/2;
@@ -123,9 +123,6 @@ function createMaze(spec) {
 							});
 						}
 						break;
-
-
-						break;
 				}
 			}
 		}
@@ -136,8 +133,8 @@ function createMaze(spec) {
 				exit : exitPos,
 			});
 		}
-	},
-	getPath = function(spec) {
+	};
+	var getPath = function(spec) {
 		var a = spec.a,
 		b = spec.b,
 		coordinate = spec.coordinate,
@@ -162,14 +159,14 @@ function createMaze(spec) {
 		}
 
 		return nodes;
-	},
-	getSound = function(pos) {
+	};
+	var getSound = function(pos) {
 		return soundGrid.get(toGrid(pos));
-	},
-	addSound = function(pos,intensity) {
+	};
+	var addSound = function(pos,intensity) {
 		soundGrid.add(toGrid(pos),intensity);
-	},
-	getFreeDirection = function(pos) {
+	};
+	var getFreeDirection = function(pos) {
 		var p = toGrid(pos),
 		freeDir = [];
 
@@ -187,8 +184,8 @@ function createMaze(spec) {
 		}
 
 		return freeDir;
-	},
-	draw = function() {
+	};
+	var draw = function() {
 //		var p,alpha;
 //		for (i=0; i<mazeGrid.length; i++) {
 //			for (j=0; j<mazeGrid[0].length; j++) {
@@ -199,9 +196,9 @@ function createMaze(spec) {
 //				}
 //			}
 //		}
-	},
-	i,j;
+	};
 
+	var i,j;
 	for (i=0; i<mazeGrid.length; i++) {
 		for (j=0; j<mazeGrid[i].length; j++) {
 			if (mazeGrid[i][j] === 1) {

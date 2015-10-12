@@ -1,3 +1,5 @@
+"use strict";
+
 function generateMaze() {
 	var radius = PARAM.MG_RADIUS, //the radius in room of the global square
 	roomNbr = PARAM.MG_ROOM_NBR,
@@ -37,7 +39,8 @@ function generateMaze() {
 
 				do {
 					k = Math.floor(Math.random()*4);
-				} while (k === forbidden)
+				} while (k === forbidden);
+
 				switch (k) { 
 					case 0:
 						i++;
@@ -69,7 +72,7 @@ function generateMaze() {
 		 * 4 : monsterable
 		 */
 		var grid = [],
-		i,j,k,l,x,y,
+		i,j,l,x,y,
 		rg,room,
 		entrance,exit;
 

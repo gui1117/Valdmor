@@ -1,3 +1,5 @@
+"use strict";
+
 /* possibilité pour améliorer :
  * 		pour une certaine proba on prend dans a salle
  * 		une salle plus petite qui relie a la meme sortie et entre

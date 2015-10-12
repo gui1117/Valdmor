@@ -1,6 +1,8 @@
+"use strict";
+
 function createIncrement(n) {
-	var i = n || 0,
-	inc = function() {
+	var i = n || 0;
+	var inc = function() {
 		i++;
 		return i;
 	};

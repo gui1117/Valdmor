@@ -1,17 +1,19 @@
+"use strict";
+
 /* shape group */
-GROUP = {};
-GROUP.WALL 		= 0b1 << 1;
-GROUP.CHARACTER = 0b1 << 2;
-GROUP.BULLET 	= 0b1 << 3;
-GROUP.DAMAGE 	= 0b1 << 4;
-GROUP.FLOODER 	= 0b1 << 5;
-GROUP.LIGHTBALL = 0b1 << 6;
-GROUP.BLIND 	= 0b1 << 7;
-GROUP.MANHOLE 	= 0b1 << 8;
+var GROUP = {};
+GROUP.WALL 		= 1 << 1;
+GROUP.CHARACTER = 1 << 2;
+GROUP.BULLET 	= 1 << 3;
+GROUP.DAMAGE 	= 1 << 4;
+GROUP.FLOODER 	= 1 << 5;
+GROUP.LIGHTBALL = 1 << 6;
+GROUP.BLIND 	= 1 << 7;
+GROUP.MANHOLE 	= 1 << 8;
 GROUP.MONSTER	= GROUP.MANHOLE | GROUP.FLOODER | GROUP.LIGHTBALL | GROUP.BLIND;
 /* sound */
 /* volume not yet implemented */
-SOUND = {};
+var SOUND = {};
 SOUND.PUNCH_SHOOT = ['monsterAttack.ogg',1];
 SOUND.SHOTGUN_SHOOT = ['pistol.ogg',1];
 SOUND.GRENADELAUNCHER_SHOOT = ['click.ogg',1];
@@ -20,7 +22,7 @@ SOUND.BLIND_DIE = ['monsterDie.ogg',1];
 SOUND.FLOODER_DIE = ['monsterDie.ogg',1];
 
 /* standard spec*/
-PARAM = {};
+var PARAM = {};
 PARAM.FRAMERATE = Math.floor(1000/60);
 PARAM.ZOOM = 1.5;
 

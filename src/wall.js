@@ -1,16 +1,18 @@
+"use strict";
+
 function createWall(spec) {
-	var id = newIdentifier(),
-	wall = {id : id},
+	var id = newIdentifier();
+	var wall = {id : id};
 
-	position = spec.position,
-	topleft = spec.topleft,
-	downright = spec.downright,
+	var position = spec.position;
+	var topleft = spec.topleft;
+	var downright = spec.downright;
 
-	shape = phys2D.createPolygonShape({
+	var shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices( topleft[0], topleft[1], downright[0], downright[1]),
 		group : GROUP.WALL,
-	}),
-	body = phys2D.createRigidBody({
+	});
+	var body = phys2D.createRigidBody({
 		type : 'static',
 		shapes : [shape],
 		sleeping : false,

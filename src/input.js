@@ -1,20 +1,22 @@
+"use strict";
+
 function createInput(spec) {
-	var input = {},
+	var input = {};
 
-	isDown = {},
-	reverseKeyCodes = [],
-	reverseMouseCodes = [],
+	var isDown = {};
+	var reverseKeyCodes = [];
+	var reverseMouseCodes = [];
 
-	keydown = function(keyCode) {
+	var keydown = function(keyCode) {
 		isDown[reverseKeyCodes[keyCode]] = true;
-	},
-	keyup = function(keyCode) {
+	};
+	var keyup = function(keyCode) {
 		isDown[reverseKeyCodes[keyCode]] = false;
-	},
-	mousedown = function(mouseCode) {
+	};
+	var mousedown = function(mouseCode) {
 		isDown[reverseMouseCodes[mouseCode]] = true;
-	},
-	mouseup = function(mouseCode) {
+	};
+	var mouseup = function(mouseCode) {
 		isDown[reverseMouseCodes[mouseCode]] = false;
 	};
 

@@ -15,6 +15,7 @@ function createShotgun(spec) {
 
 	var shootSound = spec.shootSound || SOUND.SHOTGUN_SHOOT[0];
 
+	
 	var shape =  phys2D.createPolygonShape({
 		vertices : [
 			[0,-smallWidth/2],

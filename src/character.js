@@ -1,23 +1,26 @@
+"use strict";
+
 function createCharacter(spec) {
-	var id = newIdentifier(),
-	character = {id : id},
+	var id = newIdentifier();
+	var character = {id : id};
 
-	position = spec ? spec.position : [100,100],
+	var position = spec ? spec.position : [100,100];
 
-	soundIntensity = PARAM.CHAR_SOUND_INT,
-	rad = PARAM.CHAR_RAD,
-	life = PARAM.CHAR_LIFE,
-	velocity = PARAM.CHAR_VELOCITY,
-	rotation = 0,
-	distance = PARAM.CHAR_DISTANCE,
+	var soundIntensity = PARAM.CHAR_SOUND_INT;
+	var rad = PARAM.CHAR_RAD;
+	var life = PARAM.CHAR_LIFE;
+	var velocity = PARAM.CHAR_VELOCITY;
+	var rotation = 0;
+	var distance = PARAM.CHAR_DISTANCE;
 
-	aim = 0,
+	var aim = 0;
 
-	shape = phys2D.createPolygonShape({
+	var shape = phys2D.createPolygonShape({
 		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
 		group : GROUP.CHARACTER,
-	}),
-	body = phys2D.createRigidBody({
+	});
+
+	var body = phys2D.createRigidBody({
 		type : 'kinetic',
 		shapes : [shape],
 		sleeping : false,
@@ -25,15 +28,16 @@ function createCharacter(spec) {
 		position : position,
 		rotation : rotation,
 		userData : character,
-	}),
-	grenadeLauncher = createGrenadeLauncher(),
-	shotgun = createShotgun({
+	});
+
+	var grenadeLauncher = createGrenadeLauncher();
+	var shotgun = createShotgun({
 		immune : character,
-	}),
-	update = function(dt) {
+	});
+
+	var update = function(dt) {
 		var r = body.getRotation(),
 		v = velocity,
-		mid = newIdentifier(),
 		mp = mouse.getWorldPosition();
 
 		aim = getAngle(body.getPosition(),mp);
@@ -67,26 +71,31 @@ function createCharacter(spec) {
 		}
 
 		camera.setPosition(body.getPosition());
-	},
-	damage = function(d) {
+	};
+	
+	var	damage = function(d) {
 		life -= d;
 		console.log('character damaged');
-	},
-	getPosition = function() {
+	};
+
+	var getPosition = function() {
 		var p = body.getPosition();
 		return [p[0],p[1]];
-	},
-	keydown = function(keyCode) { 
+	};
+
+	var keydown = function(keyCode) { 
 		if (inputDevice.ReverseKeyCodes[keyCode] === 'M') {
 			camera.multZoom(0.1);
 		}
-	},
-	keyup = function(keyCode) { 
+	};
+
+	var keyup = function(keyCode) { 
 		if (inputDevice.ReverseKeyCodes[keyCode] === 'M') {
 			camera.multZoom(10);
 		}
-	},
-	mousedown = function(keycode,x,y) {
+	};
+
+	var mousedown = function(keycode) {
 		if (keycode === inputDevice.mouseCodes.BUTTON_1) {
 			grenadeLauncher.shoot({
 				position : body.getPosition(),
@@ -102,10 +111,10 @@ function createCharacter(spec) {
 				immune : [character.id],
 			}));
 
-//			shotgun.shoot({
-//				position : body.getPosition(),
-//				rotation : aim,
-//			});
+			shotgun.shoot({
+				position : body.getPosition(),
+				rotation : aim,
+			});
 		}
 	};
 	world.addRigidBody(body);

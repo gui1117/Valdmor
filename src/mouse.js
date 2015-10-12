@@ -1,14 +1,16 @@
+"use strict";
+
 function createMouse() {
-	var mouseCodes = inputDevice.mouseCodes,
-	position = [0,0],
-	getPosition = function() {
+	var mouseCodes = inputDevice.mouseCodes;
+	var position = [0,0];
+	var getPosition = function() {
 		return [position[0],position[1]];
-	},
-	setPosition = function(p) {
+	};
+	var setPosition = function(p) {
 		position[0] = p[0];
 		position[1] = p[1];
-	},
-	getWorldPosition = function() {
+	};
+	var getWorldPosition = function() {
 		var cp = camera.getPosition(),
 		zoom = camera.getZoom();
 		return [

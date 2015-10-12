@@ -1,26 +1,28 @@
+"use strict";
+
 function createLoop(deltaTime) {
-	var	toUpdate = {},
-	toDraw = {},
-	toRemoveOfUpdate = [],
-	toRemoveOfDraw = [],
-	addToUpdate = function(id,obj) {
+	var	toUpdate = {};
+	var toDraw = {};
+	var toRemoveOfUpdate = [];
+	var toRemoveOfDraw = [];
+	var addToUpdate = function(id,obj) {
 		toUpdate[id] = obj;
-	},
-	addToDraw = function(id,obj) {
+	};
+	var addToDraw = function(id,obj) {
 		toDraw[id] = obj;
-	},
-	removeOfUpdate = function(id) {
+	};
+	var removeOfUpdate = function(id) {
 		toRemoveOfUpdate.push(id);
-	},
-	removeOfDraw = function(id) {
+	};
+	var removeOfDraw = function(id) {
 		toRemoveOfDraw.push(id);
-	},
-	lastTime = undefined,
-	debugDT = [],
+	};
+	var lastTime;
+	var debugDT = [];
 
 	/* MAIN LOOP */
 
-	loop = function() {
+	var loop = function() {
 		var mp,dt,
 		avg = 0,
 		min = Infinity,

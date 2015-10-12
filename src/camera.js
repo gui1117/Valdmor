@@ -1,3 +1,5 @@
+"use strict" ;
+
 function createCamera() {
 	var position = [0,0],
 	zoom = PARAM.ZOOM,
