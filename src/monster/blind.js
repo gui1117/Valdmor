@@ -1,6 +1,6 @@
 function createBlind(spec) {
 	var id = newIdentifier(),
-	blind = {},
+	blind = {id : id},
 
 	position = spec.position || [10,10],
 

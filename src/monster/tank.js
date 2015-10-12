@@ -1,7 +1,7 @@
 function createTank(spec) {
 	/* condition : position is on a big square */
 	var id = newIdentifier(),
-	tank = {},
+	tank = {id : id},
 
 	position = spec.position,
 

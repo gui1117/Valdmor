@@ -1,3 +1,0 @@
-/* particle that accumulate in the maze
- * on wall...
- */

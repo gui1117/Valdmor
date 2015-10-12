@@ -4,7 +4,7 @@
 
 function createManhole(spec) {
 	var id = newIdentifier(),
-	manhole = {},
+	manhole = {id : id},
 
 	position = spec.position,	
 

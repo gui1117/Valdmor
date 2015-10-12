@@ -1,19 +1,21 @@
 function createShotgun(spec) {
-	var id = newIdentifier(),
-	shotgun = {},
-	spec = spec || {},
+	var id = newIdentifier();
+	var shotgun = {};
+	spec = spec || {};
 
-	immune = spec.immune,
-	height = spec.height || PARAM.SH_HEIGHT,
-	smallWidth = spec.smallWidth || PARAM.SH_SMALL_WIDTH,
-	bigWidth = spec.bigWidth || PARAM.SH_BIG_WIDTH,
-	damage = spec.damage || PARAM.SH_DAMAGE,
-	reloadTime = spec.reloadTime || PARAM.SH_RELOAD_TIME,
-	magazin = spec.magazin || PARAM.SH_MAGAZIN,
-	soundIntensity = spec.soundIntensity || PARAM.SH_SOUND_INTENSITY,
-	shootSound = spec.shootSound || SOUND.SHOTGUN_SHOOT[0],
+	var immune = spec.immune;
+	var height = spec.height || PARAM.SH_HEIGHT;
+	var smallWidth = spec.smallWidth || PARAM.SH_SMALL_WIDTH;
+	var bigWidth = spec.bigWidth || PARAM.SH_BIG_WIDTH;
+	var damage = spec.damage || PARAM.SH_DAMAGE;
+	var reloadTime = spec.reloadTime || PARAM.SH_RELOAD_TIME;
+	var magazin = spec.magazin || PARAM.SH_MAGAZIN;
+	var soundIntensity = spec.soundIntensity || PARAM.SH_SOUND_INTENSITY;
+	var division = spec.division || PARAM.SH_DIVISION;
 
-	shape =  phys2D.createPolygonShape({
+	var shootSound = spec.shootSound || SOUND.SHOTGUN_SHOOT[0];
+
+	var shape =  phys2D.createPolygonShape({
 		vertices : [
 			[0,-smallWidth/2],
 			[height,-bigWidth/2],
@@ -21,11 +23,11 @@ function createShotgun(spec) {
 			[0,smallWidth/2 ]
 		],
 		group : GROUP.DAMAGE,
-	}),
+	});
 
-	bullet = 0,
-	reload = 0,
-	shoot = function(spec) {
+	var bullet = 0;
+	var reload = 0;
+	var shoot = function(spec) {
 		var position = spec.position,
 		rotation = spec.rotation || 0;
 
@@ -43,8 +45,8 @@ function createShotgun(spec) {
 				immune : [immune],
 			});
 		}
-	},
-	update = function(dt) {
+	};
+	var update = function(dt) {
 		if (!bullet) {
 			reload = Math.max(reload - dt, 0);
 			if (!reload) {
@@ -52,11 +54,11 @@ function createShotgun(spec) {
 				reload = reloadTime;
 			}
 		}
-	},
-	getBullet = function() {
+	};
+	var getBullet = function() {
 		return bullet;
-	},
-	getMagazin = function() {
+	};
+	var getMagazin = function() {
 		return magazin;
 	};
 

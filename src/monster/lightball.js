@@ -5,7 +5,7 @@ function createLightball(spec) {
  * may not have life
  */
 	var id = newIdentifier(),
-	lightball = {},
+	lightball = {id : id},
 
 	entry = spec.entry,
 	exit = spec.exit,

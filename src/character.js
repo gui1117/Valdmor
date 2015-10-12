@@ -1,6 +1,6 @@
 function createCharacter(spec) {
 	var id = newIdentifier(),
-	character = {},
+	character = {id : id},
 
 	position = spec ? spec.position : [100,100],
 
@@ -94,10 +94,18 @@ function createCharacter(spec) {
 				distance : distance,
 			});
 		} else if (keycode === inputDevice.mouseCodes.BUTTON_0) {
-			shotgun.shoot({
-				position : body.getPosition(),
+			console.log(particleAttack({
+				origin : body.getPosition(),
 				rotation : aim,
-			});
+				height : 200,
+				damage : 1,
+				immune : [character.id],
+			}));
+
+//			shotgun.shoot({
+//				position : body.getPosition(),
+//				rotation : aim,
+//			});
 		}
 	};
 	world.addRigidBody(body);

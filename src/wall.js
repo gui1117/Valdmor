@@ -1,6 +1,6 @@
 function createWall(spec) {
 	var id = newIdentifier(),
-	wall = {},
+	wall = {id : id},
 
 	position = spec.position,
 	topleft = spec.topleft,

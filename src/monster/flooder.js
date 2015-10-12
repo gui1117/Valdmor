@@ -1,7 +1,7 @@
 function createFlooder(spec) {
 	/* condition : position is on a big square */
 	var id = newIdentifier(),
-	flooder = {},
+	flooder = {id : id},
 
 	position = spec.position,
 
