@@ -1,3 +1,7 @@
+"use strict";
+
+var character;
+
 function createMaze(spec) {
 
 	var id = newIdentifier();

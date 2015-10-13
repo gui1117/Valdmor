@@ -12,8 +12,8 @@ function createBlind(spec) {
 	soundRatio = PARAM.BL_SOUND_RATIO,
 	attackDelay = PARAM.BL_ATTACK_DELAY,
 
-	punch = createPunch({
-		immune : blind,
+	sword = createSword({
+		immuneId : [blind.id],
 	}),
 	awake = false,
 	rotation = 0,
@@ -74,7 +74,7 @@ function createBlind(spec) {
 			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 		}
 		if (timeToAttack && time > timeToAttack) {
-			punch.shoot({
+			sword.attack({
 				position : body.getPosition(),
 				rotation : body.getRotation(),
 			});

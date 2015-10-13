@@ -1,11 +1,17 @@
 # short term
 
-* sound :
-
 * loading sound, manage sound so that each entity say I want
   this sound and I will use x at the same time
 
-* particle shoot
+* sound manage volume
+
+* grenadeLauncher -> particleShoot
+
+* tank
+
+* grenadeLauncher+shotgun sound that end when reloaded
+
+* grenadeLauncher : immuneId , immuneMask
 
 # long term
 

@@ -7,8 +7,8 @@ function shapeAttack(spec) {
 	var d = spec.distance || 0;
 	var r = spec.rotation || 0;
 	var damage = spec.damage;
-	var transparantId = spec.transparentId || [];
-	var transparantMask = spec.transparantMask || 0;
+	var immuneId = spec.immuneId || [];
+	var immuneMask = spec.immuneMask || 0;
 	//	var opaqueMask = spec.opaqueMask || GROUP.WALL; // not implemented
 	/* end specification */
 
@@ -27,9 +27,7 @@ function shapeAttack(spec) {
 
 	if (debugBool) {
 		var debi = newIdentifier();
-		loop.addToDraw(debi,{
-			draw:function(){ phys2DDebug.drawRigidBody(body); }
-		});
+		loop.addToDraw(debi,{ draw:function(){ phys2DDebug.drawRigidBody(body); } });
 		loop.removeOfDraw(debi);
 	}
 
@@ -41,8 +39,8 @@ function shapeAttack(spec) {
 		var userData = otherShape.body.userData;
 
 		if (userData && userData.damage
-				&& !(otherShape.mask & transparantMask)
-				&& (!userData.id || transparantId.indexOf(userData.id) === -1)
+				&& !(otherShape.mask & immuneMask)
+				&& (!userData.id || immuneId.indexOf(userData.id) === -1)
 				&& intersect(otherShape)) {
 
 			userData.damage(damage);

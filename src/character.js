@@ -32,7 +32,7 @@ function createCharacter(spec) {
 
 	var grenadeLauncher = createGrenadeLauncher();
 	var shotgun = createShotgun({
-		immune : character,
+		immune : [character.id],
 	});
 
 	var update = function(dt) {
@@ -103,13 +103,13 @@ function createCharacter(spec) {
 				distance : distance,
 			});
 		} else if (keycode === inputDevice.mouseCodes.BUTTON_0) {
-			console.log(particleAttack({
-				origin : body.getPosition(),
-				rotation : aim,
-				height : 200,
-				damage : 1,
-				immune : [character.id],
-			}));
+//			console.log(particleAttack({
+//				origin : body.getPosition(),
+//				rotation : aim,
+//				height : 200,
+//				damage : 1,
+//				immune : [character.id],
+//			}));
 
 			shotgun.shoot({
 				position : body.getPosition(),
