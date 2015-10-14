@@ -194,6 +194,14 @@ function createMaze(spec) {
 
 		return freeDir;
 	};
+
+	var isWalkable = function(pos,type) {
+		var p = pos;
+		if (type === "world") {
+			p = toGrid(pos);
+		}
+		return pathGrid.isWalkableAt(pos[0],pos[1]);
+	}
 	var draw = function() {
 //		var p,alpha;
 //		for (i=0; i<mazeGrid.length; i++) {
@@ -223,6 +231,7 @@ function createMaze(spec) {
 	maze.addSound = addSound;
 	maze.getPath = getPath;
 	maze.getFreeDirection = getFreeDirection;
+	maze.isWalkable = isWalkable;
 	maze.createEntities = createEntities;
 	maze.toGrid = toGrid;
 	maze.toWorld = toWorld;

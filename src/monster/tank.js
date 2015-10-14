@@ -51,23 +51,95 @@ function createTank(spec) {
 		height : damageHeight,
 	});
 
+	var getCharacterCorner = function () {
+		var cPos = character.getPosition();
+		var tPos = body.getPosition();
+
+		if (cPos[1] >= tPos[1]) {
+			if (cPos[0] >= tPos[0]) {
+				return 1;
+			} else {
+				return 2;
+			}
+		} else {
+			if (cPos[0] >= tPos[0]) {
+				return 4;
+			} else {
+				return 3;
+			}
+		}
+	};
 
 	var nodes = [body.getPosition()];
 	var current = 0;
 
 	var active = false;
-	var timeToPathfind = 0;
+	var nextDir = [0,0];
+	var characterCorner;
+	var aim = body.getPosition();
 	var update = function(dt) {
-		var v,r;
+		var nextCharCorner;
+		var almostNextAim;
+		var nextAim;
 		if (!active) {
 			if (getDistance(body.getPosition(),character.getPosition()) 
 						< activationDistance) {
 				active = true;
+				nextDir = [0,0];
+				characterCorner = getCharacterCorner();
 			}
 		} else {
-			//TODO just go to the direction of the hero grid aligned
-			v = velocity;
-			r = getAngle(body.getPosition(),aim);
+			nextCharCorner = getCharacterCorner();
+			if (nextCharCorner !== characterCorner) {
+				switch (characterCorner) {
+					case 1: 
+						if (nextCharCorner === 2) {
+							nextDir = [-1,0];
+						} else {
+							nextDir = [0,-1];
+						}
+						break;
+					case 2:
+						if (nextCharCorner === 3) {
+							nextDir = [0,-1];
+						} else {
+							nextDir = [1,0];
+						}
+						break;
+					case 3:
+						if (nextCharCorner === 4) {
+							nextDir = [1,0];
+						} else {
+							nextDir = [0,1];
+						}
+						break;
+					case 4:
+						if (nextCharCorner === 1) {
+							nextDir = [0,1];
+						} else {
+							nextDir = [-1,0];
+						}
+						break;
+				}
+				characterCorner = nextCharCorner;
+			}
+			console.log(nextCharCorner);
+
+			// or something out of the grid !!
+//			if (getDistance(body.getPosition(),aim) < distance) {
+//				aim = maze.toGrid(aim);
+//				almostNextAim = [aim[0]+nextDir[0],aim[1]+nextDir[1]];
+//				nextAim = [aim[0]+nextDir[0]*2,aim[1]+nextDir[1]*2];
+//				console.log(nextAim,aim);
+//				if (maze.isWalkable(nextAim,"grid")
+//						&& maze.isWalkable(almostNextAim,"grid")) {
+//					aim = nextAim;
+//				}
+//				aim = maze.toWorld(aim,"center");
+//			}
+
+			var r = getAngle(body.getPosition(),aim) 
+			var v = velocity;
 			body.setRotation(r);
 			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 
