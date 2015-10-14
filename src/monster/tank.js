@@ -58,37 +58,16 @@ function createTank(spec) {
 	var active = false;
 	var timeToPathfind = 0;
 	var update = function(dt) {
+		var v,r;
 		if (!active) {
 			if (getDistance(body.getPosition(),character.getPosition()) 
 						< activationDistance) {
 				active = true;
 			}
 		} else {
-			if (TurbulenzEngine.getTime() >= timeToPathfind) {
-				nodes = maze.getPath({
-					a : body.getPosition(),
-					b : character.getPosition(),
-					coordinate : "world",
-					nodesType : "center",
-				});
-				current = 0;
-				timeToPathfind = TurbulenzEngine.getTime + timeBetweenPathfind;
-			}
-
-			var aim;
-			if (nodes.length === 1) {
-				aim = character.getPosition();
-			} else {
-				if (getDistance(body.getPosition(),nodes[current]) < distance) {
-					if (current < nodes.length-1) {
-						current++;
-					} 
-				}
-				aim = nodes[current];
-			}
-
-			var v = velocity;
-			var r = getAngle(body.getPosition(),aim);
+			//TODO just go to the direction of the hero grid aligned
+			v = velocity;
+			r = getAngle(body.getPosition(),aim);
 			body.setRotation(r);
 			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 

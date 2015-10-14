@@ -70,9 +70,9 @@ function createBlind(spec) {
 			}
 		}
 		if (awake) {
-//			v = velocity;
-//			r = body.getRotation();
-//			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
+			v = velocity;
+			r = body.getRotation();
+			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 		}
 		if (timeToAttack && time > timeToAttack) {
 			sword.attack({

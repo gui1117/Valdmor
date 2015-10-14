@@ -31,9 +31,31 @@ function createCharacter(spec) {
 	});
 
 	var grenadeLauncher = createGrenadeLauncher();
+	var launchGrenade = function() {
+		grenadeLauncher.shoot({
+			position : body.getPosition(),
+			rotation : aim,
+			distance : distance,
+		});
+	};
+
 	var shotgun = createShotgun({
 		immuneId : [character.id],
 	});
+	var shootShotgun = function() {
+		shotgun.shoot({
+			position : body.getPosition(),
+			rotation : aim,
+		});
+	};
+	var sword = createSword({
+	});
+	var attackSword = function() {
+		sword.attack({
+			position : body.getPosition(),
+			rotation : aim,
+		});
+	};
 
 	var update = function(dt) {
 		var r = body.getRotation(),
@@ -70,9 +92,19 @@ function createCharacter(spec) {
 			maze.addSound(body.getPosition(),soundIntensity);
 		}
 
+		if (input.isDown.BUTTON_1) {
+			launchGrenade();
+		}
+		if (input.isDown.BUTTON_0) {
+			shootShotgun();
+		}
+		if (input.isDown['SPACE']) {
+			attackSword();
+		}
+
 		camera.setPosition(body.getPosition());
 	};
-	
+
 	var	damage = function(d) {
 		life -= d;
 		console.log('character damaged');
@@ -84,8 +116,11 @@ function createCharacter(spec) {
 	};
 
 	var keydown = function(keyCode) { 
-		if (inputDevice.ReverseKeyCodes[keyCode] === 'M') {
+		var key = inputDevice.ReverseKeyCodes[keyCode];
+		if (key === 'M') {
 			camera.multZoom(0.1);
+		} else if (key === 'SPACE') {
+			attackSword();
 		}
 	};
 
@@ -97,24 +132,9 @@ function createCharacter(spec) {
 
 	var mousedown = function(keycode) {
 		if (keycode === inputDevice.mouseCodes.BUTTON_1) {
-			grenadeLauncher.shoot({
-				position : body.getPosition(),
-				rotation : aim,
-				distance : distance,
-			});
+			launchGrenade();
 		} else if (keycode === inputDevice.mouseCodes.BUTTON_0) {
-//			console.log(particleAttack({
-//				origin : body.getPosition(),
-//				rotation : aim,
-//				height : 200,
-//				damage : 1,
-//				immune : [character.id],
-//			}));
-
-			shotgun.shoot({
-				position : body.getPosition(),
-				rotation : aim,
-			});
+			shootShotgun();
 		}
 	};
 	world.addRigidBody(body);

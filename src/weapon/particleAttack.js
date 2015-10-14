@@ -39,10 +39,11 @@ function particleAttack(spec) {
 				&& (immuneId.indexOf(userData.id) === -1)) {
 
 			distance = getDistance(body.getPosition(),origin);
-			store.push({
-				distance : distance,
-				userData : userData,
-			});
+			store.push([
+				userData.id,
+				distance,
+				userData.damage
+			]);
 		}
 		if (group & opaqueMask) {
 			return true;
@@ -54,10 +55,10 @@ function particleAttack(spec) {
 
 	var touched = [];
 	store.forEach(function(elem) {
-		var id = elem.userData.id;
-		if (elem.distance < wallDistance
+		var id = elem[0];
+		if (elem[1] < wallDistance
 				&& (touched.indexOf(id) === -1)) {
-			elem.userData.damage(damage);
+			elem[2](damage);
 			touched.push(id);
 		}
 	});

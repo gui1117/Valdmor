@@ -139,7 +139,7 @@ function createMaze(spec) {
 		}
 
 		createTank({
-			position : exitPos,
+			position : entryPos,
 		});
 	};
 	var getPath = function(spec) {

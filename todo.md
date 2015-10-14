@@ -5,12 +5,7 @@
 
 * sound manage volume
 
-* grenadeLauncher : random rotations at each explosion 
-  or create 10 random explosion and iterate on it
-
 * grenadeLauncher+shotgun sound that end when reloaded
-
-* test shotgun precisely to see if raycast precise
 
 # long term
 
@@ -20,5 +15,20 @@
 
 * tank monster
 
+* wall shadow : for wall each end and angle < 180° must
+  create an invisible zone
+
 * manhole create flooder they need due to their frequency
   and the flooder life time ?
+
+* shadow : circle shadow by default + wall shadow + lighball
+  light.
+
+* particle effect for guns
+
+* texture 
+
+# maybe ?
+
+* grenadeLauncher : random rotations at each explosion 
+  or create 10 random explosion and iterate on it

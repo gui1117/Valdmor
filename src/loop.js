@@ -77,7 +77,7 @@ function createLoop(deltaTime) {
 		camera.setViewport();
 
 		if (graphicsDevice.beginFrame()){
-			graphicsDevice.clear([0,0,0,0], 1.0);
+			graphicsDevice.clear([0.2,0.2,0.5,0], 1.0);
 			phys2DDebug.begin();
 
 			maze.draw();
