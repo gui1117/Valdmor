@@ -88,7 +88,7 @@ function createLoop(deltaTime) {
 			phys2DDebug.drawWorld(world);
 
 			mp = mouse.getWorldPosition();
-			phys2DDebug.drawCircle(mp[0],mp[1],1,[1,1,0,1]);
+			phys2DDebug.drawCircle(mp[0],mp[1],METER,[1,1,0,1]);
 
 			phys2DDebug.end();
 			graphicsDevice.endFrame();

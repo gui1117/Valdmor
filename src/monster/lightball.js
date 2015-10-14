@@ -1,3 +1,5 @@
+"use strict";
+
 function createLightball(spec) {
 /* ball that goes from the entry to the exit
  * at the speed of the characters
@@ -71,7 +73,7 @@ function createLightball(spec) {
 		a : entry,
 		b : exit,
 		coordinate : "world",
-		nodeType : "center",
+		nodesType : "center",
 	});
 	current = Math.floor(Math.random()*nodes.length);
 

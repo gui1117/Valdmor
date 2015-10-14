@@ -1,37 +1,47 @@
 function createGrenadeLauncher(spec) {
-	var id = newIdentifier(),
-	grenadeLauncher = {},
-	spec = spec || {},
+	var id = newIdentifier();
+	var grenadeLauncher = {};
+	var spec = spec || {};
 
-	rad = spec.radius || PARAM.GL_RADIUS,
-	damageAmount = spec.damage || PARAM.GL_DAMAGE,
-	damageRadius = spec.damageRadius || PARAM.GL_DAMAGE_RADIUS,
-	velocity = spec.velocty || PARAM.GL_VELOCITY,
-	velocityTime = spec.velocityTime || PARAM.GL_VELOCITY_TIME,
-	lifeTime = spec.lifeTime || PARAM.GL_LIFE_TIME,
-	soundIntensity = spec.soundIntensity || PARAM.GL_SOUND_INTENSITY,
-	reloadTime = spec.reloadTime || PARAM.GL_RELOAD_TIME,
-	bullet = spec.bullet || 0,
+	var immuneId = spec.immuneId || [];
+	var immuneMask = spec.immuneMask || 0;
+	var division = spec.division || PARAM.GL_DIVISION;
+	var rad = spec.radius || PARAM.GL_RADIUS;
+	var damageAmount = spec.damage || PARAM.GL_DAMAGE;
+	var damageRadius = spec.damageRadius || PARAM.GL_DAMAGE_RADIUS;
+	var velocity = spec.velocty || PARAM.GL_VELOCITY;
+	var velocityTime = spec.velocityTime || PARAM.GL_VELOCITY_TIME;
+	var lifeTime = spec.lifeTime || PARAM.GL_LIFE_TIME;
+	var soundIntensity = spec.soundIntensity || PARAM.GL_SOUND_INTENSITY;
+	var reloadTime = spec.reloadTime || PARAM.GL_RELOAD_TIME;
+	var bullet = spec.bullet || 0;
 
-	shootSound  = spec.shootSound || SOUND.GRENADELAUNCHER_SHOOT[0],
+	var shootSound  = spec.shootSound || SOUND.GRENADELAUNCHER_SHOOT[0];
 
-	explosionSound = spec.explosionSound || SOUND.GRENADELAUNCHER_EXPLOSION[0],
+	var explosionSound = spec.explosionSound || SOUND.GRENADELAUNCHER_EXPLOSION[0];
 
-	reload = 0,
-	createGrenade = function(spec) {
-		var id = newIdentifier(),
-		grenade = {},
-		p = spec.position,
-		r = spec.rotation,
-		v = spec.velocity,
+	var reload = 0;
 
-		shape = phys2D.createPolygonShape({
+	var index;
+	var rotations = [];
+	for (index = 0; index < division+1; index++) {
+		rotations[index] = 2*Math.PI*index/(division+1);
+	}
+
+	var createGrenade = function(spec) {
+		var id = newIdentifier();
+		var grenade = {};
+		var p = spec.position;
+		var r = spec.rotation;
+		var v = spec.velocity;
+
+		var shape = phys2D.createPolygonShape({
 			sensor : true,
 			vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
 			group : GROUP.BULLET,
 			userData : grenade,
-		}),
-		body = phys2D.createRigidBody({
+		});
+		var body = phys2D.createRigidBody({
 			type : 'kinetic',
 			shapes : [shape],
 			sleeping : false,
@@ -40,17 +50,19 @@ function createGrenadeLauncher(spec) {
 			velocity : v,
 			rotation : r,
 			userData : grenade,
-		}),
-		life = 1,
-		timeToStop = TurbulenzEngine.getTime() + velocityTime,
-		timeToDie = TurbulenzEngine.getTime() + lifeTime,
-		remove = function() {
+		});
+		var life = 1;
+		var timeToStop = TurbulenzEngine.getTime() + velocityTime;
+		var timeToDie = TurbulenzEngine.getTime() + lifeTime;
+		var remove = function() {
 			loop.removeOfUpdate(id);
 			world.removeRigidBody(body);
-		},
-		update = function(dt) {
-			var store,damageShape,
-			time = TurbulenzEngine.getTime();
+		};
+		var update = function(dt) {
+			var time = TurbulenzEngine.getTime();
+
+			var store = immuneId;
+			var factor = [];
 
 			if (time < timeToStop) {
 				body.setVelocity(v);
@@ -64,15 +76,23 @@ function createGrenadeLauncher(spec) {
 					group : GROUP.DAMAGE,
 				}),
 
-				shapeAttack({
-					shape : damageShape,
-					position : body.getPosition(),
-					damage : damageAmount,
+
+				rotations.forEach(function(rotation) {
+					var result = particleAttack({
+						origin : body.getPosition(),
+						height : damageRadius,
+						rotation : rotation,
+						damage : damageAmount,
+						immuneId : store,
+						immuneMask : immuneMask,
+					});
+					store = store.concat(result.touched);
+					factor.push(result.factor);
 				});
 				remove();
 			}
-		},
-		damage = function(d) {
+		};
+		var damage = function(d) {
 			life = 0;
 		};
 
@@ -84,8 +104,8 @@ function createGrenadeLauncher(spec) {
 		grenade.damage = damage;
 		grenade.update = update;
 		return Object.freeze(grenade);
-	},
-	shoot = function(spec) {
+	};
+	var shoot = function(spec) {
 		var p = spec.position;
 		d = spec.distance+rad*1.45,
 		v = spec.velocity || velocity,
@@ -101,17 +121,17 @@ function createGrenadeLauncher(spec) {
 			});
 			reload = reloadTime;
 		}
-	},
-	setBullet = function(n) {
+	};
+	var setBullet = function(n) {
 		bullet = n;
-	},
-	addBullet = function(n) {
+	};
+	var addBullet = function(n) {
 		bullet += n;
-	},
-	getBullet = function() {
+	};
+	var getBullet = function() {
 		return bullet;
-	},
-	update = function(dt) {
+	};
+	var update = function(dt) {
 		reload = Math.max(reload - dt, 0);
 	};
 

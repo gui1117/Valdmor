@@ -63,7 +63,7 @@ function createShotgun(spec) {
 					immuneId : store,
 					immuneMask : immuneMask,
 				});
-				store = result.immuneId;
+				store = store.concat(result.touched);
 				factor.push(result.factor);
 			});
 		}

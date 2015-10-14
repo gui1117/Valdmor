@@ -137,14 +137,18 @@ function createMaze(spec) {
 				exit : exitPos,
 			});
 		}
+
+		createTank({
+			position : exitPos,
+		});
 	};
 	var getPath = function(spec) {
-		var a = spec.a,
-		b = spec.b,
-		coordinate = spec.coordinate,
-		nodeType = spec.nodeType,
+		var a = spec.a;
+		var b = spec.b;
+		var coordinate = spec.coordinate;
+		var nodesType = spec.nodesType;
 
-		ga,gb,nodes,i;
+		var ga,gb;
 
 		if (coordinate === "world") {
 			ga = toGrid(a);
@@ -154,11 +158,12 @@ function createMaze(spec) {
 			gb = b;
 		}
 
-		nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathGrid);
+		var nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathGrid.clone());
 
+		var i;
 		if (coordinate === "world") {
 			for (i=0; i<nodes.length; i++) {
-				nodes[i] = toWorld(nodes[i],nodeType);
+				nodes[i] = toWorld(nodes[i],nodesType);
 			}
 		}
 

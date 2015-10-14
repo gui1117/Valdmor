@@ -39,7 +39,7 @@ function shapeAttack(spec) {
 		var userData = otherShape.body.userData;
 
 		if (userData && userData.damage
-				&& !(otherShape.mask & immuneMask)
+				&& !(otherShape.getGroup() & immuneMask)
 				&& (!userData.id || immuneId.indexOf(userData.id) === -1)
 				&& intersect(otherShape)) {
 

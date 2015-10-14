@@ -32,7 +32,7 @@ function createCharacter(spec) {
 
 	var grenadeLauncher = createGrenadeLauncher();
 	var shotgun = createShotgun({
-		immune : [character.id],
+		immuneId : [character.id],
 	});
 
 	var update = function(dt) {

@@ -2,9 +2,10 @@
 
 function particleAttack(spec) {
 	var origin = spec.origin;
-	var mask = spec.mask || GROUP.WALL;
+	var opaqueMask = spec.opaqueMask || GROUP.WALL;
 	var damage = spec.damage;
 	var immuneId = spec.immuneId || []; // array of id
+	var immuneMask = spec.immuneMask || 0;
 
 	var destination = spec.destination; // this or the two below must be given
 	var rotation = spec.rotation;
@@ -25,34 +26,40 @@ function particleAttack(spec) {
 		maxFactor : 1,
 	};
 
-	
-	var ignored = {};
-	immuneId.forEach(function(id) {
-		ignored[id] = true;
-	});
-
-	var wallTouched = false;
+	var store = [];
 	var filter = function(ray, tmpResult) {
-		if (!wallTouched) {
-			var userData = tmpResult.shape.body.userData;
-			if (userData && userData.damage && !ignored[userData.id]) {
-				userData.damage(damage);
-				ignored[userData.id] = true;
-			}
-			var group = tmpResult.shape.getGroup();
+		var body = tmpResult.shape.body;
+		var userData = body.userData;
+		var group = tmpResult.shape.getGroup();
+		var distance;
 
-			if (group & mask) {
-				wallTouched = true;
-				return true;
-			} 
+		if (userData 
+				&& !(group & immuneMask)
+				&& userData.damage 
+				&& (immuneId.indexOf(userData.id) === -1)) {
+
+			distance = getDistance(body.getPosition(),origin);
+			store.push({
+				distance : distance,
+				userData : userData,
+			});
+		}
+		if (group & opaqueMask) {
+			return true;
 		}
 		return false;
 	};
 	var result = world.rayCast(ray, true, filter);
+	var wallDistance = result ? result.factor*height : height;
 
-	immuneId = [];
-	Object.keys(ignored).forEach(function(key) {
-		immuneId.push(key);
+	var touched = [];
+	store.forEach(function(elem) {
+		var id = elem.userData.id;
+		if (elem.distance < wallDistance
+				&& (touched.indexOf(id) === -1)) {
+			elem.userData.damage(damage);
+			touched.push(id);
+		}
 	});
 
 	if (debugBool) {
@@ -66,10 +73,8 @@ function particleAttack(spec) {
 		loop.removeOfDraw(debi);
 	}
 
-
-
 	return { 
 		factor : result ? result.factor*height : height,
-		immuneId : immuneId, // actually touched + immunedId
+		touched : touched,
 	};
 }

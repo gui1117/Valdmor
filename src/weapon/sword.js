@@ -36,12 +36,12 @@ function createSword(spec) {
 			sound.play(attackSound);
 			shapeAttack({
 				immuneId : immuneId,
+				immuneMask : immuneMask,
 				shape : shape,
 				position : position,
 				rotation : rotation,
 				distance : distance,
 				damage : damage,
-				immuneMask : immuneMask,
 			});
 		}
 	};

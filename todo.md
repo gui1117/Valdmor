@@ -5,13 +5,12 @@
 
 * sound manage volume
 
-* grenadeLauncher -> particleShoot
-
-* tank
+* grenadeLauncher : random rotations at each explosion 
+  or create 10 random explosion and iterate on it
 
 * grenadeLauncher+shotgun sound that end when reloaded
 
-* grenadeLauncher : immuneId , immuneMask
+* test shotgun precisely to see if raycast precise
 
 # long term
 
