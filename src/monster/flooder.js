@@ -37,8 +37,19 @@ function createFlooder(spec) {
 		rotation : 0,
 		userData : flooder,
 	}),
+	sprite = Draw2DSprite.create({
+		width : rad,
+		height : rad,
+		color : COLOR.FLOODER,
+		x : position[0],
+		y : position[1],
+		scale : [1, 1],
+	}),
 	remove = function() {
 		loop.removeOfUpdate(id);
+		if (mode === 'timer') {
+			loop.removeOfDraw(id);
+		}
 		world.removeRigidBody(body);
 	},
 	update = function(dt) {
@@ -78,8 +89,15 @@ function createFlooder(spec) {
 		r = getAngle(p,aim);
 		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 
+		camera.setSpriteAttribute(sprite,body.getPosition(),body.getRotation());
+
 		if (life <= 0 || TurbulenzEngine.getTime() > timeToDie) {
 			remove();
+		}
+	},
+	draw = function(debug) {
+		if (!debug) {
+			draw2D.drawSprite(sprite);
 		}
 	},
 	attack = function(arbitrer) {
@@ -97,8 +115,10 @@ function createFlooder(spec) {
 	shape.addEventListener('begin',attack,GROUP.CHARACTER);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,flooder);
+	loop.addToDraw(id,flooder);
 
 	flooder.update = update;
 	flooder.damage = damage;
+	flooder.draw = draw;
 	return Object.freeze(flooder);
 }

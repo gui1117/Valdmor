@@ -69,7 +69,7 @@ function particleAttack(spec) {
 		var debf = result ? result.factor*height : height;
 		var debdestination = [origin[0]+debf*Math.cos(debr),origin[1]+debf*Math.sin(debr)]
 		loop.addToDraw(debi,{
-			draw:function(){ phys2DDebug.drawLine(origin[0],origin[1],debdestination[0],debdestination[1],[1,1,0.5,1]); }
+			draw:function(debug){if(debug) { phys2DDebug.drawLine(origin[0],origin[1],debdestination[0],debdestination[1],[1,1,0.5,1]);}}
 		});
 		loop.removeOfDraw(debi);
 	}

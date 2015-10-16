@@ -27,7 +27,7 @@ function shapeAttack(spec) {
 
 	if (debugBool) {
 		var debi = newIdentifier();
-		loop.addToDraw(debi,{ draw:function(){ phys2DDebug.drawRigidBody(body); } });
+		loop.addToDraw(debi,{draw:function(debug){if(debug){phys2DDebug.drawRigidBody(body);}}});
 		loop.removeOfDraw(debi);
 	}
 

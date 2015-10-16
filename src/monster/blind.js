@@ -34,8 +34,20 @@ function createBlind(spec) {
 		rotation : rotation,
 		userData : blind,
 	}),
+	sprite = Draw2DSprite.create({
+		width : rad,
+		height : rad,
+		color : COLOR.BLIND,
+		x : 0,
+		y : 0,
+		rotation : rotation,
+		scale : [1, 1],
+	}),
 	remove = function() {
 		loop.removeOfUpdate(id);
+		if (mode === 'timer') {
+			loop.removeOfDraw(id);
+		}
 		world.removeRigidBody(body);
 	},
 	setAwake = function(bool) {
@@ -82,6 +94,8 @@ function createBlind(spec) {
 			timeToAttack = undefined;
 		}
 
+		camera.setSpriteAttribute(sprite,body.getPosition(),body.getRotation());
+
 		if (life <= 0) {
 			remove();
 		}
@@ -91,14 +105,21 @@ function createBlind(spec) {
 			timeToAttack = TurbulenzEngine.getTime()+attackDelay;
 		}
 	},
+	draw = function(debug) {
+		if (!debug) {
+			draw2D.drawSprite(sprite);
+		}
+	},
 	damage = function(d) {
 		life -= d;
 	};
 	shape.addEventListener('begin',attack,GROUP.CHARACTER);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,blind);
+	loop.addToDraw(id,blind);
 
 	blind.update = update;
 	blind.damage = damage;
+	blind.draw = draw;
 	return Object.freeze(blind);
 }

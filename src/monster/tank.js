@@ -4,8 +4,7 @@
  * attack on touch every things
  *
  * or same velocity but stop a little when attack
- */
-function createTank(spec) {
+ */ function createTank(spec) {
 	/* condition : position is on a big square */
 	var id = newIdentifier();
 	var tank = {id : id};
@@ -16,7 +15,6 @@ function createTank(spec) {
 	var life = PARAM.TA_LIFE;
 	var velocity = PARAM.TA_VELOCITY;
 	var distance = PARAM.TA_DISTANCE; // for path nodes
-	var activationDistance = PARAM.ACTIVATION_DISTANCE;
 	//var attackDelay = PARAM.TA_ATTACK_DELAY;  // no?
 	var activationDistance = PARAM.TA_ACTIVATION_DISTANCE;
 	var timeBetweenPathfind = PARAM.TA_TIME_BETWEEN_PATHFIND;
@@ -39,8 +37,20 @@ function createTank(spec) {
 		userData : tank,
 	});
 
+	var sprite = Draw2DSprite.create({
+		width : rad,
+		height : rad,
+		color : COLOR.TANK,
+		x : 0,
+		y : 0,
+		scale : [1, 1],
+	});
+
 	var remove = function() {
 		loop.removeOfUpdate(id);
+		if (mode === 'timer') {
+			loop.removeOfDraw(id);
+		}
 		world.removeRigidBody(body);
 	};
 
@@ -74,9 +84,9 @@ function createTank(spec) {
 	var current = 0;
 
 	var active = false;
-	var nextDir = [0,0];
-	var characterCorner;
-	var aim = body.getPosition();
+	var timeToFindPath = TurbulenzEngine.getTime();
+	var nodes;
+	var current;
 	var update = function(dt) {
 		var nextCharCorner;
 		var almostNextAim;
@@ -85,60 +95,34 @@ function createTank(spec) {
 			if (getDistance(body.getPosition(),character.getPosition()) 
 						< activationDistance) {
 				active = true;
-				nextDir = [0,0];
-				characterCorner = getCharacterCorner();
 			}
 		} else {
-			nextCharCorner = getCharacterCorner();
-			if (nextCharCorner !== characterCorner) {
-				switch (characterCorner) {
-					case 1: 
-						if (nextCharCorner === 2) {
-							nextDir = [-1,0];
-						} else {
-							nextDir = [0,-1];
-						}
-						break;
-					case 2:
-						if (nextCharCorner === 3) {
-							nextDir = [0,-1];
-						} else {
-							nextDir = [1,0];
-						}
-						break;
-					case 3:
-						if (nextCharCorner === 4) {
-							nextDir = [1,0];
-						} else {
-							nextDir = [0,1];
-						}
-						break;
-					case 4:
-						if (nextCharCorner === 1) {
-							nextDir = [0,1];
-						} else {
-							nextDir = [-1,0];
-						}
-						break;
+			if (TurbulenzEngine.getTime() >= timeToFindPath) {
+				while (TurbulenzEngine.getTime() >= timeToFindPath) {
+					timeToFindPath += timeBetweenPathfind;
 				}
-				characterCorner = nextCharCorner;
+				nodes = maze.getPath({
+					a : body.getPosition(),
+					b : character.getPosition(),
+					coordinate : "world",
+					nodesType : "center",
+					attribut : "none",
+				})
+				current = 0;
 			}
-			console.log(nextCharCorner);
 
-			// or something out of the grid !!
-//			if (getDistance(body.getPosition(),aim) < distance) {
-//				aim = maze.toGrid(aim);
-//				almostNextAim = [aim[0]+nextDir[0],aim[1]+nextDir[1]];
-//				nextAim = [aim[0]+nextDir[0]*2,aim[1]+nextDir[1]*2];
-//				console.log(nextAim,aim);
-//				if (maze.isWalkable(nextAim,"grid")
-//						&& maze.isWalkable(almostNextAim,"grid")) {
-//					aim = nextAim;
-//				}
-//				aim = maze.toWorld(aim,"center");
-//			}
+			var r;
+			if (nodes.length - current <= 2) {
+				r = getAngle(body.getPosition(),character.getPosition());
+			} else {
+				if (getDistance(body.getPosition(),nodes[current]) < distance) {
+					if (current !== nodes.length-1) {
+						current++;
+					}
+				}
+				r = getAngle(body.getPosition(),nodes[current]) 
+			}
 
-			var r = getAngle(body.getPosition(),aim) 
 			var v = velocity;
 			body.setRotation(r);
 			body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
@@ -152,6 +136,8 @@ function createTank(spec) {
 				active = false;
 			}
 		}
+
+		camera.setSpriteAttribute(sprite,body.getPosition(),body.getRotation());
 	};
 
 	var attack = function(arbitrer) {
@@ -161,6 +147,12 @@ function createTank(spec) {
 		});
 	};
 
+	var draw = function(debug) {
+		if (!debug) {
+			draw2D.drawSprite(sprite);
+		}
+	};
+
 	var damage = function(d) {
 		life -= d;
 	};
@@ -168,8 +160,10 @@ function createTank(spec) {
 	shape.addEventListener('begin',attack,GROUP.CHARACTER | GROUP.MONSTER);
 	world.addRigidBody(body);
 	loop.addToUpdate(id,tank);
+	loop.addToDraw(id,tank);
 
 	tank.update = update;
 	tank.damage = damage;
+	tank.draw = draw;
 	return Object.freeze(tank);
 }

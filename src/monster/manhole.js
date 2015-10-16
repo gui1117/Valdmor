@@ -16,8 +16,8 @@ function createManhole(spec) {
 	nextTime = 0,
 	time = 0,
 
-	shape = phys2D.createCircleShape({
-		radius : rad,
+	shape = phys2D.createPolygonShape({
+		vertices : phys2D.createRectangleVertices(-rad,-rad,rad,rad),
 		group : GROUP.MANHOLE,
 		mask : 0xffffffff^GROUP.FLOODER,
 	}),
@@ -30,8 +30,19 @@ function createManhole(spec) {
 		rotation : 0,
 		userData : manhole,
 	}),
+	sprite = Draw2DSprite.create({
+		width : rad,
+		height : rad,
+		color : COLOR.MANHOLE,
+		x : 0,
+		y : 0,
+		scale : [1, 1],
+	}),
 	remove = function() {
 		loop.removeOfUpdate(id);
+		if (mode === 'timer') {
+			loop.removeOfDraw(id);
+		}
 		world.removeRigidBody(body);
 	},
 	update = function(dt) {
@@ -48,9 +59,16 @@ function createManhole(spec) {
 				});
 			}
 		}
+
+		camera.setSpriteAttribute(sprite,body.getPosition(),body.getRotation());
 		
 		if (life <= 0) {
 			remove();
+		}
+	},
+	draw = function(debug) {
+		if (!debug) {
+			draw2D.drawSprite(sprite);
 		}
 	},
 	damage = function(d) {
@@ -59,8 +77,10 @@ function createManhole(spec) {
 
 	world.addRigidBody(body);
 	loop.addToUpdate(id,manhole);
+	loop.addToDraw(id,manhole);
 
 	manhole.update = update;
 	manhole.damage = damage;
+	manhole.draw = draw;
 	return Object.freeze(manhole);
 }

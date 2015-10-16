@@ -55,9 +55,21 @@ function createGrenadeLauncher(spec) {
 		var timeToStop = TurbulenzEngine.getTime() + velocityTime;
 		var timeToDie = TurbulenzEngine.getTime() + lifeTime;
 		var remove = function() {
+			if (mode === 'timer') {
+				loop.removeOfDraw(id);
+			}
 			loop.removeOfUpdate(id);
 			world.removeRigidBody(body);
 		};
+
+		var sprite = Draw2DSprite.create({
+			width : rad,
+			height : rad,
+			color : COLOR.BULLET,
+			x : p[0],
+			y : p[1],
+			scale : [1, 1],
+		});
 		var update = function(dt) {
 			var time = TurbulenzEngine.getTime();
 
@@ -91,6 +103,13 @@ function createGrenadeLauncher(spec) {
 				});
 				remove();
 			}
+			camera.setSpriteAttribute(sprite,body.getPosition(),body.getRotation());
+		};
+
+		var draw = function(debug) {
+			if (!debug) {
+				draw2D.drawSprite(sprite);
+			}
 		};
 		var damage = function(d) {
 			life = 0;
@@ -99,10 +118,12 @@ function createGrenadeLauncher(spec) {
 		shape.addEventListener('begin',damage);
 		world.addRigidBody(body);
 		loop.addToUpdate(id,grenade);
+		loop.addToDraw(id,grenade);
 
 
 		grenade.damage = damage;
 		grenade.update = update;
+		grenade.draw = draw;
 		return Object.freeze(grenade);
 	};
 	var shoot = function(spec) {

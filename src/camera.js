@@ -1,4 +1,4 @@
-"use strict" ;
+"use strict";
 
 function createCamera() {
 	var position = [0,0],
@@ -19,19 +19,28 @@ function createCamera() {
 	multZoom = function(n) {
 		zoom *= n;
 	},
+	setSpriteAttribute = function(sprite,pos,rotation) {
+		sprite.x = (pos[0]-position[0])*zoom+canvas.width/2;
+		sprite.y = (pos[1]-position[1])*zoom+canvas.height/2;
+		sprite.setScale([zoom*2,zoom*2]);
+		sprite.rotation = rotation;
+	},
 	setViewport = function() {
-		phys2DDebug.setPhysics2DViewport([
-				position[0]-canvas.width/2/zoom,
-				position[1]-canvas.height/2/zoom,
-				position[0]+canvas.width/2/zoom,
-				position[1]+canvas.height/2/zoom
-		]);
-		phys2DDebug.setScreenViewport([
-				0,0,canvas.width,canvas.height
-		]);
+		if (debugBool) {
+			phys2DDebug.setPhysics2DViewport([
+					position[0]-canvas.width/2/zoom,
+					position[1]-canvas.height/2/zoom,
+					position[0]+canvas.width/2/zoom,
+					position[1]+canvas.height/2/zoom
+			]);
+			phys2DDebug.setScreenViewport([
+					0,0,canvas.width,canvas.height
+			]);
+		}
 	};
 
 	return Object.freeze({
+		setSpriteAttribute : setSpriteAttribute,
 		setZoom : setZoom,
 		getZoom : getZoom,
 		multZoom : multZoom,

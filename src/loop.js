@@ -2,7 +2,7 @@
 
 function createLoop(deltaTime) {
 	var	toUpdate = {};
-	var toDraw = {};
+	var toDraw = [];
 	var toRemoveOfUpdate = [];
 	var toRemoveOfDraw = [];
 	var addToUpdate = function(id,obj) {
@@ -17,6 +17,14 @@ function createLoop(deltaTime) {
 	var removeOfDraw = function(id) {
 		toRemoveOfDraw.push(id);
 	};
+
+	var toDrawDamage = {};
+	toDrawDamage.length = PARAM.DAMAGE_DRAW_LENGTH;
+	var toDrawDamageCursor = 0;
+
+	var addToDrawDamage = function(id,fct) {
+		toDrawDamage[toDrawDamageCursor] = fct;
+	};
 	var lastTime;
 	var debugDT = [];
 
@@ -27,7 +35,7 @@ function createLoop(deltaTime) {
 		avg = 0,
 		min = Infinity,
 		max = -Infinity;
-		
+
 		if (!lastTime) {
 			lastTime = TurbulenzEngine.getTime();
 			dt = deltaTime;
@@ -77,20 +85,31 @@ function createLoop(deltaTime) {
 		camera.setViewport();
 
 		if (graphicsDevice.beginFrame()){
-			graphicsDevice.clear([0.2,0.2,0.5,0], 1.0);
-			phys2DDebug.begin();
+			graphicsDevice.clear([0.1,0.1,0.0,0], 1.0);
+			if (debugBool) {
+				phys2DDebug.begin();
 
-			maze.draw();
+				maze.draw(true);
 
-			Object.keys(toDraw).forEach(function(key) {
-				toDraw[key].draw();
-			});
-			phys2DDebug.drawWorld(world);
+				Object.keys(toDraw).forEach(function(key) {
+					toDraw[key].draw(true);
+				});
 
-			mp = mouse.getWorldPosition();
-			phys2DDebug.drawCircle(mp[0],mp[1],METER,[1,1,0,1]);
+				mp = mouse.getWorldPosition();
+				phys2DDebug.drawCircle(mp[0],mp[1],METER,[1,1,0,1]);
+				phys2DDebug.drawWorld(world);
 
-			phys2DDebug.end();
+				phys2DDebug.end();
+			}
+			draw2D.begin();
+
+				maze.draw(false);
+
+				Object.keys(toDraw).forEach(function(key) {
+					toDraw[key].draw(false);
+				});
+
+			draw2D.end();
 			graphicsDevice.endFrame();
 		}
 		toRemoveOfDraw.forEach(function(id) {

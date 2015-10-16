@@ -139,7 +139,7 @@ function createMaze(spec) {
 		}
 
 		createTank({
-			position : entryPos,
+			position : exitPos,
 		});
 	};
 	var getPath = function(spec) {
@@ -147,6 +147,7 @@ function createMaze(spec) {
 		var b = spec.b;
 		var coordinate = spec.coordinate;
 		var nodesType = spec.nodesType;
+		var attribut = spec.attribut;
 
 		var ga,gb;
 
@@ -158,8 +159,14 @@ function createMaze(spec) {
 			gb = b;
 		}
 
-		var nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathGrid.clone());
+		var nodes = pathfinder.findPath(ga[0],ga[1],gb[0],gb[1],pathGrid);
+		pathGrid.clean();
 
+		if (attribut === "compress") {
+			nodes = PF.Util.smoothenPath(pathGrid, nodes);
+		} else if (attribut === "smooth") {
+			nodes = PF.Util.compressPath(nodes);
+		}
 		var i;
 		if (coordinate === "world") {
 			for (i=0; i<nodes.length; i++) {
@@ -202,7 +209,7 @@ function createMaze(spec) {
 		}
 		return pathGrid.isWalkableAt(pos[0],pos[1]);
 	}
-	var draw = function() {
+	var draw = function(debug) {
 //		var p,alpha;
 //		for (i=0; i<mazeGrid.length; i++) {
 //			for (j=0; j<mazeGrid[0].length; j++) {

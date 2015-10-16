@@ -20,13 +20,18 @@ var soundDevice = TurbulenzEngine.createSoundDevice({
 	linearDistance: true,
 });
 
-var phys2DDebug = Physics2DDebugDraw.create({
-	graphicsDevice : graphicsDevice
-});
+if (debugBool) {
+	var phys2DDebug = Physics2DDebugDraw.create({
+		graphicsDevice : graphicsDevice
+	});
+}
 
 var inputDevice = TurbulenzEngine.createInputDevice();
 var phys2D = Physics2DDevice.create();
-var phys2DCollision = phys2D.createCollisionUtils(); //Needed ?
+var phys2DCollision = phys2D.createCollisionUtils();
+var draw2D = Draw2D.create({
+	graphicsDevice : graphicsDevice,
+});
 /* end load Turbulenz device */
 
 /* create game device */
@@ -35,6 +40,9 @@ var mouse = createMouse();
 var sound = createSound();
 var camera = createCamera();
 var loop = createLoop(PARAM.FRAMERATE);
+
+var mode = 'timer'
+//var mode = 'painter'
 
 var newIdentifier = createIncrement(-1);
 

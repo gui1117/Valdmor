@@ -57,12 +57,23 @@ function createCharacter(spec) {
 		});
 	};
 
-	var update = function(dt) {
-		var r = body.getRotation(),
-		v = velocity,
-		mp = mouse.getWorldPosition();
+	var sprite = Draw2DSprite.create({
+		width : rad,
+		height : rad,
+		color : COLOR.CHARACTER,
+		x : 0,
+		y : 0,
+		rotation : rotation,
+		scale : [1, 1],
+	});
 
-		aim = getAngle(body.getPosition(),mp);
+	var update = function(dt) {
+		var r = body.getRotation();
+		var v = velocity;
+		var mp = mouse.getWorldPosition();
+		var pos = body.getPosition();
+
+		aim = getAngle(pos,mp);
 		if (input.isDown.Z) {
 			if (input.isDown.Q) {
 				body.setRotation(-3*Math.PI/4);
@@ -89,7 +100,7 @@ function createCharacter(spec) {
 		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 
 		if (v) {
-			maze.addSound(body.getPosition(),soundIntensity);
+			maze.addSound(pos,soundIntensity);
 		}
 
 		if (input.isDown.BUTTON_1) {
@@ -102,7 +113,8 @@ function createCharacter(spec) {
 			attackSword();
 		}
 
-		camera.setPosition(body.getPosition());
+		camera.setPosition(pos);
+		camera.setSpriteAttribute(sprite,pos,body.getRotation());
 	};
 
 	var	damage = function(d) {
@@ -137,8 +149,16 @@ function createCharacter(spec) {
 			shootShotgun();
 		}
 	};
+
+	var draw = function(debug) {
+		if (!debug) {
+			draw2D.drawSprite(sprite);
+		}
+	};
+
 	world.addRigidBody(body);
 	loop.addToUpdate(id,character);
+	loop.addToDraw(id,character);
 
 	inputDevice.addEventListener('keydown',keydown);
 	inputDevice.addEventListener('keyup',keyup);
@@ -147,5 +167,6 @@ function createCharacter(spec) {
 	character.update = update;
 	character.damage = damage;
 	character.getPosition = getPosition; 
+	character.draw = draw;
 	return Object.freeze(character);
 }

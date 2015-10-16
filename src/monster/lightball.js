@@ -33,8 +33,19 @@ function createLightball(spec) {
 		rotation : 0,
 		userData : lightball,
 	}),
+	sprite = Draw2DSprite.create({
+		width : rad,
+		height : rad,
+		color : COLOR.LIGHTBALL,
+		x : 0,
+		y : 0,
+		scale : [1, 1],
+	}),
 	remove = function() {
 		loop.removeOfUpdate(id);
+		if (mode === 'timer') {
+			loop.removeOfDraw(id);
+		}
 		world.removeRigidBody(body);
 	},
 	update = function(dt) {
@@ -54,15 +65,19 @@ function createLightball(spec) {
 		body.setRotation(r);
 		body.setVelocity([v*Math.cos(r),v*Math.sin(r)]);
 
+		camera.setSpriteAttribute(sprite,body.getPosition(),body.getRotation());
+
 		if (life <= 0) {
 			remove();
 		}
 	},
-	draw = function() {
-		if (debugBool) {
+	draw = function(debug) {
+		if (debug) {
 			nodes.forEach(function(node) {
 				phys2DDebug.drawCircle(node[0],node[1],20,[0,1,1,1]);
 			});
+		} else {
+			draw2D.drawSprite(sprite);
 		}
 	},
 	damage = function(d) {
