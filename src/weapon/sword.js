@@ -7,8 +7,7 @@ function createSword(spec) {
 	var immuneMask = spec.immuneMask;
 	var height = spec.height || PARAM.SW_HEIGHT;
 	var distance = spec.distance || PARAM.SW_DISTANCE;
-	var innerWidth = spec.width || PARAM.SW_INNER_WIDTH;
-	var outerWidth = spec.width || PARAM.SW_INNER_WIDTH;
+	var width = spec.width || PARAM.SW_INNER_WIDTH;
 	var recoveryTime = spec.recovery || PARAM.SW_RECOVERY;
 	var damage = spec.damage || PARAM.SW_DAMAGE;
 	var soundIntensity = spec.soundIntensity || PARAM.SW_SOUND_INTENSITY;
@@ -17,10 +16,10 @@ function createSword(spec) {
 
 	var shape = phys2D.createPolygonShape({
 		vertices : [
-			[0,-innerWidth/2],
-			[height,-outerWidth/2],
-			[height,outerWidth/2],
-			[0,innerWidth/2]
+			[-height/2,-width/2],
+			[height/2,-width/2],
+			[height/2,width/2],
+			[-height/2,width/2]
 		],
 		group : GROUP.DAMAGE,
 	});
@@ -38,6 +37,8 @@ function createSword(spec) {
 				immuneId : immuneId,
 				immuneMask : immuneMask,
 				shape : shape,
+				width : width,
+				height : height,
 				position : position,
 				rotation : rotation,
 				distance : distance,

@@ -1,7 +1,5 @@
 "use strict";
 
-var debugBool = true;
-
 /* load Turbulenz devices */
 var TurbulenzEngine = WebGLTurbulenzEngine.create({
 	canvas: document.getElementById("canvas")
@@ -35,16 +33,16 @@ var draw2D = Draw2D.create({
 /* end load Turbulenz device */
 
 /* create game device */
+var newIdentifier = createIncrement(-1);
 var input = createInput();
+var loop = createLoop(PARAM.FRAMERATE);
 var mouse = createMouse();
 var sound = createSound();
 var camera = createCamera();
-var loop = createLoop(PARAM.FRAMERATE);
 
 var mode = 'timer'
 //var mode = 'painter'
 
-var newIdentifier = createIncrement(-1);
 
 var world = phys2D.createWorld({
 	gravity : [0, 0],

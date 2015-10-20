@@ -18,20 +18,31 @@ function createLoop(deltaTime) {
 		toRemoveOfDraw.push(id);
 	};
 
-	var toDrawDamage = {};
+	var toDrawDamage = [];
 	toDrawDamage.length = PARAM.DAMAGE_DRAW_LENGTH;
-	var toDrawDamageCursor = 0;
+	toDrawDamage.forEach(function(elem,index,array) {
+		array[index] = [];
+	});
 
-	var addToDrawDamage = function(id,fct) {
-		toDrawDamage[toDrawDamageCursor] = fct;
+	var addToDrawDamage = function(p,w,h,r) {
+		toDrawDamage[PARAM.DAMAGE_DRAW_LENGTH-1].push([p,w,h,r]);
 	};
+
+	var sprite = Draw2DSprite.create({
+		width : 100,
+		height : 100,
+		color : COLOR.DAMAGE,
+		x : 0,
+		y : 0,
+	});
+
 	var lastTime;
 	var debugDT = [];
 
 	/* MAIN LOOP */
 
 	var loop = function() {
-		var mp,dt,
+		var dt,
 		avg = 0,
 		min = Infinity,
 		max = -Infinity;
@@ -43,7 +54,7 @@ function createLoop(deltaTime) {
 			dt = TurbulenzEngine.getTime()- lastTime;
 			lastTime = TurbulenzEngine.getTime();
 		}
-		if (debugBool) {
+		if (true) {
 			debugDT.push(dt);
 			if (debugDT.length >= 100) {
 				debugDT.forEach(function(t) {
@@ -85,7 +96,29 @@ function createLoop(deltaTime) {
 		camera.setViewport();
 
 		if (graphicsDevice.beginFrame()){
-			graphicsDevice.clear([0.1,0.1,0.0,0], 1.0);
+			graphicsDevice.clear(COLOR.BACKGROUND, 1.0);
+			draw2D.begin();
+
+				maze.draw(false);
+
+				toDrawDamage.forEach(function(elem) {
+					elem.forEach(function(e) {
+						sprite.setWidth(e[1]);
+						sprite.setHeight(e[2]);
+						camera.setSpriteAttribute(sprite,e[0],e[3]);
+						draw2D.drawSprite(sprite);
+					});
+				});
+				toDrawDamage.splice(0,1);
+				toDrawDamage.push([]);
+
+				Object.keys(toDraw).forEach(function(key) {
+					toDraw[key].draw(false);
+				});
+				mouse.draw(false);
+
+			draw2D.end();
+
 			if (debugBool) {
 				phys2DDebug.begin();
 
@@ -95,21 +128,11 @@ function createLoop(deltaTime) {
 					toDraw[key].draw(true);
 				});
 
-				mp = mouse.getWorldPosition();
-				phys2DDebug.drawCircle(mp[0],mp[1],METER,[1,1,0,1]);
 				phys2DDebug.drawWorld(world);
+				mouse.draw(true);
 
 				phys2DDebug.end();
 			}
-			draw2D.begin();
-
-				maze.draw(false);
-
-				Object.keys(toDraw).forEach(function(key) {
-					toDraw[key].draw(false);
-				});
-
-			draw2D.end();
 			graphicsDevice.endFrame();
 		}
 		toRemoveOfDraw.forEach(function(id) {
@@ -123,6 +146,7 @@ function createLoop(deltaTime) {
 	return Object.freeze({
 		addToUpdate : addToUpdate,
 		addToDraw : addToDraw,
+		addToDrawDamage : addToDrawDamage,
 		removeOfUpdate : removeOfUpdate,
 		removeOfDraw : removeOfDraw,
 		loop : loop,

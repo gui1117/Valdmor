@@ -103,6 +103,8 @@ function createFlooder(spec) {
 	attack = function(arbitrer) {
 		shapeAttack({
 			shape : damageShape,
+			width : damageRadius*2,
+			height : damageRadius*2,
 			position : body.getPosition(),
 			damage : damage,
 		});

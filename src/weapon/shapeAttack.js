@@ -6,6 +6,8 @@ function shapeAttack(spec) {
 	var p = spec.position;
 	var d = spec.distance || 0;
 	var r = spec.rotation || 0;
+	var width = spec.width;
+	var height = spec.height;
 	var damage = spec.damage;
 	var immuneId = spec.immuneId || [];
 	var immuneMask = spec.immuneMask || 0;
@@ -30,6 +32,8 @@ function shapeAttack(spec) {
 		loop.addToDraw(debi,{draw:function(debug){if(debug){phys2DDebug.drawRigidBody(body);}}});
 		loop.removeOfDraw(debi);
 	}
+
+	loop.addToDrawDamage(p,width/2,height/2,r);
 
 	var store = [];
 	var bounds = body.computeWorldBounds();

@@ -21,9 +21,35 @@ function createWall(spec) {
 		userData : wall,
 	});
 
+	var sprite = Draw2DSprite.create({
+		width : downright[0],
+		height : downright[1],
+		color : COLOR.WALL,
+		x : 0,
+		y : 0,
+		scale : [1, 1],
+	});
+
+	camera.setSpriteAttribute(sprite,position,0);
+
+	var update = function(dt) {
+		camera.setSpriteAttribute(sprite,position,0);
+	};
+
+	var draw = function(debug) {
+		if (!debug) {
+			draw2D.drawSprite(sprite);
+		}
+	};
+
+	loop.addToDraw(id,wall);
+	loop.addToUpdate(id,wall);
+
 	world.addRigidBody(body);
 
 	wall.body = body;
+	wall.draw = draw;
+	wall.update = update;
 
 	return Object.freeze(wall);
 }

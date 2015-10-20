@@ -74,8 +74,12 @@ function particleAttack(spec) {
 		loop.removeOfDraw(debi);
 	}
 
+	var factor = result ? result.factor*height : height;
+
+	loop.addToDrawDamage([origin[0]+factor/2*Math.cos(rotation),origin[1]+factor/2*Math.sin(rotation)],factor/2,PARAM.DAMAGE_PARTICLE_WIDTH,rotation);
+
 	return { 
-		factor : result ? result.factor*height : height,
+		factor : factor,
 		touched : touched,
 	};
 }
